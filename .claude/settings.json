@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash /Users/maslov/OBSIDIAN_ALL/BAZA/BAZA/scripts/git-autopush.sh 2>/dev/null || true",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
