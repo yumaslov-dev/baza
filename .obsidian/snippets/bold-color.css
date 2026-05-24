@@ -1,0 +1,5 @@
+/* Bold text color override */
+.markdown-rendered strong,
+.markdown-source-view.mod-cm6 .cm-strong {
+    color: #e6a817;
+}

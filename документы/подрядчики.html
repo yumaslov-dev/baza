@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Подрядчики и фрилансеры — mass agency</title>
+  <style>
+    :root {
+      --bg: #0f0f0f; --surface: #1a1a1a; --surface-hover: #212121;
+      --border: #2a2a2a; --border-active: #3d3d3d;
+      --text-primary: #e8e8e8; --text-secondary: #888; --text-muted: #555;
+      --accent: #c8ff00; --accent-dim: rgba(200,255,0,.08); --accent-border: rgba(200,255,0,.2);
+      --danger: #ff4d4d; --tag-bg: #242424;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text-primary); font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 52px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .topbar-brand span { color: var(--accent); }
+    .topbar-nav { display: flex; gap: 24px; }
+    .topbar-nav a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color .15s; }
+    .topbar-nav a:hover { color: var(--text-secondary); }
+    .topbar-nav a.active { color: var(--text-primary); }
+    .breadcrumb { padding: 20px 32px 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text-secondary); }
+    .breadcrumb-sep { color: var(--border-active); }
+    .layout { display: grid; grid-template-columns: 1fr 280px; gap: 0; max-width: 1200px; margin: 0 auto; padding: 32px 32px 80px; align-items: start; }
+    .main { padding-right: 48px; }
+    .page-header { margin-bottom: 36px; }
+    .page-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-border); padding: 3px 10px; border-radius: 4px; margin-bottom: 14px; }
+    .page-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .page-title { font-size: 26px; font-weight: 700; line-height: 1.25; color: var(--text-primary); margin-bottom: 10px; }
+    .page-desc { color: var(--text-secondary); font-size: 14px; max-width: 580px; line-height: 1.7; }
+    .page-meta { display: flex; align-items: center; gap: 20px; margin-top: 16px; font-size: 12px; color: var(--text-muted); }
+    .progress-bar { display: flex; gap: 6px; margin-bottom: 32px; }
+    .progress-step { flex: 1; height: 3px; background: var(--border); border-radius: 2px; transition: background .3s; cursor: pointer; }
+    .progress-step.active { background: var(--accent); }
+    .progress-step.done { background: #4a4a4a; }
+    .cards { display: flex; flex-direction: column; gap: 8px; }
+    .card { border: 1px solid var(--border); border-radius: 10px; background: var(--surface); overflow: hidden; transition: border-color .2s; }
+    .card:hover { border-color: var(--border-active); }
+    .card.open { border-color: var(--border-active); background: var(--surface-hover); }
+    .card-header { display: flex; align-items: center; gap: 16px; padding: 18px 20px; cursor: pointer; user-select: none; }
+    .card-num { width: 30px; height: 30px; border-radius: 8px; background: var(--tag-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0; transition: all .2s; }
+    .card.open .card-num { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); }
+    .card-header-text { flex: 1; }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); }
+    .card-tags { display: flex; gap: 6px; margin-left: auto; padding-left: 16px; }
+    .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--border); white-space: nowrap; }
+    .card-chevron { color: var(--text-muted); font-size: 16px; transition: transform .25s; flex-shrink: 0; margin-left: 12px; }
+    .card.open .card-chevron { transform: rotate(180deg); color: var(--text-secondary); }
+    .card-body { display: none; padding: 0 20px 24px; border-top: 1px solid var(--border); }
+    .card.open .card-body { display: block; }
+    .rule-callout { display: flex; gap: 12px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; padding: 14px 16px; margin: 20px 0 24px; }
+    .rule-callout p { font-size: 13px; color: var(--text-primary); line-height: 1.6; }
+    .body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .section { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+    .section.full { grid-column: 1/-1; }
+    .section h4 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: 10px; }
+    .section ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .section ul li { font-size: 12px; color: var(--text-secondary); padding-left: 12px; position: relative; }
+    .section ul li::before { content: '—'; position: absolute; left: 0; color: var(--text-muted); }
+    .section ol { list-style: none; counter-reset: item; display: flex; flex-direction: column; gap: 6px; }
+    .section ol li { font-size: 13px; color: var(--text-secondary); padding-left: 24px; position: relative; counter-increment: item; }
+    .section ol li::before { content: counter(item); position: absolute; left: 0; font-size: 11px; font-weight: 700; color: var(--accent); width: 16px; height: 16px; background: var(--accent-dim); border-radius: 4px; display: flex; align-items: center; justify-content: center; top: 1px; }
+    .letter-structure { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .letter-field { display: flex; gap: 12px; padding: 10px 14px; background: var(--tag-bg); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+    .letter-field-num { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-dim); border-radius: 4px; padding: 1px 6px; flex-shrink: 0; align-self: flex-start; margin-top: 1px; }
+    .letter-field-text { color: var(--text-secondary); }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .toolbar-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .btn-ghost { font-size: 12px; color: var(--text-muted); background: var(--tag-bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; cursor: pointer; transition: all .15s; }
+    .btn-ghost:hover { color: var(--text-secondary); border-color: var(--border-active); }
+    .sidebar { position: sticky; top: 72px; display: flex; flex-direction: column; gap: 16px; }
+    .side-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .side-block h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-muted); margin-bottom: 12px; }
+    .side-toc { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .side-toc li a { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 5px; font-size: 12px; color: var(--text-muted); text-decoration: none; transition: all .15s; }
+    .side-toc li a:hover, .side-toc li a.active { color: var(--text-primary); background: var(--tag-bg); }
+    .side-toc li a.active { color: var(--accent); }
+    .side-toc-num { width: 18px; height: 18px; background: var(--tag-bg); border-radius: 4px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .side-links { display: flex; flex-direction: column; gap: 6px; }
+    .side-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); text-decoration: none; padding: 6px 8px; border-radius: 5px; transition: all .15s; }
+    .side-link:hover { background: var(--tag-bg); color: var(--text-secondary); }
+    .side-info { display: flex; flex-direction: column; gap: 8px; }
+    .side-info-row { display: flex; justify-content: space-between; font-size: 12px; }
+    .side-info-label { color: var(--text-muted); }
+    .side-info-value { color: var(--text-secondary); font-weight: 500; }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand"><a href="index.html" style="text-decoration:none;color:inherit">mass<span>.</span>agency</a></div>
+  <nav class="topbar-nav">
+    <a href="команда.html" class="active">Команда</a>
+    <a href="процессы.html">Процессы</a>
+    <a href="знания.html">Знания</a>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">База знаний</a>
+  <span class="breadcrumb-sep">›</span>
+  <a href="команда.html">Команда</a>
+  <span class="breadcrumb-sep">›</span>
+  <span>Подрядчики</span>
+</div>
+
+<div class="layout">
+  <main class="main">
+
+    <div class="page-header">
+      <div class="page-tag">Команда · Подрядчики</div>
+      <h1 class="page-title">Подрядчики и фрилансеры</h1>
+      <p class="page-desc">База специалистов, шаблон карточки и правила выбора нового подрядчика.</p>
+      <div class="page-meta">
+        <div>📅 22 мая 2026</div>
+        <div>👤 Для продюсеров</div>
+        <div>⏱ ~4 мин</div>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-step" onclick="toggleCard(0)"></div>
+      <div class="progress-step" onclick="toggleCard(1)"></div>
+      <div class="progress-step" onclick="toggleCard(2)"></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-label">3 карточки</div>
+      <button class="btn-ghost" onclick="expandAll()">Развернуть все</button>
+    </div>
+
+    <div class="cards">
+
+      <!-- Card 1 -->
+      <div class="card" id="card-0">
+        <div class="card-header" onclick="toggleCard(0)">
+          <div class="card-num">1</div>
+          <div class="card-header-text">
+            <div class="card-title">Категории специалистов</div>
+            <div class="card-subtitle">Кто может понадобиться на проекте</div>
+          </div>
+          <div class="card-tags"><span class="tag">Категории</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body" style="padding-top: 20px;">
+          <div class="grid-4">
+            <div class="section">
+              <h4>Съёмочная группа</h4>
+              <ul>
+                <li>Операторы</li>
+                <li>Режиссёры</li>
+                <li>Вторые операторы</li>
+                <li>Гафферы, осветители</li>
+                <li>Звукорежиссёры</li>
+                <li>Ассистенты</li>
+                <li>Фотографы</li>
+                <li>Дрон-операторы</li>
+                <li>Гримёры, стилисты</li>
+                <li>Локейшн-менеджеры</li>
+                <li>Кастинг</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Постпродакшн</h4>
+              <ul>
+                <li>Монтажёры</li>
+                <li>Моушн-дизайнеры</li>
+                <li>2D/3D специалисты</li>
+                <li>Цветокорректоры</li>
+                <li>Звукорежиссёры</li>
+                <li>Композиторы</li>
+                <li>Дикторы</li>
+                <li>Саунд-дизайнеры</li>
+                <li>Ретушёры</li>
+                <li>VFX</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Продюсирование</h4>
+              <ul>
+                <li>Линейные продюсеры</li>
+                <li>Координаторы</li>
+                <li>Администраторы</li>
+                <li>Водители</li>
+                <li>Аренда оборудования</li>
+                <li>Студии, павильоны</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Креатив и тексты</h4>
+              <ul>
+                <li>Сценаристы</li>
+                <li>Редакторы</li>
+                <li>Копирайтеры</li>
+                <li>Арт-директоры</li>
+                <li>Дизайнеры</li>
+                <li>Иллюстраторы</li>
+                <li>Презентационные дизайнеры</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card" id="card-1">
+        <div class="card-header" onclick="toggleCard(1)">
+          <div class="card-num">2</div>
+          <div class="card-header-text">
+            <div class="card-title">Как выбирать подрядчика</div>
+            <div class="card-subtitle">8 вопросов перед выбором</div>
+          </div>
+          <div class="card-tags"><span class="tag">Выбор</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="rule-callout">
+            <p>Если подрядчик новый — нельзя сразу отдавать критически важную часть проекта без проверки.</p>
+          </div>
+          <div class="section full" style="margin-bottom: 16px;">
+            <h4>8 вопросов перед выбором</h4>
+            <ol>
+              <li>Какая задача и уровень ответственности?</li>
+              <li>Какой бюджет и срок?</li>
+              <li>Нужна самостоятельность или плотный контроль?</li>
+              <li>Был ли опыт с этим человеком?</li>
+              <li>Кто из команды может поручиться?</li>
+              <li>Есть ли риск по срокам, качеству или коммуникации?</li>
+              <li>Что будет, если сорвётся?</li>
+              <li>Есть ли запасной вариант?</li>
+            </ol>
+          </div>
+          <div class="section full">
+            <h4>Алгоритм проверки нового подрядчика</h4>
+            <ol>
+              <li>Дать небольшую задачу</li>
+              <li>Составить понятный бриф</li>
+              <li>Установить ограниченный срок</li>
+              <li>Провести промежуточную проверку</li>
+              <li>Оценить результат</li>
+              <li>Зафиксировать вывод в базе</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card" id="card-2">
+        <div class="card-header" onclick="toggleCard(2)">
+          <div class="card-num">3</div>
+          <div class="card-header-text">
+            <div class="card-title">Шаблон карточки подрядчика</div>
+            <div class="card-subtitle">Что фиксировать после каждого проекта</div>
+          </div>
+          <div class="card-tags"><span class="tag">Шаблон</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="letter-structure">
+            <div class="letter-field">
+              <span class="letter-field-num">1</span>
+              <span class="letter-field-text">Имя / компания</span>
+            </div>
+            <div class="letter-field">
+              <span class="letter-field-num">2</span>
+              <span class="letter-field-text">Специализация и уровень (junior / middle / senior / lead)</span>
+            </div>
+            <div class="letter-field">
+              <span class="letter-field-num">3</span>
+              <span class="letter-field-text">Город / куда готов выезжать</span>
+            </div>
+            <div class="letter-field">
+              <span class="letter-field-num">4</span>
+              <span class="letter-field-text">Контакты (Telegram, email, портфолио)</span>
+            </div>
+            <div class="letter-field">
+              <span class="letter-field-num">5</span>
+              <span class="letter-field-text">Ставка (смена / проект / пакет)</span>
+            </div>
+            <div class="letter-field">
+              <span class="letter-field-num">6</span>
+              <span class="letter-field-text">С чем работали (проект, клиент, дата, результат)</span>
+            </div>
+            <div class="letter-field">
+              <span class="letter-field-num">7</span>
+              <span class="letter-field-text">Сильные стороны и ограничения</span>
+            </div>
+            <div class="letter-field">
+              <span class="letter-field-num">8</span>
+              <span class="letter-field-text">Статус: работаем регулярно / можно звать / только конкретные задачи / пауза / стоплист</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <aside class="sidebar">
+    <div class="side-block">
+      <h3>На этой странице</h3>
+      <ul class="side-toc">
+        <li><a href="#" class="active" onclick="showCard(0);return false;"><span class="side-toc-num">1</span>Категории</a></li>
+        <li><a href="#" onclick="showCard(1);return false;"><span class="side-toc-num">2</span>Как выбирать</a></li>
+        <li><a href="#" onclick="showCard(2);return false;"><span class="side-toc-num">3</span>Шаблон карточки</a></li>
+      </ul>
+    </div>
+
+    <div class="side-block">
+      <h3>Связанные страницы</h3>
+      <div class="side-links">
+        <a href="люди-и-роли.html" class="side-link"><span>⇗</span>Люди и роли</a>
+        <a href="история.html" class="side-link"><span>⇗</span>MASS AGENCY: кто мы</a>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <h3>Информация</h3>
+      <div class="side-info">
+        <div class="side-info-row"><span class="side-info-label">Раздел</span><span class="side-info-value">Команда</span></div>
+        <div class="side-info-row"><span class="side-info-label">Для кого</span><span class="side-info-value">Продюсеры</span></div>
+        <div class="side-info-row"><span class="side-info-label">Обновлено</span><span class="side-info-value">22 мая 2026</span></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+  const openCards = new Set();
+  const TOTAL = 3;
+
+  function toggleCard(i) {
+    const card = document.getElementById('card-' + i);
+    if (card.classList.contains('open')) { card.classList.remove('open'); openCards.delete(i); }
+    else { card.classList.add('open'); openCards.add(i); }
+    updateProgress();
+  }
+
+  function showCard(i) {
+    for (let j = 0; j < TOTAL; j++) { document.getElementById('card-' + j).classList.remove('open'); openCards.delete(j); }
+    document.getElementById('card-' + i).classList.add('open');
+    openCards.add(i);
+    document.getElementById('card-' + i).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.side-toc li a').forEach((a, j) => a.classList.toggle('active', j === i));
+    updateProgress();
+  }
+
+  function expandAll() {
+    const btn = document.querySelector('.btn-ghost');
+    const allOpen = openCards.size === TOTAL;
+    for (let i = 0; i < TOTAL; i++) {
+      const card = document.getElementById('card-' + i);
+      if (allOpen) { card.classList.remove('open'); openCards.delete(i); }
+      else { card.classList.add('open'); openCards.add(i); }
+    }
+    btn.textContent = allOpen ? 'Развернуть все' : 'Свернуть все';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    document.querySelectorAll('.progress-step').forEach((s, i) => {
+      s.classList.remove('active', 'done');
+      if (openCards.has(i)) s.classList.add('active');
+      else if (openCards.size > 0) s.classList.add('done');
+    });
+  }
+
+  toggleCard(0);
+</script>
+</body>
+</html>

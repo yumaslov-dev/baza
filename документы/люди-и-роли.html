@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Люди и роли — mass agency</title>
+  <style>
+    :root {
+      --bg: #0f0f0f; --surface: #1a1a1a; --surface-hover: #212121;
+      --border: #2a2a2a; --border-active: #3d3d3d;
+      --text-primary: #e8e8e8; --text-secondary: #888; --text-muted: #555;
+      --accent: #c8ff00; --accent-dim: rgba(200,255,0,.08); --accent-border: rgba(200,255,0,.2);
+      --danger: #ff4d4d; --tag-bg: #242424;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text-primary); font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 52px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .topbar-brand span { color: var(--accent); }
+    .topbar-nav { display: flex; gap: 24px; }
+    .topbar-nav a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color .15s; }
+    .topbar-nav a:hover { color: var(--text-secondary); }
+    .topbar-nav a.active { color: var(--text-primary); }
+    .breadcrumb { padding: 20px 32px 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text-secondary); }
+    .breadcrumb-sep { color: var(--border-active); }
+    .layout { display: grid; grid-template-columns: 1fr 280px; gap: 0; max-width: 1200px; margin: 0 auto; padding: 32px 32px 80px; align-items: start; }
+    .main { padding-right: 48px; }
+    .page-header { margin-bottom: 36px; }
+    .page-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-border); padding: 3px 10px; border-radius: 4px; margin-bottom: 14px; }
+    .page-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .page-title { font-size: 26px; font-weight: 700; line-height: 1.25; color: var(--text-primary); margin-bottom: 10px; }
+    .page-desc { color: var(--text-secondary); font-size: 14px; max-width: 580px; line-height: 1.7; }
+    .page-meta { display: flex; align-items: center; gap: 20px; margin-top: 16px; font-size: 12px; color: var(--text-muted); }
+    .progress-bar { display: flex; gap: 6px; margin-bottom: 32px; }
+    .progress-step { flex: 1; height: 3px; background: var(--border); border-radius: 2px; transition: background .3s; cursor: pointer; }
+    .progress-step.active { background: var(--accent); }
+    .progress-step.done { background: #4a4a4a; }
+    .cards { display: flex; flex-direction: column; gap: 8px; }
+    .card { border: 1px solid var(--border); border-radius: 10px; background: var(--surface); overflow: hidden; transition: border-color .2s; }
+    .card:hover { border-color: var(--border-active); }
+    .card.open { border-color: var(--border-active); background: var(--surface-hover); }
+    .card-header { display: flex; align-items: center; gap: 16px; padding: 18px 20px; cursor: pointer; user-select: none; }
+    .card-num { width: 30px; height: 30px; border-radius: 8px; background: var(--tag-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0; transition: all .2s; }
+    .card.open .card-num { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); }
+    .card-header-text { flex: 1; }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); }
+    .card-tags { display: flex; gap: 6px; margin-left: auto; padding-left: 16px; }
+    .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--border); white-space: nowrap; }
+    .card-chevron { color: var(--text-muted); font-size: 16px; transition: transform .25s; flex-shrink: 0; margin-left: 12px; }
+    .card.open .card-chevron { transform: rotate(180deg); color: var(--text-secondary); }
+    .card-body { display: none; padding: 0 20px 24px; border-top: 1px solid var(--border); }
+    .card.open .card-body { display: block; }
+    .rule-callout { display: flex; gap: 12px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; padding: 14px 16px; margin: 20px 0 24px; }
+    .rule-callout p { font-size: 13px; color: var(--text-primary); line-height: 1.6; }
+    .body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .section { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+    .section.full { grid-column: 1/-1; }
+    .section h4 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: 10px; }
+    .section ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .section ul li { font-size: 13px; color: var(--text-secondary); padding-left: 14px; position: relative; }
+    .section ul li::before { content: '—'; position: absolute; left: 0; color: var(--text-muted); }
+    .warning-box { display: flex; gap: 10px; background: rgba(255,77,77,.06); border: 1px solid rgba(255,77,77,.2); border-radius: 8px; padding: 12px 14px; margin-top: 8px; }
+    .warning-box p { font-size: 13px; color: #ff9999; line-height: 1.6; }
+    .criteria-box { display: flex; gap: 10px; background: #161f00; border: 1px solid #2d3d00; border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+    .criteria-box p { font-size: 13px; color: #b8d870; line-height: 1.6; }
+    .role-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .role-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); }
+    .role-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+    .role-table tr:last-child td { border-bottom: none; }
+    .role-table td:first-child { color: var(--text-primary); font-weight: 500; white-space: nowrap; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .toolbar-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .btn-ghost { font-size: 12px; color: var(--text-muted); background: var(--tag-bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; cursor: pointer; transition: all .15s; }
+    .btn-ghost:hover { color: var(--text-secondary); border-color: var(--border-active); }
+    .sidebar { position: sticky; top: 72px; display: flex; flex-direction: column; gap: 16px; }
+    .side-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .side-block h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-muted); margin-bottom: 12px; }
+    .side-toc { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .side-toc li a { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 5px; font-size: 12px; color: var(--text-muted); text-decoration: none; transition: all .15s; }
+    .side-toc li a:hover, .side-toc li a.active { color: var(--text-primary); background: var(--tag-bg); }
+    .side-toc li a.active { color: var(--accent); }
+    .side-toc-num { width: 18px; height: 18px; background: var(--tag-bg); border-radius: 4px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .side-links { display: flex; flex-direction: column; gap: 6px; }
+    .side-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); text-decoration: none; padding: 6px 8px; border-radius: 5px; transition: all .15s; }
+    .side-link:hover { background: var(--tag-bg); color: var(--text-secondary); }
+    .side-info { display: flex; flex-direction: column; gap: 8px; }
+    .side-info-row { display: flex; justify-content: space-between; font-size: 12px; }
+    .side-info-label { color: var(--text-muted); }
+    .side-info-value { color: var(--text-secondary); font-weight: 500; }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand"><a href="index.html" style="text-decoration:none;color:inherit">mass<span>.</span>agency</a></div>
+  <nav class="topbar-nav">
+    <a href="команда.html" class="active">Команда</a>
+    <a href="процессы.html">Процессы</a>
+    <a href="знания.html">Знания</a>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">База знаний</a>
+  <span class="breadcrumb-sep">›</span>
+  <a href="команда.html">Команда</a>
+  <span class="breadcrumb-sep">›</span>
+  <span>Люди и роли</span>
+</div>
+
+<div class="layout">
+  <main class="main">
+
+    <div class="page-header">
+      <div class="page-tag">Команда · Люди</div>
+      <h1 class="page-title">Люди и роли</h1>
+      <p class="page-desc">Состав команды, зоны ответственности и когда к кому обращаться.</p>
+      <div class="page-meta">
+        <div>📅 22 мая 2026</div>
+        <div>👤 Для всей команды</div>
+        <div>⏱ ~8 мин</div>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-step" onclick="toggleCard(0)"></div>
+      <div class="progress-step" onclick="toggleCard(1)"></div>
+      <div class="progress-step" onclick="toggleCard(2)"></div>
+      <div class="progress-step" onclick="toggleCard(3)"></div>
+      <div class="progress-step" onclick="toggleCard(4)"></div>
+      <div class="progress-step" onclick="toggleCard(5)"></div>
+      <div class="progress-step" onclick="toggleCard(6)"></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-label">7 карточек</div>
+      <button class="btn-ghost" onclick="expandAll()">Развернуть все</button>
+    </div>
+
+    <div class="cards">
+
+      <!-- Card 0: Роли -->
+      <div class="card" id="card-0">
+        <div class="card-header" onclick="toggleCard(0)">
+          <div class="card-num">0</div>
+          <div class="card-header-text">
+            <div class="card-title">Роли в агентстве</div>
+            <div class="card-subtitle">Кто за что отвечает</div>
+          </div>
+          <div class="card-tags"><span class="tag">Структура</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body" style="padding-top: 20px;">
+          <table class="role-table">
+            <thead>
+              <tr><th>Роль</th><th>Зона ответственности</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Генеральный продюсер</td><td>Направление, деньги, ключевые решения, переговоры, развитие</td></tr>
+              <tr><td>Исполнительный продюсер</td><td>Движение проекта: клиент, сроки, задачи, документы, правки</td></tr>
+              <tr><td>Постпродакшн-продюсер</td><td>Монтаж, графика, цвет, звук, версии, финальный файл</td></tr>
+              <tr><td>Оператор</td><td>Изображение на съёмке, камера, свет, композиция</td></tr>
+              <tr><td>Монтажёр</td><td>Сборка материала в историю, черновики, правки, финальные файлы</td></tr>
+              <tr><td>Junior</td><td>Помогает команде, выполняет понятные задачи, учится</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Card 1: Юрий -->
+      <div class="card" id="card-1">
+        <div class="card-header" onclick="toggleCard(1)">
+          <div class="card-num">1</div>
+          <div class="card-header-text">
+            <div class="card-title">Юрий Маслов</div>
+            <div class="card-subtitle">Генеральный продюсер, основатель</div>
+          </div>
+          <div class="card-tags"><span class="tag">Основатель</span><span class="tag">GP</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="body-grid">
+            <div class="section">
+              <h4>Зона ответственности</h4>
+              <ul>
+                <li>Общее развитие агентства</li>
+                <li>Ключевые клиенты и переговоры</li>
+                <li>КП и позиционирование</li>
+                <li>Финансовая логика</li>
+                <li>Развитие команды</li>
+                <li>Стандарты и база знаний</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Сильные стороны</h4>
+              <ul>
+                <li>Видит задачу целиком</li>
+                <li>Связывает бизнес, людей и производство</li>
+                <li>Чувствует клиентский контекст</li>
+                <li>Превращает опыт в принципы</li>
+              </ul>
+            </div>
+            <div class="section full">
+              <h4>Когда обращаться</h4>
+              <ul>
+                <li>Сложный клиентский разговор</li>
+                <li>Спорная смета</li>
+                <li>Конфликт</li>
+                <li>Важная презентация</li>
+                <li>Решение по деньгам или команде</li>
+                <li>Новое направление</li>
+              </ul>
+            </div>
+          </div>
+          <div class="criteria-box">
+            <p>Подключать не в момент пожара, а при первых признаках риска: расплывчатая задача, несходящийся бюджет, перегруженная команда, бесконечные правки.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Андрей -->
+      <div class="card" id="card-2">
+        <div class="card-header" onclick="toggleCard(2)">
+          <div class="card-num">2</div>
+          <div class="card-header-text">
+            <div class="card-title">Андрей Федяев</div>
+            <div class="card-subtitle">Постпродакшн-продюсер, основатель</div>
+          </div>
+          <div class="card-tags"><span class="tag">Основатель</span><span class="tag">Постпродакшн</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="body-grid">
+            <div class="section">
+              <h4>Зона ответственности</h4>
+              <ul>
+                <li>Постпродакшн</li>
+                <li>Монтаж и режиссёрская сборка</li>
+                <li>Цвет, 2D/3D</li>
+                <li>Техническая оценка</li>
+                <li>Контроль качества финальных файлов</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Сильные стороны</h4>
+              <ul>
+                <li>Совмещает несколько компетенций</li>
+                <li>Видит материал через монтаж</li>
+                <li>Решает задачи в реальном бюджете</li>
+              </ul>
+            </div>
+            <div class="section full">
+              <h4>Когда обращаться</h4>
+              <ul>
+                <li>Оценить сложность постпродакшна</li>
+                <li>Понять реализуемость идеи</li>
+                <li>Вопросы по монтажу, цвету, 3D</li>
+                <li>Финальная проверка качества</li>
+              </ul>
+            </div>
+          </div>
+          <div class="criteria-box">
+            <p>Его ресурс нужно планировать заранее. Поздний вход → идея плохо реализуется в посте, нет нужных исходников, нереальные сроки финальной сборки.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Алёна -->
+      <div class="card" id="card-3">
+        <div class="card-header" onclick="toggleCard(3)">
+          <div class="card-num">3</div>
+          <div class="card-header-text">
+            <div class="card-title">Алёна Апполонова</div>
+            <div class="card-subtitle">Исполнительный продюсер</div>
+          </div>
+          <div class="card-tags"><span class="tag">Продюсер</span><span class="tag">Клиент</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="body-grid">
+            <div class="section">
+              <h4>Зона ответственности</h4>
+              <ul>
+                <li>Ведение проектов</li>
+                <li>Клиентская коммуникация</li>
+                <li>Сбор вводных и документы</li>
+                <li>Контроль сроков</li>
+                <li>Координация команды</li>
+                <li>Передача задач в постпродакшн</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Сильные стороны</h4>
+              <ul>
+                <li>Держит рабочий процесс</li>
+                <li>Умеет общаться с клиентом</li>
+                <li>Видит организационную часть</li>
+                <li>Понимает механику агентства</li>
+              </ul>
+            </div>
+            <div class="section full">
+              <h4>Когда обращаться</h4>
+              <ul>
+                <li>Статус проекта</li>
+                <li>Что ждёт клиент</li>
+                <li>Собрать вводные или отправить документы</li>
+                <li>Согласовать сроки</li>
+                <li>Организовать этап или собрать правки</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Анна -->
+      <div class="card" id="card-4">
+        <div class="card-header" onclick="toggleCard(4)">
+          <div class="card-num">4</div>
+          <div class="card-header-text">
+            <div class="card-title">Анна Веселова</div>
+            <div class="card-subtitle">Исполнительный продюсер</div>
+          </div>
+          <div class="card-tags"><span class="tag">Продюсер</span><span class="tag">Клиент</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="body-grid">
+            <div class="section">
+              <h4>Зона ответственности</h4>
+              <ul>
+                <li>Продюсирование проектов</li>
+                <li>Коммуникация с клиентом</li>
+                <li>Организация съёмок</li>
+                <li>Работа с подрядчиками</li>
+                <li>Контроль дедлайнов</li>
+                <li>Передача задач в производство</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Сильные стороны</h4>
+              <div class="warning-box" style="margin-top: 0;">
+                <p>⚠️ Сильные стороны Анны и типы проектов — требуют уточнения</p>
+              </div>
+            </div>
+            <div class="section full">
+              <h4>Когда обращаться</h4>
+              <ul>
+                <li>Статус проекта</li>
+                <li>Организация коммуникации</li>
+                <li>Сбор материалов</li>
+                <li>Постановка задачи подрядчику</li>
+                <li>Уточнение сроков</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Дима -->
+      <div class="card" id="card-5">
+        <div class="card-header" onclick="toggleCard(5)">
+          <div class="card-num">5</div>
+          <div class="card-header-text">
+            <div class="card-title">Дима Берендяй</div>
+            <div class="card-subtitle">Постпродакшн-продюсер</div>
+          </div>
+          <div class="card-tags"><span class="tag">Постпродакшн</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="body-grid">
+            <div class="section">
+              <h4>Зона ответственности</h4>
+              <ul>
+                <li>Монтаж и сборка материалов</li>
+                <li>Постпродакшн-задачи</li>
+                <li>Техническая подготовка файлов</li>
+                <li>Адаптации</li>
+                <li>Работа с исходниками</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Сильные стороны</h4>
+              <ul>
+                <li>Многофункциональность</li>
+                <li>Большой объём практической работы</li>
+                <li>Быстро включается в задачу</li>
+                <li>Знает внутренние процессы</li>
+              </ul>
+            </div>
+            <div class="section full">
+              <h4>Зона роста</h4>
+              <ul>
+                <li>Переход от исполнителя к продюсеру процесса</li>
+                <li>Самостоятельность</li>
+                <li>Оценка рисков заранее</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: Руслан -->
+      <div class="card" id="card-6">
+        <div class="card-header" onclick="toggleCard(6)">
+          <div class="card-num">6</div>
+          <div class="card-header-text">
+            <div class="card-title">Руслан Галиахметов</div>
+            <div class="card-subtitle">Оператор, монтажёр (junior)</div>
+          </div>
+          <div class="card-tags"><span class="tag">Junior</span><span class="tag">Съёмка</span></div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-body">
+          <div class="body-grid">
+            <div class="section">
+              <h4>Зона ответственности</h4>
+              <ul>
+                <li>Съёмка и помощь оператору</li>
+                <li>Монтаж</li>
+                <li>Подготовка материалов</li>
+                <li>Технические задачи</li>
+              </ul>
+            </div>
+            <div class="section">
+              <h4>Навыки</h4>
+              <div class="warning-box" style="margin-top: 0;">
+                <p>⚠️ Съёмочные и монтажные навыки, техника — требуют уточнения</p>
+              </div>
+            </div>
+            <div class="section full">
+              <h4>Важно при постановке задачи</h4>
+              <ul>
+                <li>Понятная задача и срок</li>
+                <li>Пример результата и критерии качества</li>
+                <li>Ответственный старший</li>
+                <li>Обратная связь</li>
+                <li>Новые или сложные задачи — только с проверкой промежуточного результата</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <aside class="sidebar">
+    <div class="side-block">
+      <h3>На этой странице</h3>
+      <ul class="side-toc">
+        <li><a href="#" class="active" onclick="showCard(0);return false;"><span class="side-toc-num">0</span>Роли в агентстве</a></li>
+        <li><a href="#" onclick="showCard(1);return false;"><span class="side-toc-num">1</span>Юрий Маслов</a></li>
+        <li><a href="#" onclick="showCard(2);return false;"><span class="side-toc-num">2</span>Андрей Федяев</a></li>
+        <li><a href="#" onclick="showCard(3);return false;"><span class="side-toc-num">3</span>Алёна Апполонова</a></li>
+        <li><a href="#" onclick="showCard(4);return false;"><span class="side-toc-num">4</span>Анна Веселова</a></li>
+        <li><a href="#" onclick="showCard(5);return false;"><span class="side-toc-num">5</span>Дима Берендяй</a></li>
+        <li><a href="#" onclick="showCard(6);return false;"><span class="side-toc-num">6</span>Руслан Галиахметов</a></li>
+      </ul>
+    </div>
+
+    <div class="side-block">
+      <h3>Связанные страницы</h3>
+      <div class="side-links">
+        <a href="история.html" class="side-link"><span>⇗</span>MASS AGENCY: кто мы</a>
+        <a href="культура.html" class="side-link"><span>⇗</span>Культура и принципы</a>
+        <a href="подрядчики.html" class="side-link"><span>⇗</span>Подрядчики</a>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <h3>Информация</h3>
+      <div class="side-info">
+        <div class="side-info-row"><span class="side-info-label">Раздел</span><span class="side-info-value">Команда</span></div>
+        <div class="side-info-row"><span class="side-info-label">Людей</span><span class="side-info-value">6</span></div>
+        <div class="side-info-row"><span class="side-info-label">Ролей</span><span class="side-info-value">6</span></div>
+        <div class="side-info-row"><span class="side-info-label">Обновлено</span><span class="side-info-value">22 мая 2026</span></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+  const openCards = new Set();
+  const TOTAL = 7;
+
+  function toggleCard(i) {
+    const card = document.getElementById('card-' + i);
+    if (card.classList.contains('open')) { card.classList.remove('open'); openCards.delete(i); }
+    else { card.classList.add('open'); openCards.add(i); }
+    updateProgress();
+  }
+
+  function showCard(i) {
+    for (let j = 0; j < TOTAL; j++) { document.getElementById('card-' + j).classList.remove('open'); openCards.delete(j); }
+    document.getElementById('card-' + i).classList.add('open');
+    openCards.add(i);
+    document.getElementById('card-' + i).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.side-toc li a').forEach((a, j) => a.classList.toggle('active', j === i));
+    updateProgress();
+  }
+
+  function expandAll() {
+    const btn = document.querySelector('.btn-ghost');
+    const allOpen = openCards.size === TOTAL;
+    for (let i = 0; i < TOTAL; i++) {
+      const card = document.getElementById('card-' + i);
+      if (allOpen) { card.classList.remove('open'); openCards.delete(i); }
+      else { card.classList.add('open'); openCards.add(i); }
+    }
+    btn.textContent = allOpen ? 'Развернуть все' : 'Свернуть все';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    document.querySelectorAll('.progress-step').forEach((s, i) => {
+      s.classList.remove('active', 'done');
+      if (openCards.has(i)) s.classList.add('active');
+      else if (openCards.size > 0) s.classList.add('done');
+    });
+  }
+
+  toggleCard(0);
+</script>
+</body>
+</html>

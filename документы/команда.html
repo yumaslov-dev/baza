@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Команда — mass agency</title>
+  <style>
+    :root {
+      --bg: #0f0f0f; --surface: #1a1a1a; --surface-hover: #212121;
+      --border: #2a2a2a; --border-active: #3d3d3d;
+      --text-primary: #e8e8e8; --text-secondary: #888; --text-muted: #555;
+      --accent: #c8ff00; --accent-dim: rgba(200,255,0,.08); --accent-border: rgba(200,255,0,.2);
+      --danger: #ff4d4d; --tag-bg: #242424;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text-primary); font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 52px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .topbar-brand span { color: var(--accent); }
+    .topbar-nav { display: flex; gap: 24px; }
+    .topbar-nav a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color .15s; }
+    .topbar-nav a:hover { color: var(--text-secondary); }
+    .topbar-nav a.active { color: var(--text-primary); }
+
+    .breadcrumb { padding: 20px 32px 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text-secondary); }
+    .breadcrumb-sep { color: var(--border-active); }
+
+    .page { max-width: 960px; margin: 0 auto; padding: 40px 32px 80px; }
+
+    .page-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-border); padding: 3px 10px; border-radius: 4px; margin-bottom: 14px; }
+    .page-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .page-title { font-size: 32px; font-weight: 700; line-height: 1.2; margin-bottom: 10px; }
+    .page-desc { color: var(--text-secondary); font-size: 14px; max-width: 540px; line-height: 1.7; margin-bottom: 8px; }
+    .page-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 40px; }
+
+    .divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+    .section-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+    .section-card {
+      display: block;
+      text-decoration: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color .2s, background .2s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .section-card:hover {
+      border-color: var(--border-active);
+      background: var(--surface-hover);
+      transform: translateY(-1px);
+    }
+    .section-card:hover .card-arrow { opacity: 1; transform: translate(0, 0); }
+
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+    .card-num-badge {
+      width: 36px; height: 36px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .card-arrow {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      font-size: 16px;
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition: opacity .2s, transform .2s;
+    }
+
+    .card-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .card-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; line-height: 1.3; }
+    .card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+
+    .card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .card-count {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .card-count-dot {
+      width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: .6;
+    }
+    .card-tags-row { display: flex; gap: 6px; }
+    .ctag {
+      font-size: 11px; padding: 2px 8px; border-radius: 4px;
+      background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--border);
+    }
+
+    .section-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .section-card:hover::before { opacity: 1; }
+
+    .card-topics { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+    .card-topic {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .card-topic::before { content: '·'; color: var(--accent); font-size: 16px; line-height: 1; }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand"><a href="index.html" style="text-decoration:none;color:inherit">mass<span>.</span>agency</a></div>
+  <nav class="topbar-nav">
+    <a href="команда.html" class="active">Команда</a>
+    <a href="процессы.html">Процессы</a>
+    <a href="знания.html">Знания</a>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">База знаний</a>
+  <span class="breadcrumb-sep">›</span>
+  <span>Команда</span>
+</div>
+
+<div class="page">
+
+  <div class="page-tag">Раздел базы знаний</div>
+  <h1 class="page-title">Команда</h1>
+  <p class="page-desc">Кто мы, как работаем, состав агентства и база подрядчиков.</p>
+  <div class="page-meta">5 страниц · Обновлено 22 мая 2026</div>
+
+  <div class="divider"></div>
+
+  <div class="section-grid">
+
+    <a href="история.html" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">🏢</div>
+        <div class="card-arrow">↗</div>
+      </div>
+      <div class="card-section-label">Команда · Агентство</div>
+      <div class="card-title">MASS AGENCY: кто мы</div>
+      <div class="card-desc">Короткое описание агентства, что мы делаем, позиционирование и ценность для клиента.</div>
+      <div class="card-topics">
+        <div class="card-topic">Продакшн-команда для визуальных коммуникаций</div>
+        <div class="card-topic">Что входит: продюсирование, съёмка, постпродакшн, креатив</div>
+        <div class="card-topic">Ценность — снижение управленческой нагрузки</div>
+        <div class="card-topic">Как объяснять агентство клиенту</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>1 страница</div>
+        <div class="card-tags-row"><span class="ctag">Агентство</span><span class="ctag">О нас</span></div>
+      </div>
+    </a>
+
+    <a href="культура.html" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">⚡</div>
+        <div class="card-arrow">↗</div>
+      </div>
+      <div class="card-section-label">Команда · Принципы</div>
+      <div class="card-title">Культура и принципы</div>
+      <div class="card-desc">Восемь принципов, на которых держится работа агентства.</div>
+      <div class="card-topics">
+        <div class="card-topic">Сначала понять задачу</div>
+        <div class="card-topic">Продюсер отвечает за движение</div>
+        <div class="card-topic">Красиво должно быть применимо</div>
+        <div class="card-topic">Мы бережём отношения</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>8 принципов</div>
+        <div class="card-tags-row"><span class="ctag">Культура</span><span class="ctag">Ценности</span></div>
+      </div>
+    </a>
+
+    <a href="люди-и-роли.html" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">👤</div>
+        <div class="card-arrow">↗</div>
+      </div>
+      <div class="card-section-label">Команда · Люди</div>
+      <div class="card-title">Люди и роли</div>
+      <div class="card-desc">Карточки основной команды: зоны ответственности, сильные стороны, когда обращаться.</div>
+      <div class="card-topics">
+        <div class="card-topic">Юрий Маслов — генеральный продюсер</div>
+        <div class="card-topic">Андрей Федяев — постпродакшн-продюсер</div>
+        <div class="card-topic">Алёна, Анна — исполнительные продюсеры</div>
+        <div class="card-topic">Дима, Руслан — постпродакшн и съёмка</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>6 человек</div>
+        <div class="card-tags-row"><span class="ctag">Люди</span><span class="ctag">Роли</span></div>
+      </div>
+    </a>
+
+    <a href="подрядчики.html" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">🔗</div>
+        <div class="card-arrow">↗</div>
+      </div>
+      <div class="card-section-label">Команда · Подрядчики</div>
+      <div class="card-title">Подрядчики и фрилансеры</div>
+      <div class="card-desc">Категории специалистов, шаблон карточки и правила выбора нового подрядчика.</div>
+      <div class="card-topics">
+        <div class="card-topic">Категории: съёмка, постпродакшн, продюсирование, креатив</div>
+        <div class="card-topic">Шаблон карточки подрядчика</div>
+        <div class="card-topic">Как выбирать нового подрядчика</div>
+        <div class="card-topic">Стоплист: с кем не работаем</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>Шаблоны</div>
+        <div class="card-tags-row"><span class="ctag">Подрядчики</span><span class="ctag">База</span></div>
+      </div>
+    </a>
+
+  </div>
+
+</div>
+</body>
+</html>
