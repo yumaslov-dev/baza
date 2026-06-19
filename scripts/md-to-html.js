@@ -290,11 +290,11 @@ function buildPageHtml(data, filename, relatedLinks) {
   <title>${escHtml(title)} — mass agency</title>
   <style>
     :root {
-      --bg:#0b0a08;--surface:#141210;--surface-hover:#1c1a17;
-      --border:#252320;--border-active:#353230;
-      --text-primary:#f0ece4;--text-secondary:#8a8682;--text-muted:#4a4845;
-      --accent:#e8612a;--accent-dim:rgba(232,97,42,.1);--accent-border:rgba(232,97,42,.3);
-      --danger:#ff5555;--tag-bg:#1c1b18;
+      --bg:#0f0f0f;--surface:#1a1a1a;--surface-hover:#212121;
+      --border:#2a2a2a;--border-active:#3d3d3d;
+      --text-primary:#e8e8e8;--text-secondary:#888;--text-muted:#555;
+      --accent:#c8ff00;--accent-dim:rgba(200,255,0,.08);--accent-border:rgba(200,255,0,.2);
+      --danger:#ff4d4d;--tag-bg:#242424;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
@@ -302,12 +302,9 @@ function buildPageHtml(data, filename, relatedLinks) {
     .topbar-brand{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
     .topbar-brand span{color:var(--accent)}
     .topbar-nav{display:flex;gap:24px}
-    .topbar-nav a{color:var(--text-secondary);text-decoration:none;font-size:13px;position:relative;padding-bottom:2px;transition:color .15s}
-    .topbar-nav a::before{content:'';width:0%;height:3px;position:absolute;display:block;background:var(--accent);left:0;bottom:-4px;transition:width .3s}
-    .topbar-nav a:hover{color:var(--text-primary)}
-    .topbar-nav a:hover::before{width:100%}
+    .topbar-nav a{color:var(--text-muted);text-decoration:none;font-size:13px;transition:color .15s}
+    .topbar-nav a:hover{color:var(--text-secondary)}
     .topbar-nav a.active{color:var(--text-primary)}
-    .topbar-nav a.active::before{width:100%}
     .breadcrumb{padding:20px 32px 0;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)}
     .breadcrumb a{color:var(--text-muted);text-decoration:none}
     .breadcrumb a:hover{color:var(--text-secondary)}
@@ -323,7 +320,7 @@ function buildPageHtml(data, filename, relatedLinks) {
     .progress-bar{display:flex;gap:6px;margin-bottom:32px}
     .progress-step{flex:1;height:3px;background:var(--border);border-radius:2px;transition:background .3s;cursor:pointer}
     .progress-step.active{background:var(--accent)}
-    .progress-step.done{background:#3a3835}
+    .progress-step.done{background:#4a4a4a}
     .cards{display:flex;flex-direction:column;gap:8px}
     .card{border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden;transition:border-color .2s}
     .card:hover{border-color:var(--border-active)}
@@ -351,9 +348,9 @@ function buildPageHtml(data, filename, relatedLinks) {
     .section ol{list-style:none;counter-reset:item;display:flex;flex-direction:column;gap:6px}
     .section ol li{font-size:13px;color:var(--text-secondary);padding-left:24px;position:relative;counter-increment:item}
     .section ol li::before{content:counter(item);position:absolute;left:0;font-size:11px;font-weight:700;color:var(--accent);width:16px;height:16px;background:var(--accent-dim);border-radius:4px;display:flex;align-items:center;justify-content:center;top:1px}
-    .criteria-box{background:#1f1208;border:1px solid #3d2010;border-radius:8px;padding:14px 16px;margin-top:16px}
-    .criteria-box p{font-size:13px;color:#e8a070;line-height:1.6}
-    .quote-block{background:#161412;border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 14px;margin:8px 0;font-size:13px;color:var(--text-secondary);line-height:1.65}
+    .criteria-box{background:#161f00;border:1px solid #2d3d00;border-radius:8px;padding:14px 16px;margin-top:16px}
+    .criteria-box p{font-size:13px;color:#b8d870;line-height:1.6}
+    .quote-block{background:#191919;border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 14px;margin:8px 0;font-size:13px;color:var(--text-secondary);line-height:1.65}
     .body-p{font-size:13px;color:var(--text-secondary);line-height:1.65;margin-bottom:8px}
     .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
     .toolbar-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
