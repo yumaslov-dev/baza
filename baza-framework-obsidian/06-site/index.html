@@ -2,563 +2,1000 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>База знаний продюсера — MASS AGENCY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mass.agency — База знаний продюсера</title>
   <style>
     :root {
-      --bg: #0a0a09;
-      --panel: #121211;
-      --panel-2: #181815;
-      --ink: #f3f0e8;
-      --text: #d8d3c7;
-      --muted: #8e897d;
-      --line: #2d2b25;
-      --line-strong: #4a4639;
-      --acid: #d7ff2f;
-      --paper: #e7dfcc;
-      --black: #050505;
-      --radius: 6px;
+      --bg: #0f0f0f; --surface: #1a1a1a; --surface-hover: #212121;
+      --border: #2a2a2a; --border-active: #3d3d3d;
+      --text-primary: #e8e8e8; --text-secondary: #888; --text-muted: #555;
+      --accent: #c8ff00; --accent-dim: rgba(200,255,0,.08); --accent-border: rgba(200,255,0,.2);
+      --danger: #ff4d4d; --tag-bg: #242424;
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font: 14px/1.5 Inter, Arial, Helvetica, sans-serif;
-      letter-spacing: 0;
-    }
-    button, input { font: inherit; }
-    a { color: inherit; }
-    .noise { display: none; }
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      min-height: 48px;
-      padding: 0 22px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(10,10,9,.94);
-      backdrop-filter: blur(12px);
-    }
-    .brand {
-      text-transform: lowercase;
-      font-weight: 700;
-      letter-spacing: -.02em;
-    }
-    .brand span { color: var(--acid); }
-    .nav {
-      display: flex;
-      gap: 18px;
-      color: var(--muted);
-      font-size: 13px;
-      text-transform: lowercase;
-    }
-    .nav a { text-decoration: none; }
-    .shell {
-      position: relative;
-      z-index: 1;
-      width: min(1500px, calc(100vw - 28px));
-      margin: 0 auto;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 18px;
-      align-items: stretch;
-      padding: 22px 0 14px;
-    }
-    .hero-copy {
-      min-height: 178px;
-      display: grid;
-      align-content: space-between;
-      gap: 18px;
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-    }
-    .kicker {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      color: var(--muted);
-      text-transform: lowercase;
-      font-size: 12px;
-    }
-    .kicker:before {
-      content: "";
-      width: 34px;
-      height: 1px;
-      background: var(--acid);
-    }
-    h1 {
-      margin: 0;
-      max-width: 900px;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: clamp(42px, 5vw, 78px);
-      line-height: .92;
-      letter-spacing: -.052em;
-      text-transform: lowercase;
-    }
-    .hero-text {
-      max-width: 720px;
-      color: var(--text);
-      font-size: 18px;
-      line-height: 1.35;
-      letter-spacing: -.015em;
-    }
-    .hero-panel {
-      display: grid;
-      align-content: space-between;
-      min-height: 178px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-    }
-    .years {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      text-transform: lowercase;
-      font-size: 12px;
-    }
-    .big-count {
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 48px;
-      line-height: .95;
-      letter-spacing: -.045em;
-    }
-    .big-count span { color: var(--acid); }
-    .panel-caption {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px 12px;
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: lowercase;
-    }
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      margin: 0 0 10px;
-      padding: 10px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-    }
-    .search {
-      width: 100%;
-      height: 42px;
-      padding: 0 12px;
-      color: var(--ink);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      outline: none;
-      background: var(--black);
-    }
-    .search:focus { border-color: var(--acid); }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-    .filter {
-      height: 42px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      color: var(--muted);
-      background: transparent;
-      cursor: pointer;
-      text-transform: lowercase;
-    }
-    .filter.active {
-      color: #111;
-      border-color: var(--acid);
-      background: var(--acid);
-    }
-    .dashboard {
-      display: grid;
-      grid-template-columns: 230px minmax(430px, .86fr) minmax(430px, 1.14fr);
-      gap: 10px;
-      align-items: start;
-      padding-bottom: 36px;
-    }
-    .rail, .detail {
-      position: sticky;
-      top: 58px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-      overflow: hidden;
-    }
-    .rail-head, .detail-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: lowercase;
-    }
-    .section-list { display: grid; }
-    .section-button {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      width: 100%;
-      padding: 11px 12px;
-      border: 0;
-      border-bottom: 1px solid var(--line);
-      color: var(--ink);
-      text-align: left;
-      background: transparent;
-      cursor: pointer;
-      text-transform: lowercase;
-    }
-    .section-button span { color: var(--muted); }
-    .section-button.active {
-      color: #111;
-      background: var(--acid);
-    }
-    .section-button.active span { color: #111; }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
-    }
-    .card {
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px 16px;
-      padding: 13px 14px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-      cursor: pointer;
-      transition: border-color .15s ease, background .15s ease;
-    }
-    .card:hover, .card.active {
-      border-color: var(--acid);
-      background: var(--panel-2);
-    }
-    .card-top {
-      display: flex;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: lowercase;
-      grid-column: 1 / -1;
-    }
-    .card-title {
-      margin: 0;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: -.035em;
-      text-transform: lowercase;
-    }
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      grid-column: 1 / -1;
-      max-width: 680px;
-    }
-    .artifact {
-      color: var(--acid);
-      font-size: 13px;
-      text-transform: lowercase;
-      grid-column: 1 / -1;
-    }
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .tag {
-      padding: 3px 7px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: lowercase;
-    }
-    .detail {
-      max-height: calc(100vh - 58px);
-      overflow: auto;
-    }
-    .detail-body { padding: 20px 22px 28px; }
-    .detail-title {
-      margin: 0 0 14px;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 40px;
-      line-height: .98;
-      letter-spacing: -.04em;
-      text-transform: lowercase;
-    }
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .pill {
-      padding: 5px 9px;
-      color: #111;
-      background: #d9d1bd;
-      border-radius: 999px;
-      font-size: 12px;
-      text-transform: lowercase;
-    }
-    .pill.acid { background: var(--acid); }
-    .content h2, .content h3, .content h4 {
-      margin: 24px 0 8px;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 22px;
-      line-height: 1.05;
-      letter-spacing: -.025em;
-      text-transform: lowercase;
-    }
-    .content p, .content li {
-      color: var(--text);
-    }
-    .content ul, .content ol {
-      padding-left: 20px;
-    }
-    .content pre {
-      overflow: auto;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--black);
-      color: var(--paper);
-      white-space: pre-wrap;
-    }
-    .wiki-link {
-      color: var(--acid);
-    }
-    .empty {
-      display: none;
-      padding: 52px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      color: var(--muted);
-      text-align: center;
-      background: var(--panel);
-    }
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 18px 0 32px;
-      color: var(--muted);
-      border-top: 1px solid var(--line);
-      text-transform: lowercase;
-    }
-    @media (max-width: 1100px) {
-      .hero, .dashboard { grid-template-columns: 1fr; }
-      .hero-panel, .rail, .detail { position: static; }
-      .grid { grid-template-columns: 1fr; }
-      .controls { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 620px) {
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text-primary); font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 52px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .topbar-brand span { color: var(--accent); }
+    .topbar-nav { display: flex; gap: 24px; }
+    .topbar-nav a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color .15s; }
+    .topbar-nav a:hover { color: var(--text-secondary); }
+    .topbar-nav a.active { color: var(--text-primary); }
+    .breadcrumb { padding: 20px 32px 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb-sep { color: var(--border-active); }
+    .page { max-width: 1080px; margin: 0 auto; padding: 40px 32px 80px; }
+    .page-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-border); padding: 3px 10px; border-radius: 4px; margin-bottom: 14px; }
+    .page-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .page-title { font-size: 32px; font-weight: 700; line-height: 1.2; margin-bottom: 10px; }
+    .page-desc { color: var(--text-secondary); font-size: 14px; max-width: 620px; line-height: 1.7; margin-bottom: 8px; }
+    .page-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 40px; }
+    .divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+    .section-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 48px; }
+    .section-card { display: block; text-decoration: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: border-color .2s, background .2s, transform .15s; position: relative; overflow: hidden; }
+    .section-card:hover { border-color: var(--border-active); background: var(--surface-hover); transform: translateY(-1px); }
+    .section-card:hover .card-arrow { opacity: 1; transform: translate(0, 0); }
+    .section-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); opacity: 0; transition: opacity .2s; }
+    .section-card:hover::before { opacity: 1; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+    .card-num-badge { width: 36px; height: 36px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .card-arrow { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 16px; opacity: 0; transform: translate(-4px, 4px); transition: opacity .2s, transform .2s; }
+    .card-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin-bottom: 6px; }
+    .card-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; line-height: 1.3; }
+    .card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .card-count { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+    .card-count-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: .6; }
+    .card-tags-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ctag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .card-topics { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+    .card-topic { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .card-topic::before { content: '·'; color: var(--accent); font-size: 16px; line-height: 1; }
+    .material-section { margin-top: 40px; scroll-margin-top: 72px; }
+    .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+    .section-heading h2 { font-size: 22px; line-height: 1.2; }
+    .section-count { color: var(--text-muted); font-size: 12px; margin-bottom: 4px; }
+    .cards { display: flex; flex-direction: column; gap: 8px; }
+    .card { border: 1px solid var(--border); border-radius: 10px; background: var(--surface); overflow: hidden; transition: border-color .2s; }
+    .card:hover { border-color: var(--border-active); }
+    .card.open { border-color: var(--border-active); background: var(--surface-hover); }
+    .card-header { display: flex; align-items: center; gap: 16px; padding: 18px 20px; cursor: pointer; user-select: none; }
+    .card-num { width: 36px; height: 36px; border-radius: 8px; background: var(--tag-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; transition: all .2s; }
+    .card.open .card-num { background: var(--accent-dim); border-color: var(--accent-border); }
+    .card-header-text { flex: 1; }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); }
+    .card-chevron { color: var(--text-muted); font-size: 16px; transition: transform .25s; flex-shrink: 0; margin-left: 12px; }
+    .card.open .card-chevron { transform: rotate(90deg); color: var(--text-secondary); }
+    .card-body { display: none; padding: 0 20px 24px; border-top: 1px solid var(--border); }
+    .card.open .card-body { display: block; }
+    .rule-callout { display: flex; gap: 12px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; padding: 14px 16px; margin: 20px 0 16px; }
+    .rule-callout p { font-size: 13px; color: var(--text-primary); line-height: 1.6; }
+    .section { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+    .section h4, .section h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: 10px; }
+    .section h5 { font-size: 13px; color: var(--text-primary); margin: 14px 0 8px; }
+    .section ul, .section ol { display: flex; flex-direction: column; gap: 6px; padding-left: 18px; color: var(--text-secondary); }
+    .section li, .body-p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+    .section pre { background: #191919; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow: auto; color: var(--text-secondary); white-space: pre-wrap; font-size: 13px; line-height: 1.55; }
+    .quote-block { background: #191919; border-left: 2px solid var(--accent); border-radius: 0 6px 6px 0; padding: 12px 14px; margin: 8px 0; font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .material-content h3 { margin-top: 18px; }
+    @media (max-width: 760px) {
       .topbar { padding: 0 16px; }
-      .nav { display: none; }
-      .shell { width: min(100vw - 24px, 1480px); }
-      .hero { min-height: auto; padding-top: 52px; }
-      h1 { font-size: 44px; }
-      .hero-copy { padding: 16px; }
-      .hero-text { font-size: 16px; }
-      .big-count { font-size: 40px; }
-      .filters { display: grid; grid-template-columns: repeat(2, 1fr); }
-      .filter { width: 100%; }
-      .card-title { font-size: 22px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      * { scroll-behavior: auto !important; transition: none !important; }
+      .topbar-nav { gap: 12px; }
+      .page { padding: 28px 16px 56px; }
+      .section-grid { grid-template-columns: 1fr; }
+      .card-footer, .section-heading { align-items: flex-start; flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <div class="noise"></div>
-  <header class="topbar">
-    <div class="brand">mass<span>.</span> knowledge</div>
-    <nav class="nav">
-      <a href="#situations">ситуации</a>
-      <a href="#processes">процессы</a>
-      <a href="#templates">шаблоны</a>
-      <a href="#principles">принципы</a>
-    </nav>
-  </header>
+<header class="topbar">
+  <div class="topbar-brand"><a href="index.html" style="text-decoration:none;color:inherit">mass<span>.</span>agency</a></div>
+  <nav class="topbar-nav">
+    <a href="#situation-card" class="active">Ситуации</a>
+    <a href="#process">Процессы</a>
+    <a href="#template">Шаблоны</a>
+  </nav>
+</header>
 
-  <main class="shell">
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="kicker">2015-2026 / продакшн / люди / решения</div>
-        <h1>база знаний продюсера</h1>
-        <div class="hero-text">Рабочий интерфейс MASS AGENCY для ситуаций, где нужно быстро понять контекст, назвать риск и собрать следующий шаг.</div>
+<div class="breadcrumb">
+  <span>База знаний</span>
+  <span class="breadcrumb-sep">›</span>
+  <span>Framework</span>
+</div>
+
+<div class="page">
+  <div class="page-tag">Framework</div>
+  <h1 class="page-title">База знаний продюсера</h1>
+  <p class="page-desc">Параллельная система на основе BAZA: рабочие ситуации, процессы, шаблоны и принципы MASS AGENCY.</p>
+  <div class="page-meta">Обновлено: 19 июня 2026 · 23 материалов</div>
+  <div class="divider"></div>
+
+  <div class="section-grid">
+    <a href="#situation-card" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">🎯</div>
+        <div class="card-arrow">↓</div>
       </div>
-      <aside class="hero-panel">
-        <div class="years"><span>внутренняя версия</span><span>ready</span></div>
-        <div>
-          <div class="big-count"><span>23</span> материалов</div>
-        </div>
-        <div class="panel-caption">
-          <span>11 ситуаций</span>
-          <span>3 процесса</span>
-          <span>6 шаблонов</span>
-          <span>3 принципа</span>
-        </div>
-      </aside>
-    </section>
+      <div class="card-section-label">Тип материала</div>
+      <div class="card-title">Ситуация</div>
+      <div class="card-desc">Рабочие ситуации: что происходит, почему важно, где ломается и что делать дальше.</div>
+      <div class="card-topics"><div class="card-topic">Боюсь написать клиенту</div><div class="card-topic">Клиент молчит</div><div class="card-topic">Клиент пишет: нужен ролик</div><div class="card-topic">Клиент просит быстро оценить бюджет</div></div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>11 материалов</div>
+        <div class="card-tags-row"><span class="ctag">Ситуация</span></div>
+      </div>
+    </a>
+<a href="#process" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">⚙️</div>
+        <div class="card-arrow">↓</div>
+      </div>
+      <div class="card-section-label">Тип материала</div>
+      <div class="card-title">Процесс</div>
+      <div class="card-desc">Повторяемые процессы для входа в задачу, ведения проекта и работы с командой.</div>
+      <div class="card-topics"><div class="card-topic">Ведение проекта</div><div class="card-topic">Вход в задачу</div><div class="card-topic">Работа с командой</div></div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>3 материалов</div>
+        <div class="card-tags-row"><span class="ctag">Процесс</span></div>
+      </div>
+    </a>
+<a href="#template" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">📄</div>
+        <div class="card-arrow">↓</div>
+      </div>
+      <div class="card-section-label">Тип материала</div>
+      <div class="card-title">Шаблон</div>
+      <div class="card-desc">Готовые структуры писем, статусов, чеклистов и разборов.</div>
+      <div class="card-topics"><div class="card-topic">Письмо о риске</div><div class="card-topic">Письмо с пониманием задачи</div><div class="card-topic">Постразбор проекта</div><div class="card-topic">Статус проекта</div></div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>6 материалов</div>
+        <div class="card-tags-row"><span class="ctag">Шаблон</span></div>
+      </div>
+    </a>
+<a href="#principle" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">💡</div>
+        <div class="card-arrow">↓</div>
+      </div>
+      <div class="card-section-label">Тип материала</div>
+      <div class="card-title">Принцип</div>
+      <div class="card-desc">Короткие управленческие правила, которые держат систему решений.</div>
+      <div class="card-topics"><div class="card-topic">Контроль сохраняет доверие</div><div class="card-topic">Неопределённость нужно называть</div><div class="card-topic">Ясность до оценки</div></div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>3 материалов</div>
+        <div class="card-tags-row"><span class="ctag">Принцип</span></div>
+      </div>
+    </a>
+  </div>
 
-    <section class="controls" aria-label="фильтры базы">
-      <input class="search" id="search" placeholder="найти ситуацию, письмо, риск, задачу..." />
-      <div class="filters" id="typeFilters"></div>
-    </section>
-
-    <section class="dashboard" id="situations">
-      <aside class="rail">
-        <div class="rail-head"><span>раздел</span><span id="totalCount"></span></div>
-        <div class="section-list" id="sectionFilters"></div>
-      </aside>
-
+  <section class="material-section" id="situation-card">
+    <div class="section-heading">
       <div>
-        <div class="grid" id="grid"></div>
-        <div class="empty" id="empty">ничего не найдено. попробуйте убрать фильтр или изменить запрос.</div>
+        <div class="page-tag">Ситуация</div>
+        <h2>Ситуация</h2>
       </div>
+      <div class="section-count">11 материалов</div>
+    </div>
+    <div class="cards">
+      <div class="card" id="card-0">
+    <div class="card-header" onclick="toggleCard(0)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Боюсь написать клиенту</div>
+        <div class="card-subtitle">Ситуация · Понять клиента</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> письмо клиенту</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Нужно написать клиенту, но есть страх показаться некомпетентным, навязчивым или преждевременно тревожным.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Если не написать клиенту вовремя, неопределённость начнёт управлять проектом. Карточка помогает собрать короткое письмо и вернуть ситуацию в рабочее поле.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Нужно написать клиенту, но внутри появляется сопротивление.</p>
+<p class="body-p">Кажется, что вопрос слишком простой. Или что клиент подумает: команда сама не понимает, что делает. Или что ещё рано тревожить человека.</p>
+<p class="body-p">В итоге продюсер ждёт. Команда тоже ждёт. Срок идёт.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Молчание редко сохраняет доверие. Чаще оно накапливает риск.</p>
+<p class="body-p">Клиент может быть занят, мог не увидеть сообщение, мог считать, что команда двигается дальше. Команда в это время начинает додумывать за клиента.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>продюсер ждёт идеального момента;</li><li>пытается сначала решить всё внутри команды;</li><li>боится задать простой вопрос;</li><li>пишет слишком длинно;</li><li>не называет риск;</li><li>не предлагает следующий шаг.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Письмо клиенту — часть управления проектом.</p>
+<p class="body-p">Хорошее сообщение показывает картину: что происходит, где нужен ответ, какой риск появился и какой следующий шаг команда предлагает.</p>
+<h3>Что делать</h3>
+<ol><li>Выписать, какой ответ нужен от клиента.</li><li>Назвать, на какой срок влияет этот ответ.</li><li>Сформулировать риск без драматизации.</li><li>Предложить простой следующий шаг.</li><li>Отправить короткое письмо.</li></ol>
+<h3>Что написать</h3>
+<pre><code>Привет.
 
-      <aside class="detail" id="detail">
-        <div class="detail-head"><span>предпросмотр</span><span id="detailPath"></span></div>
-        <div class="detail-body">
-          <h2 class="detail-title" id="detailTitle"></h2>
-          <div class="meta" id="detailMeta"></div>
-          <div class="content" id="detailContent"></div>
-        </div>
-      </aside>
-    </section>
+Нужен ваш ответ по [вопрос].
 
-    <footer class="footer">
-      <span>mass agency / knowledge framework</span>
-      <span>локальный html-прототип</span>
-    </footer>
-  </main>
+Сейчас без этого решения мы можем двигаться только до [граница]. Дальше появляется риск по [срок / качеству / бюджету].
 
-  <script>
-    const items = [{"title":"Боюсь написать клиенту","slug":"боюсь-написать-клиенту","path":"02-cards/боюсь-написать-клиенту.md","type":"situation-card","status":"ready","section":"client","audience":"продюсер, менеджер проекта, креативный специалист","situation":"Нужно написать клиенту, но есть страх показаться некомпетентным, навязчивым или преждевременно тревожным.","artifact":"письмо клиенту","visibility":"internal","tags":["клиент","коммуникация","страх","ответственность","письмо"],"related":["[[Статус проекта]]","[[Вход в задачу]]","[[Неопределённость нужно называть]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Если не написать клиенту вовремя, неопределённость начнёт управлять проектом. Карточка помогает собрать короткое письмо и вернуть ситуацию в рабочее поле.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Нужно написать клиенту, но внутри появляется сопротивление.\u003c/p>\n\u003cp>Кажется, что вопрос слишком простой. Или что клиент подумает: команда сама не понимает, что делает. Или что ещё рано тревожить человека.\u003c/p>\n\u003cp>В итоге продюсер ждёт. Команда тоже ждёт. Срок идёт.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Молчание редко сохраняет доверие. Чаще оно накапливает риск.\u003c/p>\n\u003cp>Клиент может быть занят, мог не увидеть сообщение, мог считать, что команда двигается дальше. Команда в это время начинает додумывать за клиента.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>продюсер ждёт идеального момента;\u003c/li>\u003cli>пытается сначала решить всё внутри команды;\u003c/li>\u003cli>боится задать простой вопрос;\u003c/li>\u003cli>пишет слишком длинно;\u003c/li>\u003cli>не называет риск;\u003c/li>\u003cli>не предлагает следующий шаг.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Письмо клиенту — часть управления проектом.\u003c/p>\n\u003cp>Хорошее сообщение показывает картину: что происходит, где нужен ответ, какой риск появился и какой следующий шаг команда предлагает.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Выписать, какой ответ нужен от клиента.\u003c/li>\u003cli>Назвать, на какой срок влияет этот ответ.\u003c/li>\u003cli>Сформулировать риск без драматизации.\u003c/li>\u003cli>Предложить простой следующий шаг.\u003c/li>\u003cli>Отправить короткое письмо.\u003c/li>\u003c/ol>\n\u003ch3>Что написать\u003c/h3>\n\u003cpre>\u003ccode>Привет.\n\nНужен ваш ответ по [вопрос].\n\nСейчас без этого решения мы можем двигаться только до [граница]. Дальше появляется риск по [срок / качеству / бюджету].\n\nПредлагаю так:\n1. Вы отвечаете по [вопрос] до [время].\n2. Мы после этого делаем [следующий шаг].\n3. Если ответа не будет, зафиксируем [вариант по умолчанию] и пойдём по нему.\n\nТак мы сохраним срок и не будем гадать.\u003c/code>\u003c/pre>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Короткое письмо клиенту с вопросом, риском и следующим шагом.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>После письма понятно:\u003c/p>\n\u003cul>\u003cli>какой ответ нужен;\u003c/li>\u003cli>зачем он нужен;\u003c/li>\u003cli>какой срок связан с решением;\u003c/li>\u003cli>что команда предлагает дальше;\u003c/li>\u003cli>что произойдёт, если ответа не будет.\u003c/li>\u003c/ul>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Чем раньше названа неопределённость, тем меньше она стоит проекту.\u003c/p>"},{"title":"Клиент молчит","slug":"клиент-молчит","path":"02-cards/клиент-молчит.md","type":"situation-card","status":"ready","section":"client","audience":"продюсер, менеджер проекта","situation":"Клиент не отвечает, а решение нужно для движения проекта.","artifact":"короткое follow-up письмо","visibility":"internal","tags":["клиент","письмо","риск","сроки"],"related":["[[Боюсь написать клиенту]]","[[Письмо о риске]]","[[Неопределённость нужно называть]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Молчание клиента не всегда означает отказ или недовольство. Для проекта это неопределённость, которую нужно назвать и перевести в следующий шаг.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Клиент не отвечает на вопрос, согласование или отправленный материал. Команда ждёт, срок идёт, продюсер начинает додумывать за клиента.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Если не написать вовремя, проект теряет управление. Клиент может считать, что команда продолжает работу, а команда в этот момент стоит.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>ждут слишком долго;\u003c/li>\u003cli>пишут эмоционально;\u003c/li>\u003cli>напоминают без конкретного вопроса;\u003c/li>\u003cli>не называют влияние на срок;\u003c/li>\u003cli>не предлагают вариант по умолчанию.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Нужно отделить факт молчания от интерпретаций. Факт: нет ответа. Рабочий вопрос: какое решение нужно и до какого времени.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Назвать, какой ответ нужен.\u003c/li>\u003cli>Объяснить, на что он влияет.\u003c/li>\u003cli>Дать срок ответа.\u003c/li>\u003cli>Предложить вариант по умолчанию.\u003c/li>\u003cli>Зафиксировать следующий шаг.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cpre>\u003ccode>Привет.\n\nНапомню про [вопрос]. Ответ нужен до [время], потому что дальше он влияет на [срок / монтаж / запуск / смету].\n\nЕсли вам подходит вариант [вариант], подтвердите, пожалуйста. Если ответа не будет, предлагаю идти по нему, чтобы не останавливать проект.\u003c/code>\u003c/pre>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Follow-up письмо с вопросом, сроком и вариантом следующего шага.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Клиент ответил или команда получила понятный вариант движения без угадывания.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Молчание нужно переводить в ясный вопрос и следующий шаг.\u003c/p>"},{"title":"Клиент пишет: нужен ролик","slug":"клиент-пишет-нужен-ролик","path":"02-cards/клиент-пишет-нужен-ролик.md","type":"situation-card","status":"ready","section":"client","audience":"продюсер, менеджер проекта","situation":"Клиент приходит с коротким запросом про ролик, но задача, аудитория и критерий успеха ещё не прояснены.","artifact":"письмо с вопросами и пониманием следующего шага","visibility":"internal","tags":["клиент","бриф","вход-в-задачу","письмо"],"related":["[[Вход в задачу]]","[[Чеклист входа в задачу]]","[[Ясность до оценки]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Короткий запрос клиента редко описывает настоящую задачу. Карточка помогает не уйти слишком рано в цену, формат или портфолио.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Клиент пишет: «Нам нужен ролик», «Сколько стоит видео на 2 минуты?», «Можете снять имиджевый ролик?»\u003c/p>\n\u003cp>Хочется быстро назвать вилку или отправить кейсы. Но пока неизвестно, кто будет смотреть, зачем материал нужен, где он будет жить и как клиент поймёт, что работа сработала.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Если продюсер сразу продаёт формат, команда рискует взять в работу задачу, смысл и экономика которой ещё не ясны.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>отвечают ценой до понимания задачи;\u003c/li>\u003cli>отправляют портфолио без связи с запросом;\u003c/li>\u003cli>назначают созвон без подготовки;\u003c/li>\u003cli>принимают формат за результат;\u003c/li>\u003cli>боятся задать простые вопросы.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Первый ответ должен показать: запрос услышан, за форматом есть задача, команда готова быстро разобраться и предложить следующий шаг.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Ответить спокойно и по делу.\u003c/li>\u003cli>Зафиксировать, что для оценки нужен контекст.\u003c/li>\u003cli>Задать 5-7 стартовых вопросов.\u003c/li>\u003cli>Предложить короткий созвон.\u003c/li>\u003cli>После разговора письменно вернуть понимание задачи.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cpre>\u003ccode>Привет. Да, можем помочь.\n\nЧтобы корректно оценить ролик, нужно понять задачу: где он будет использоваться, кто зритель, какое действие вы ждёте после просмотра, какие сроки и есть ли бюджетный ориентир.\n\nДавайте проведём короткий созвон на 20-30 минут. После него смогу предложить подход и первичную вилку.\u003c/code>\u003c/pre>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Письмо с вопросами, договорённость о созвоне или короткое понимание задачи после первого контакта.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Продюсер может ответить: зачем клиенту ролик, кто зритель, где материал используется, какой результат важен, кто принимает решение, какие сроки и ограничения.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Короткий запрос клиента - вход в разговор, а не готовый бриф.\u003c/p>"},{"title":"Клиент просит быстро оценить бюджет","slug":"клиент-просит-быстро-оценить-бюджет","path":"02-cards/клиент-просит-быстро-оценить-бюджет.md","type":"situation-card","status":"ready","section":"money","audience":"продюсер, менеджер проекта","situation":"Клиент просит вилку бюджета до полноценного брифа.","artifact":"предварительная вилка с условиями","visibility":"internal","tags":["деньги","бюджет","клиент","оценка"],"related":["[[Клиент пишет: нужен ролик]]","[[Чеклист входа в задачу]]","[[Ясность до оценки]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Быстрая оценка полезна, если рядом с цифрой есть состав работ, неизвестные параметры и следующий шаг.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Клиент пишет: «Нам нужна вилка сегодня», «Просто порядок цифр», «Нужно заложить бюджет».\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Ранняя цифра становится якорем. Если дать одну сумму без условий, клиент запомнит минимум, а команда потеряет возможность уточнить объём.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>называют одну цифру;\u003c/li>\u003cli>дают вилку без состава работ;\u003c/li>\u003cli>занижают цену из страха потерять клиента;\u003c/li>\u003cli>не спрашивают бюджетный ориентир;\u003c/li>\u003cli>обещают точность без вводных.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Оценка должна помогать клиенту планировать и защищать агентство от случайных обязательств.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Сказать, что ориентир возможен.\u003c/li>\u003cli>Задать минимальные вопросы.\u003c/li>\u003cli>Дать вилку по сценариям.\u003c/li>\u003cli>Назвать, что входит в вилку.\u003c/li>\u003cli>Зафиксировать, что меняет цену.\u003c/li>\u003cli>Предложить шаг к точной смете.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cp>Минимальные вопросы:\u003c/p>\n\u003cul>\u003cli>нужна съёмка или монтаж из готовых материалов;\u003c/li>\u003cli>сколько минут, версий и языков;\u003c/li>\u003cli>нужны ли графика, диктор, музыка;\u003c/li>\u003cli>где будет использоваться материал;\u003c/li>\u003cli>когда нужен финал;\u003c/li>\u003cli>сколько этапов согласования;\u003c/li>\u003cli>есть ли бюджетный коридор.\u003c/li>\u003c/ul>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Сообщение с предварительной вилкой, составом работ, неизвестными параметрами и следующим шагом.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Клиент получил ориентир, но понимает, что финальная сумма зависит от вводных.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Вилка без условий создаёт риск. Вилка с условиями помогает двигаться.\u003c/p>"},{"title":"Нужен твёрдый разговор","slug":"нужен-твердый-разговор","path":"02-cards/нужен-твердый-разговор.md","type":"situation-card","status":"ready","section":"team","audience":"руководитель, продюсер","situation":"Нужно сказать человеку о проблеме в работе и обозначить границу.","artifact":"сценарий разговора и зафиксированные ожидания","visibility":"internal","tags":["команда","обратная-связь","границы","ответственность"],"related":["[[Нужно поставить задачу]]","[[Нужно разобрать ошибку]]","[[Сценарий обратной связи]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Твёрдый разговор держится на состоянии, фактах, мотивации и границе.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Человек регулярно срывает договорённости, качество не растёт, ответственность размывается. Нужно поговорить прямо.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Если разговор откладывать, проблема становится нормой. Если начать с претензий, человек уйдёт в защиту.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>начинают с обвинений;\u003c/li>\u003cli>говорят общими словами;\u003c/li>\u003cli>копят всё и выдают за раз;\u003c/li>\u003cli>принимают кивки за изменение;\u003c/li>\u003cli>ставят границу без понимания мотивации.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Нужны факты, влияние на проект, ожидание, понимание причины и ясная граница.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Подготовить 2-3 факта.\u003c/li>\u003cli>Начать спокойно.\u003c/li>\u003cli>Сказать, как это влияет на проект.\u003c/li>\u003cli>Спросить, что происходит у человека.\u003c/li>\u003cli>Назвать ожидание.\u003c/li>\u003cli>Обозначить, что изменится, если поведение не изменится.\u003c/li>\u003cli>Зафиксировать следующий шаг.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cp>Используй \u003cspan class=\"wiki-link\">Сценарий обратной связи\u003c/span>.\u003c/p>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Зафиксированные ожидания, срок проверки и следующий шаг.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Человек понимает, что именно не работает, что ожидается и когда будет проверка.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Твёрдость начинается с фактов и ясной границы.\u003c/p>"},{"title":"Нужно поставить задачу","slug":"нужно-поставить-задачу","path":"02-cards/нужно-поставить-задачу.md","type":"situation-card","status":"ready","section":"team","audience":"продюсер, руководитель, менеджер проекта","situation":"Нужно передать задачу члену команды так, чтобы он понял результат, контекст и критерии.","artifact":"письменно зафиксированная задача","visibility":"internal","tags":["команда","задача","делегирование","проект"],"related":["[[Работа с командой]]","[[Сценарий обратной связи]]","[[Контроль сохраняет доверие]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Хорошая задача описывает не только действие, но и смысл результата.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Продюсер передаёт задачу монтажёру, дизайнеру, режиссёру или ассистенту. Человек делает, но результат расходится с ожиданием.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Нечёткая задача тратит время обоих: исполнитель делает не то, продюсер переделывает, проект теряет срок.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>задача звучит как действие без результата;\u003c/li>\u003cli>нет контекста;\u003c/li>\u003cli>нет критерия готовности;\u003c/li>\u003cli>не названа глубина проработки;\u003c/li>\u003cli>нет точки проверки.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>В задаче должны быть контекст, цель, результат, формат, критерии, срок и точка проверки.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Дать контекст.\u003c/li>\u003cli>Назвать цель.\u003c/li>\u003cli>Описать результат.\u003c/li>\u003cli>Указать формат и критерии.\u003c/li>\u003cli>Назвать срок.\u003c/li>\u003cli>Договориться о первой проверке.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cpre>\u003ccode>Нужна подборка референсов для созвона с клиентом по HR-ролику.\n\nЦель: помочь выбрать тон.\nРезультат: 8-10 примеров с короткой подписью, что берём из каждого.\nФормат: ссылка + 2-3 предложения.\nПервый вариант покажи сегодня до 17:00.\u003c/code>\u003c/pre>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Письменно зафиксированная задача.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Исполнитель может своими словами повторить, что делает, к какому сроку и как поймёт, что сделал правильно.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Задача должна передавать результат, а не только действие.\u003c/p>"},{"title":"Нужно предупредить о риске","slug":"нужно-предупредить-о-риске","path":"02-cards/нужно-предупредить-о-риске.md","type":"situation-card","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Продюсер видит риск по сроку, качеству, бюджету или материалам и должен сообщить об этом заранее.","artifact":"сообщение о риске с вариантами решения","visibility":"internal","tags":["риск","проект","статус","клиент"],"related":["[[Письмо о риске]]","[[Ведение проекта]]","[[Неопределённость нужно называть]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Риск, названный заранее, выглядит как управление. Карточка помогает сообщить о проблеме до того, как она стала кризисом.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Материалы не пришли, подрядчик не успевает, бюджет дрейфует, срок под угрозой. Продюсер видит это раньше клиента или руководителя.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Клиент оценивает не только проблему. Он смотрит, есть ли у команды контроль и варианты.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>риск путают с провалом;\u003c/li>\u003cli>сообщают слишком поздно;\u003c/li>\u003cli>приносят проблему без вариантов;\u003c/li>\u003cli>надеются, что ситуация сама исчезнет;\u003c/li>\u003cli>пишут эмоционально вместо фактов.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Риск - сигнал для раннего решения. Нужно назвать факт, возможное последствие, срочность, варианты и рекомендацию.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Зафиксировать факт риска.\u003c/li>\u003cli>Оценить срочность.\u003c/li>\u003cli>Подготовить 2-3 варианта действий.\u003c/li>\u003cli>Выбрать рекомендацию.\u003c/li>\u003cli>Сообщить письменно.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cp>Используй \u003cspan class=\"wiki-link\">Письмо о риске\u003c/span>.\u003c/p>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Сообщение о риске с вариантами и принятым решением.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Все стороны знают о риске, понимают его серьёзность и знают следующий шаг.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Риск стоит меньше, когда он назван до кризиса.\u003c/p>"},{"title":"Нужно разобрать ошибку","slug":"нужно-разобрать-ошибку","path":"02-cards/нужно-разобрать-ошибку.md","type":"situation-card","status":"ready","section":"team","audience":"продюсер, руководитель","situation":"В проекте произошла ошибка, и её нужно разобрать с командой без поиска виноватого.","artifact":"изменение процесса или правило","visibility":"internal","tags":["команда","ошибка","процесс","обратная-связь"],"related":["[[Работа с командой]]","[[Сценарий обратной связи]]","[[Контроль сохраняет доверие]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Хороший разбор ошибки заканчивается изменением процесса.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Пропустили дедлайн, отправили не ту версию, потеряли файл или дали клиенту некорректную информацию.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Ошибка без разбора повторится. Разбор с обвинениями разрушит доверие и не улучшит процесс.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>ищут виноватого;\u003c/li>\u003cli>обсуждают личность;\u003c/li>\u003cli>разбирают на эмоциях;\u003c/li>\u003cli>не фиксируют вывод;\u003c/li>\u003cli>заканчивают фразой «будем внимательнее».\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Ошибка почти всегда имеет системную точку: неясная задача, нереальный срок, отсутствие проверки, незаписанная договорённость, поздний запрос помощи.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Не разбирать в момент сильных эмоций.\u003c/li>\u003cli>Начать с фактов.\u003c/li>\u003cli>Найти точку, где риск можно было увидеть раньше.\u003c/li>\u003cli>Понять, что в процессе это допустило.\u003c/li>\u003cli>Ввести правило.\u003c/li>\u003cli>Назначить ответственного за изменение.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cp>Вопросы разбора:\u003c/p>\n\u003col>\u003cli>Что произошло?\u003c/li>\u003cli>Какое последствие?\u003c/li>\u003cli>Где можно было заметить раньше?\u003c/li>\u003cli>Что в процессе позволило этому случиться?\u003c/li>\u003cli>Какое правило вводим?\u003c/li>\u003cli>Кто отвечает за изменение?\u003c/li>\u003c/ol>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Записанное правило или изменение в процессе.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Команда понимает, что именно изменится в следующем проекте.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Разбирать нужно цепочку событий, а не характер человека.\u003c/p>"},{"title":"После встречи написать понимание задачи","slug":"после-встречи-написать-понимание-задачи","path":"02-cards/после-встречи-написать-понимание-задачи.md","type":"situation-card","status":"ready","section":"client","audience":"продюсер, менеджер проекта","situation":"После первой встречи нужно зафиксировать, как агентство поняло задачу клиента.","artifact":"письмо с пониманием задачи","visibility":"internal","tags":["клиент","письмо","бриф","вход-в-задачу"],"related":["[[Клиент пишет: нужен ролик]]","[[Письмо с пониманием задачи]]","[[Вход в задачу]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>После встречи у участников часто остаются разные версии разговора. Письмо с пониманием задачи превращает устный контекст в основу для предложения.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Клиент рассказал ожидания, сроки, внутренние ограничения и сомнения. Часть прозвучала нечётко, часть участники могли понять по-разному.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Если сразу перейти к смете или идеям, проект начнёт строиться на предположениях. Расхождения проявятся позже и будут стоить дороже.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>письмо превращается в протокол;\u003c/li>\u003cli>текст слишком длинный;\u003c/li>\u003cli>нет вывода;\u003c/li>\u003cli>предположения подаются как факты;\u003c/li>\u003cli>нет просьбы подтвердить понимание.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Понимание задачи отвечает на вопросы: контекст, задача, аудитория, ожидаемый результат, ограничения, открытые вопросы, следующий шаг.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Сразу после встречи собрать заметки.\u003c/li>\u003cli>Отделить факты от предположений.\u003c/li>\u003cli>Сформулировать задачу через пользу для клиента.\u003c/li>\u003cli>Написать короткое письмо.\u003c/li>\u003cli>Попросить подтвердить или поправить.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cp>Используй \u003cspan class=\"wiki-link\">Письмо с пониманием задачи\u003c/span>.\u003c/p>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Письмо или документ с пониманием задачи.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Клиент отвечает «да, правильно поняли» или вносит точные правки до сметы и производства.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Понимание задачи нужно подтвердить до предложения.\u003c/p>"},{"title":"Правка или новая задача","slug":"правка-или-новая-задача","path":"02-cards/правка-или-новая-задача.md","type":"situation-card","status":"ready","section":"money","audience":"продюсер, менеджер проекта","situation":"Клиент просит изменить результат, и нужно понять: это правка в рамках объёма или новая работа.","artifact":"фиксация правки или допработы","visibility":"internal","tags":["правки","деньги","проект","договоренности"],"related":["[[Ведение проекта]]","[[Статус проекта]]","[[Контроль сохраняет доверие]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Если не отделять правки от новых задач, проект теряет срок, деньги и ясность договорённостей.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Клиент присылает комментарий. Он может быть уточнением в рамках результата или просьбой, которая меняет объём, формат, сроки или производственную логику.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Незаметные допработы накапливаются. На закрытии появляется конфликт: клиент уверен, что это правки, команда видит новый объём.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>боятся обсуждать деньги;\u003c/li>\u003cli>нет зафиксированного результата;\u003c/li>\u003cli>просьбу принимают устно;\u003c/li>\u003cli>команда запускает работу до оценки;\u003c/li>\u003cli>продюсер объясняет доплату слишком поздно.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Правка уточняет согласованный результат. Новая задача меняет результат, объём, формат, количество версий, срок или состав специалистов.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Проверить просьбу по критериям.\u003c/li>\u003cli>Если это правка, принять в работу.\u003c/li>\u003cli>Если это новая задача, назвать её отдельно.\u003c/li>\u003cli>Оценить срок и стоимость.\u003c/li>\u003cli>Зафиксировать решение письменно.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cpre>\u003ccode>Это изменение влияет на согласованный объём.\n\nЧтобы не потерять контроль по срокам, сначала зафиксирую новый объём, затем оценю срок и стоимость. После вашего подтверждения запустим в работу.\u003c/code>\u003c/pre>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Письменная фиксация: что принято как правка, что оформляется как допработа.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Клиент понимает границу, агентство не теряет объём незаметно, экономика проекта остаётся управляемой.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Допработу нужно назвать до запуска в работу.\u003c/p>"},{"title":"Срок сдвигается","slug":"срок-сдвигается","path":"02-cards/срок-сдвигается.md","type":"situation-card","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Проект не успевает к согласованному дедлайну, и клиенту нужно сказать об этом.","artifact":"сообщение с новым планом","visibility":"internal","tags":["сроки","клиент","риск","проект"],"related":["[[Нужно предупредить о риске]]","[[Статус проекта]]","[[Ведение проекта]]"],"html":"\u003ch3>Коротко\u003c/h3>\n\u003cp>Клиенту легче принять сдвиг, когда рядом с фактом есть причина, новый план и вариант решения.\u003c/p>\n\u003ch3>Ситуация\u003c/h3>\n\u003cp>Дедлайн больше не реалистичен: материалы задержались, правок больше, техническая часть сложнее, подрядчик не успевает.\u003c/p>\n\u003ch3>Почему важно\u003c/h3>\n\u003cp>Позднее сообщение отнимает у клиента выбор. Сообщение без плана создаёт тревогу.\u003c/p>\n\u003ch3>Где обычно ломается\u003c/h3>\n\u003cul>\u003cli>тянут до последнего;\u003c/li>\u003cli>оправдываются;\u003c/li>\u003cli>перекладывают вину;\u003c/li>\u003cli>не дают новый план;\u003c/li>\u003cli>сообщают в момент, когда уже нельзя выбрать вариант.\u003c/li>\u003c/ul>\n\u003ch3>Как смотреть точнее\u003c/h3>\n\u003cp>Перед письмом нужно знать: что сдвигается, почему, на сколько, что команда уже делает, какие варианты есть.\u003c/p>\n\u003ch3>Что делать\u003c/h3>\n\u003col>\u003cli>Сообщить как можно раньше.\u003c/li>\u003cli>Назвать факт и причину без лишних подробностей.\u003c/li>\u003cli>Объяснить влияние на срок.\u003c/li>\u003cli>Дать новый план.\u003c/li>\u003cli>Спросить, какой вариант подходит, если выбор нужен.\u003c/li>\u003c/ol>\n\u003ch3>Что написать / собрать\u003c/h3>\n\u003cpre>\u003ccode>Добрый день.\n\nПо текущему этапу есть сдвиг.\n\nПричина: [коротко].\nЧто меняется: [новый срок / порядок].\nЧто уже делаем: [действия команды].\n\nЕсли такой порядок подходит, двигаемся по нему. Если критичен прежний срок, предложу вариант сокращения объёма.\u003c/code>\u003c/pre>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Сообщение с новым планом и подтверждением клиента.\u003c/p>\n\u003ch3>Критерий хорошего результата\u003c/h3>\n\u003cp>Клиент получил информацию вовремя, понял причину, знает новый план и может принять решение.\u003c/p>\n\u003ch3>Главное правило\u003c/h3>\n\u003cp>Сдвиг срока нужно приносить вместе с планом.\u003c/p>"},{"title":"Ведение проекта","slug":"ведение-проекта","path":"03-processes/ведение-проекта.md","type":"process","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Когда проект уже запущен и нужно держать сроки, решения, риски, клиента и команду в одной картине.","artifact":"цикл управления проектом","visibility":"internal","tags":["процесс","проект","статус","риск"],"related":["[[Нужно предупредить о риске]]","[[Срок сдвигается]]","[[Статус проекта]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>Когда проект уже запущен и нужно держать сроки, решения, риски, клиента и команду в одной картине.\u003c/p>\n\u003ch3>Цикл управления\u003c/h3>\n\u003col>\u003cli>Зафиксировать результат, этапы, роли и сроки.\u003c/li>\u003cli>Вести единый статус.\u003c/li>\u003cli>Проверять риски до того, как они станут проблемами.\u003c/li>\u003cli>Отделять правки от новых задач.\u003c/li>\u003cli>Письменно фиксировать решения.\u003c/li>\u003cli>Закрывать этапы с понятным артефактом.\u003c/li>\u003cli>После финала проводить постразбор.\u003c/li>\u003c/ol>\n\u003ch3>Контрольные вопросы\u003c/h3>\n\u003cul>\u003cli>Где проект сейчас?\u003c/li>\u003cli>Что готово?\u003c/li>\u003cli>Что ждём?\u003c/li>\u003cli>Где риск?\u003c/li>\u003cli>Кто принимает решение?\u003c/li>\u003cli>Какой следующий шаг?\u003c/li>\u003cli>Что изменилось в объёме, сроке или бюджете?\u003c/li>\u003c/ul>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Единый статус проекта, история решений и список рисков.\u003c/p>\n\u003ch3>Связанные материалы\u003c/h3>\n\u003cul>\u003cli>\u003cspan class=\"wiki-link\">Нужно предупредить о риске\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Срок сдвигается\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Правка или новая задача\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Постразбор проекта\u003c/span>\u003c/li>\u003c/ul>"},{"title":"Вход в задачу","slug":"вход-в-задачу","path":"03-processes/вход-в-задачу.md","type":"process","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Когда клиент приходит с запросом, а продюсеру нужно перейти от формата к понятной задаче.","artifact":"последовательность входа в клиентскую задачу","visibility":"internal","tags":["процесс","бриф","клиент","вход-в-задачу"],"related":["[[Клиент пишет: нужен ролик]]","[[После встречи написать понимание задачи]]","[[Чеклист входа в задачу]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>Когда клиент приходит с запросом, а продюсеру нужно перейти от формата к понятной задаче.\u003c/p>\n\u003ch3>Цель процесса\u003c/h3>\n\u003cp>Собрать контекст, результат, ограничения, критерии успеха и следующий шаг до сметы, идеи или запуска команды.\u003c/p>\n\u003ch3>Шаги\u003c/h3>\n\u003col>\u003cli>Принять запрос и показать, что он услышан.\u003c/li>\u003cli>Найти открытый контекст: клиент, продукт, событие, аудитория.\u003c/li>\u003cli>Задать стартовые вопросы.\u003c/li>\u003cli>Провести короткий созвон.\u003c/li>\u003cli>Зафиксировать понимание задачи письмом.\u003c/li>\u003cli>Проверить, какие вводные ещё неизвестны.\u003c/li>\u003cli>После подтверждения перейти к оценке, идее или плану.\u003c/li>\u003c/ol>\n\u003ch3>Минимум вопросов\u003c/h3>\n\u003cul>\u003cli>Для чего нужен материал?\u003c/li>\u003cli>Кто будет смотреть?\u003c/li>\u003cli>Где материал будет использоваться?\u003c/li>\u003cli>Что зритель должен понять или сделать?\u003c/li>\u003cli>Почему задача появилась сейчас?\u003c/li>\u003cli>Кто согласует результат?\u003c/li>\u003cli>Какие сроки и бюджетный ориентир?\u003c/li>\u003c/ul>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Подтверждённое понимание задачи и список открытых вопросов.\u003c/p>\n\u003ch3>Связанные материалы\u003c/h3>\n\u003cul>\u003cli>\u003cspan class=\"wiki-link\">Клиент пишет: нужен ролик\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Клиент просит быстро оценить бюджет\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Письмо с пониманием задачи\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Чеклист входа в задачу\u003c/span>\u003c/li>\u003c/ul>"},{"title":"Работа с командой","slug":"работа-с-командой","path":"03-processes/работа-с-командой.md","type":"process","status":"ready","section":"team","audience":"руководитель, продюсер","situation":"Когда задача зависит от нескольких людей и продюсеру нужно сохранить ясность, ответственность и рабочий темп.","artifact":"цикл постановки задач, проверки и обратной связи","visibility":"internal","tags":["процесс","команда","задача","обратная-связь"],"related":["[[Нужно поставить задачу]]","[[Нужно разобрать ошибку]]","[[Нужен твёрдый разговор]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>Когда задача зависит от нескольких людей и продюсеру нужно сохранить ясность, ответственность и рабочий темп.\u003c/p>\n\u003ch3>Цикл работы\u003c/h3>\n\u003col>\u003cli>Поставить задачу через контекст, результат и критерии.\u003c/li>\u003cli>Договориться о первой точке проверки.\u003c/li>\u003cli>Проверять работу по фактам, а не по тревоге.\u003c/li>\u003cli>Помогать через диагностику стопора.\u003c/li>\u003cli>Давать обратную связь по работе.\u003c/li>\u003cli>Разбирать ошибки как цепочку событий.\u003c/li>\u003cli>Фиксировать новые правила.\u003c/li>\u003c/ol>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Письменные задачи, точки проверки, правила после ошибок и договорённости по ответственности.\u003c/p>\n\u003ch3>Связанные материалы\u003c/h3>\n\u003cul>\u003cli>\u003cspan class=\"wiki-link\">Нужно поставить задачу\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Нужно разобрать ошибку\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Нужен твёрдый разговор\u003c/span>\u003c/li>\u003cli>\u003cspan class=\"wiki-link\">Сценарий обратной связи\u003c/span>\u003c/li>\u003c/ul>"},{"title":"Письмо о риске","slug":"письмо-о-риске","path":"04-templates/письмо-о-риске.md","type":"template","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Когда риск ещё управляемый, но уже требует решения клиента, руководителя или команды.","artifact":"структура сообщения о риске","visibility":"internal","tags":["шаблон","письмо","риск","статус"],"related":["[[Нужно предупредить о риске]]","[[Срок сдвигается]]","[[Ведение проекта]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>Когда риск ещё управляемый, но уже требует решения клиента, руководителя или команды.\u003c/p>\n\u003ch3>Шаблон\u003c/h3>\n\u003cpre>\u003ccode>Привет.\n\nВижу риск по [сроку / качеству / бюджету / объёму].\n\nФакт:\n[что произошло]\n\nВозможное последствие:\n[что случится, если ничего не решить]\n\nСрочность:\n[когда нужно решение]\n\nВарианты:\n1. [вариант]\n2. [вариант]\n\nРекомендация:\n[что предлагаю выбрать и почему]\u003c/code>\u003c/pre>\n\u003ch3>Критерий хорошего сообщения\u003c/h3>\n\u003cp>После письма понятно, что происходит, чем это грозит и какое решение нужно принять.\u003c/p>"},{"title":"Письмо с пониманием задачи","slug":"письмо-с-пониманием-задачи","path":"04-templates/письмо-с-пониманием-задачи.md","type":"template","status":"ready","section":"client","audience":"продюсер, менеджер проекта","situation":"После первой встречи с клиентом или после созвона, где появились новые вводные.","artifact":"структура письма после встречи","visibility":"internal","tags":["шаблон","письмо","клиент","бриф"],"related":["[[После встречи написать понимание задачи]]","[[Вход в задачу]]","[[Клиент пишет: нужен ролик]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>После первой встречи с клиентом или после созвона, где появились новые вводные.\u003c/p>\n\u003ch3>Шаблон\u003c/h3>\n\u003cpre>\u003ccode>Привет.\n\nЗафиксирую, как мы поняли задачу. Если где-то ошибся, поправьте, пожалуйста.\n\nКонтекст:\n[что происходит у клиента и почему задача появилась сейчас]\n\nЗадача:\n[что должно измениться после нашей работы]\n\nАудитория:\n[кто будет смотреть и что для этих людей важно]\n\nОжидаемый результат:\n[что зритель должен понять / почувствовать / сделать]\n\nОграничения:\n[сроки, бюджет, согласующие, юридика, материалы]\n\nОткрытые вопросы:\n1. ...\n2. ...\n\nСледующий шаг:\n[что готовим, кто отвечает, к какой дате]\u003c/code>\u003c/pre>\n\u003ch3>Критерий хорошего письма\u003c/h3>\n\u003cp>Клиент может подтвердить понимание или внести точные правки до сметы и производства.\u003c/p>"},{"title":"Постразбор проекта","slug":"постразбор-проекта","path":"04-templates/постразбор-проекта.md","type":"template","status":"ready","section":"project","audience":"продюсер, руководитель","situation":"После завершения проекта или этапа, особенно если были риски, сдвиги, конфликтные правки или перерасход часов.","artifact":"структура постразбора","visibility":"internal","tags":["шаблон","постразбор","проект","команда"],"related":["[[Ведение проекта]]","[[Нужно разобрать ошибку]]","[[Работа с командой]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>После завершения проекта или этапа, особенно если были риски, сдвиги, конфликтные правки или перерасход часов.\u003c/p>\n\u003ch3>Структура\u003c/h3>\n\u003col>\u003cli>Что было задачей?\u003c/li>\u003cli>Что получилось хорошо?\u003c/li>\u003cli>Где возникли риски?\u003c/li>\u003cli>Где потеряли время, деньги или ясность?\u003c/li>\u003cli>Какие решения помогли?\u003c/li>\u003cli>Что нужно изменить в процессе?\u003c/li>\u003cli>Какое правило фиксируем?\u003c/li>\u003cli>Кто отвечает за изменение?\u003c/li>\u003c/ol>\n\u003ch3>Артефакт\u003c/h3>\n\u003cp>Короткий документ с выводами и 1-3 изменениями в процессе.\u003c/p>"},{"title":"Статус проекта","slug":"шаблон-статуса-проекта","path":"04-templates/шаблон-статуса-проекта.md","type":"template","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Когда нужно синхронизировать клиента, команду или подрядчиков по текущему состоянию проекта.","artifact":"структура статуса проекта","visibility":"internal","tags":["шаблон","статус","клиент","проект"],"related":["[[Вход в задачу]]","[[Нужно предупредить о риске]]","[[Срок сдвигается]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>Когда нужно синхронизировать клиента, команду или подрядчиков по текущему состоянию проекта.\u003c/p>\n\u003ch3>Структура\u003c/h3>\n\u003cpre>\u003ccode>Привет.\n\nКороткий статус по проекту:\n\n1. Что готово\n...\n2. Что в работе\n...\n3. Где нужен ответ / решение\n...\n4. Какой есть риск\n...\n5. Что предлагаем дальше\n...\n\nСледующий контрольный шаг: ...\nСрок: ...\nОтветственный: ...\u003c/code>\u003c/pre>\n\u003ch3>Критерий хорошего статуса\u003c/h3>\n\u003cp>После статуса всем понятно:\u003c/p>\n\u003cul>\u003cli>что уже сделано;\u003c/li>\u003cli>что происходит сейчас;\u003c/li>\u003cli>где нужен ответ;\u003c/li>\u003cli>какой срок под риском;\u003c/li>\u003cli>кто делает следующий шаг.\u003c/li>\u003c/ul>"},{"title":"Сценарий обратной связи","slug":"сценарий-обратной-связи","path":"04-templates/сценарий-обратной-связи.md","type":"template","status":"ready","section":"team","audience":"руководитель, продюсер","situation":"Когда нужно обсудить качество работы, нарушение договорённости или повторяющуюся проблему.","artifact":"структура разговора","visibility":"internal","tags":["шаблон","обратная-связь","команда","разговор"],"related":["[[Нужен твёрдый разговор]]","[[Нужно разобрать ошибку]]","[[Работа с командой]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>Когда нужно обсудить качество работы, нарушение договорённости или повторяющуюся проблему.\u003c/p>\n\u003ch3>Структура\u003c/h3>\n\u003cpre>\u003ccode>Хочу обсудить конкретную ситуацию.\n\nФакт:\n[что произошло без оценки личности]\n\nВлияние:\n[как это влияет на проект, клиента или команду]\n\nОжидание:\n[что должно быть иначе]\n\nВопрос:\n[что произошло с твоей стороны?]\n\nДоговорённость:\n[какой следующий шаг, срок, проверка]\u003c/code>\u003c/pre>\n\u003ch3>Критерий хорошего разговора\u003c/h3>\n\u003cp>Человек понимает факт, влияние, ожидание и следующий шаг.\u003c/p>"},{"title":"Чеклист входа в задачу","slug":"чеклист-входа-в-задачу","path":"04-templates/чеклист-входа-в-задачу.md","type":"template","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Перед оценкой, предложением, идеей или запуском команды.","artifact":"чеклист вопросов перед оценкой","visibility":"internal","tags":["шаблон","чеклист","бриф","клиент"],"related":["[[Вход в задачу]]","[[Клиент пишет: нужен ролик]]","[[Клиент просит быстро оценить бюджет]]"],"html":"\u003ch3>Когда использовать\u003c/h3>\n\u003cp>Перед оценкой, предложением, идеей или запуском команды.\u003c/p>\n\u003ch3>Чеклист\u003c/h3>\n\u003cul>\u003cli>Зачем клиенту этот материал?\u003c/li>\u003cli>Почему задача появилась сейчас?\u003c/li>\u003cli>Кто зритель?\u003c/li>\u003cli>Где материал будет использоваться?\u003c/li>\u003cli>Что зритель должен понять, почувствовать или сделать?\u003c/li>\u003cli>Кто принимает решение?\u003c/li>\u003cli>Какие сроки важны?\u003c/li>\u003cli>Есть ли бюджетный ориентир?\u003c/li>\u003cli>Какие материалы уже есть?\u003c/li>\u003cli>Что клиент уже пробовал?\u003c/li>\u003cli>Какие ограничения есть у бренда, юристов, площадки, производства?\u003c/li>\u003cli>Какой следующий шаг после разговора?\u003c/li>\u003c/ul>\n\u003ch3>Критерий готовности\u003c/h3>\n\u003cp>Продюсер может пересказать задачу без слов «примерно», «кажется» и «наверное».\u003c/p>"},{"title":"Контроль сохраняет доверие","slug":"контроль-сохраняет-доверие","path":"05-principles/контроль-сохраняет-доверие.md","type":"principle","status":"ready","section":"team","audience":"руководитель, продюсер","situation":"Контроль помогает людям понимать ожидания, видеть срок и раньше замечать риск. Он работает, когда связан с задачей, а не с тревогой руководителя.","artifact":"рамка управленческого контроля","visibility":"internal","tags":["принцип","команда","контроль","доверие"],"related":["[[Нужно поставить задачу]]","[[Нужно разобрать ошибку]]","[[Работа с командой]]"],"html":"\u003ch3>Смысл\u003c/h3>\n\u003cp>Контроль помогает людям понимать ожидания, видеть срок и раньше замечать риск. Он работает, когда связан с задачей, а не с тревогой руководителя.\u003c/p>\n\u003ch3>Где помогает\u003c/h3>\n\u003cul>\u003cli>постановка задачи;\u003c/li>\u003cli>делегирование проекта;\u003c/li>\u003cli>работа с человеком, который застрял;\u003c/li>\u003cli>разбор ошибки;\u003c/li>\u003cli>твёрдый разговор.\u003c/li>\u003c/ul>\n\u003ch3>Правило\u003c/h3>\n\u003cp>Доверие держится на ясных ожиданиях, точках проверки и спокойной фиксации фактов.\u003c/p>"},{"title":"Неопределённость нужно называть","slug":"неопределенность-нужно-называть","path":"05-principles/неопределенность-нужно-называть.md","type":"principle","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Пока риск не назван, команда и клиент додумывают реальность. Названная неопределённость становится управляемой.","artifact":"правило работы с риском","visibility":"internal","tags":["принцип","риск","статус","ответственность"],"related":["[[Нужно предупредить о риске]]","[[Боюсь написать клиенту]]","[[Письмо о риске]]"],"html":"\u003ch3>Смысл\u003c/h3>\n\u003cp>Пока риск не назван, команда и клиент додумывают реальность. Названная неопределённость становится управляемой.\u003c/p>\n\u003ch3>Где помогает\u003c/h3>\n\u003cul>\u003cli>клиент не отвечает;\u003c/li>\u003cli>срок под риском;\u003c/li>\u003cli>материалов нет;\u003c/li>\u003cli>правка похожа на новую задачу;\u003c/li>\u003cli>команда не понимает следующий шаг.\u003c/li>\u003c/ul>\n\u003ch3>Правило\u003c/h3>\n\u003cp>Чем раньше названа неопределённость, тем меньше она стоит проекту.\u003c/p>"},{"title":"Ясность до оценки","slug":"ясность-до-оценки","path":"05-principles/ясность-до-оценки.md","type":"principle","status":"ready","section":"project","audience":"продюсер, менеджер проекта","situation":"Оценивать задачу можно только после минимального понимания результата, аудитории, площадки, сроков, ограничений и состава работ.","artifact":"правило оценки задач","visibility":"internal","tags":["принцип","оценка","клиент","бюджет"],"related":["[[Клиент пишет: нужен ролик]]","[[Клиент просит быстро оценить бюджет]]","[[Вход в задачу]]"],"html":"\u003ch3>Смысл\u003c/h3>\n\u003cp>Оценивать задачу можно только после минимального понимания результата, аудитории, площадки, сроков, ограничений и состава работ.\u003c/p>\n\u003ch3>Где помогает\u003c/h3>\n\u003cul>\u003cli>в первом ответе клиенту;\u003c/li>\u003cli>при просьбе назвать вилку;\u003c/li>\u003cli>перед сметой;\u003c/li>\u003cli>перед запуском команды.\u003c/li>\u003c/ul>\n\u003ch3>Правило\u003c/h3>\n\u003cp>Если вводных мало, можно дать ориентир. Его нужно сопровождать условиями, неизвестными параметрами и следующим шагом.\u003c/p>"}];
-    const sectionLabels = {"self":"начать с себя","client":"понять клиента","project":"собрать проект","team":"работать с командой","production":"довести до результата","money":"деньги","agency":"управлять агентством"};
-    const typeLabels = {"situation-card":"ситуация","process":"процесс","template":"шаблон","principle":"принцип","guide":"раздел"};
-    let activeType = 'all';
-    let activeSection = 'all';
-    let activeSlug = items[0]?.slug;
+Предлагаю так:
+1. Вы отвечаете по [вопрос] до [время].
+2. Мы после этого делаем [следующий шаг].
+3. Если ответа не будет, зафиксируем [вариант по умолчанию] и пойдём по нему.
 
-    const grid = document.getElementById('grid');
-    const empty = document.getElementById('empty');
-    const search = document.getElementById('search');
-    const typeFilters = document.getElementById('typeFilters');
-    const sectionFilters = document.getElementById('sectionFilters');
-    const totalCount = document.getElementById('totalCount');
-    const detailTitle = document.getElementById('detailTitle');
-    const detailMeta = document.getElementById('detailMeta');
-    const detailContent = document.getElementById('detailContent');
-    const detailPath = document.getElementById('detailPath');
+Так мы сохраним срок и не будем гадать.</code></pre>
+<h3>Артефакт</h3>
+<p class="body-p">Короткое письмо клиенту с вопросом, риском и следующим шагом.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">После письма понятно:</p>
+<ul><li>какой ответ нужен;</li><li>зачем он нужен;</li><li>какой срок связан с решением;</li><li>что команда предлагает дальше;</li><li>что произойдёт, если ответа не будет.</li></ul>
+<h3>Главное правило</h3>
+<p class="body-p">Чем раньше названа неопределённость, тем меньше она стоит проекту.</p></div>
+      <div class="card-tags-row"><span class="ctag">клиент</span><span class="ctag">коммуникация</span><span class="ctag">страх</span><span class="ctag">ответственность</span></div>
+    </div>
+  </div>
+<div class="card" id="card-1">
+    <div class="card-header" onclick="toggleCard(1)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Клиент молчит</div>
+        <div class="card-subtitle">Ситуация · Понять клиента</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> короткое follow-up письмо</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Клиент не отвечает, а решение нужно для движения проекта.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Молчание клиента не всегда означает отказ или недовольство. Для проекта это неопределённость, которую нужно назвать и перевести в следующий шаг.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Клиент не отвечает на вопрос, согласование или отправленный материал. Команда ждёт, срок идёт, продюсер начинает додумывать за клиента.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Если не написать вовремя, проект теряет управление. Клиент может считать, что команда продолжает работу, а команда в этот момент стоит.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>ждут слишком долго;</li><li>пишут эмоционально;</li><li>напоминают без конкретного вопроса;</li><li>не называют влияние на срок;</li><li>не предлагают вариант по умолчанию.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Нужно отделить факт молчания от интерпретаций. Факт: нет ответа. Рабочий вопрос: какое решение нужно и до какого времени.</p>
+<h3>Что делать</h3>
+<ol><li>Назвать, какой ответ нужен.</li><li>Объяснить, на что он влияет.</li><li>Дать срок ответа.</li><li>Предложить вариант по умолчанию.</li><li>Зафиксировать следующий шаг.</li></ol>
+<h3>Что написать / собрать</h3>
+<pre><code>Привет.
 
-    function uniq(list) { return [...new Set(list)].filter(Boolean); }
+Напомню про [вопрос]. Ответ нужен до [время], потому что дальше он влияет на [срок / монтаж / запуск / смету].
 
-    function renderFilters() {
-      const types = ['all', ...uniq(items.map(i => i.type))];
-      typeFilters.innerHTML = types.map(type => '<button class="filter ' + (activeType === type ? 'active' : '') + '" data-type="' + type + '">' + (type === 'all' ? 'все' : typeLabels[type] || type) + '</button>').join('');
-      typeFilters.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', () => {
-          activeType = button.dataset.type;
-          render();
-        });
-      });
+Если вам подходит вариант [вариант], подтвердите, пожалуйста. Если ответа не будет, предлагаю идти по нему, чтобы не останавливать проект.</code></pre>
+<h3>Артефакт</h3>
+<p class="body-p">Follow-up письмо с вопросом, сроком и вариантом следующего шага.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Клиент ответил или команда получила понятный вариант движения без угадывания.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Молчание нужно переводить в ясный вопрос и следующий шаг.</p></div>
+      <div class="card-tags-row"><span class="ctag">клиент</span><span class="ctag">письмо</span><span class="ctag">риск</span><span class="ctag">сроки</span></div>
+    </div>
+  </div>
+<div class="card" id="card-2">
+    <div class="card-header" onclick="toggleCard(2)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Клиент пишет: нужен ролик</div>
+        <div class="card-subtitle">Ситуация · Понять клиента</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> письмо с вопросами и пониманием следующего шага</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Клиент приходит с коротким запросом про ролик, но задача, аудитория и критерий успеха ещё не прояснены.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Короткий запрос клиента редко описывает настоящую задачу. Карточка помогает не уйти слишком рано в цену, формат или портфолио.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Клиент пишет: «Нам нужен ролик», «Сколько стоит видео на 2 минуты?», «Можете снять имиджевый ролик?»</p>
+<p class="body-p">Хочется быстро назвать вилку или отправить кейсы. Но пока неизвестно, кто будет смотреть, зачем материал нужен, где он будет жить и как клиент поймёт, что работа сработала.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Если продюсер сразу продаёт формат, команда рискует взять в работу задачу, смысл и экономика которой ещё не ясны.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>отвечают ценой до понимания задачи;</li><li>отправляют портфолио без связи с запросом;</li><li>назначают созвон без подготовки;</li><li>принимают формат за результат;</li><li>боятся задать простые вопросы.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Первый ответ должен показать: запрос услышан, за форматом есть задача, команда готова быстро разобраться и предложить следующий шаг.</p>
+<h3>Что делать</h3>
+<ol><li>Ответить спокойно и по делу.</li><li>Зафиксировать, что для оценки нужен контекст.</li><li>Задать 5-7 стартовых вопросов.</li><li>Предложить короткий созвон.</li><li>После разговора письменно вернуть понимание задачи.</li></ol>
+<h3>Что написать / собрать</h3>
+<pre><code>Привет. Да, можем помочь.
 
-      const sections = ['all', ...uniq(items.map(i => i.section))];
-      sectionFilters.innerHTML = sections.map(section => {
-        const count = section === 'all' ? items.length : items.filter(i => i.section === section).length;
-        return '<button class="section-button ' + (activeSection === section ? 'active' : '') + '" data-section="' + section + '"><strong>' + (section === 'all' ? 'вся база' : sectionLabels[section] || section) + '</strong><span>' + count + '</span></button>';
-      }).join('');
-      sectionFilters.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', () => {
-          activeSection = button.dataset.section;
-          render();
-        });
-      });
+Чтобы корректно оценить ролик, нужно понять задачу: где он будет использоваться, кто зритель, какое действие вы ждёте после просмотра, какие сроки и есть ли бюджетный ориентир.
+
+Давайте проведём короткий созвон на 20-30 минут. После него смогу предложить подход и первичную вилку.</code></pre>
+<h3>Артефакт</h3>
+<p class="body-p">Письмо с вопросами, договорённость о созвоне или короткое понимание задачи после первого контакта.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Продюсер может ответить: зачем клиенту ролик, кто зритель, где материал используется, какой результат важен, кто принимает решение, какие сроки и ограничения.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Короткий запрос клиента - вход в разговор, а не готовый бриф.</p></div>
+      <div class="card-tags-row"><span class="ctag">клиент</span><span class="ctag">бриф</span><span class="ctag">вход-в-задачу</span><span class="ctag">письмо</span></div>
+    </div>
+  </div>
+<div class="card" id="card-3">
+    <div class="card-header" onclick="toggleCard(3)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Клиент просит быстро оценить бюджет</div>
+        <div class="card-subtitle">Ситуация · Деньги</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> предварительная вилка с условиями</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Клиент просит вилку бюджета до полноценного брифа.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Быстрая оценка полезна, если рядом с цифрой есть состав работ, неизвестные параметры и следующий шаг.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Клиент пишет: «Нам нужна вилка сегодня», «Просто порядок цифр», «Нужно заложить бюджет».</p>
+<h3>Почему важно</h3>
+<p class="body-p">Ранняя цифра становится якорем. Если дать одну сумму без условий, клиент запомнит минимум, а команда потеряет возможность уточнить объём.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>называют одну цифру;</li><li>дают вилку без состава работ;</li><li>занижают цену из страха потерять клиента;</li><li>не спрашивают бюджетный ориентир;</li><li>обещают точность без вводных.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Оценка должна помогать клиенту планировать и защищать агентство от случайных обязательств.</p>
+<h3>Что делать</h3>
+<ol><li>Сказать, что ориентир возможен.</li><li>Задать минимальные вопросы.</li><li>Дать вилку по сценариям.</li><li>Назвать, что входит в вилку.</li><li>Зафиксировать, что меняет цену.</li><li>Предложить шаг к точной смете.</li></ol>
+<h3>Что написать / собрать</h3>
+<p class="body-p">Минимальные вопросы:</p>
+<ul><li>нужна съёмка или монтаж из готовых материалов;</li><li>сколько минут, версий и языков;</li><li>нужны ли графика, диктор, музыка;</li><li>где будет использоваться материал;</li><li>когда нужен финал;</li><li>сколько этапов согласования;</li><li>есть ли бюджетный коридор.</li></ul>
+<h3>Артефакт</h3>
+<p class="body-p">Сообщение с предварительной вилкой, составом работ, неизвестными параметрами и следующим шагом.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Клиент получил ориентир, но понимает, что финальная сумма зависит от вводных.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Вилка без условий создаёт риск. Вилка с условиями помогает двигаться.</p></div>
+      <div class="card-tags-row"><span class="ctag">деньги</span><span class="ctag">бюджет</span><span class="ctag">клиент</span><span class="ctag">оценка</span></div>
+    </div>
+  </div>
+<div class="card" id="card-4">
+    <div class="card-header" onclick="toggleCard(4)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Нужен твёрдый разговор</div>
+        <div class="card-subtitle">Ситуация · Работать с командой</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> сценарий разговора и зафиксированные ожидания</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Нужно сказать человеку о проблеме в работе и обозначить границу.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Твёрдый разговор держится на состоянии, фактах, мотивации и границе.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Человек регулярно срывает договорённости, качество не растёт, ответственность размывается. Нужно поговорить прямо.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Если разговор откладывать, проблема становится нормой. Если начать с претензий, человек уйдёт в защиту.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>начинают с обвинений;</li><li>говорят общими словами;</li><li>копят всё и выдают за раз;</li><li>принимают кивки за изменение;</li><li>ставят границу без понимания мотивации.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Нужны факты, влияние на проект, ожидание, понимание причины и ясная граница.</p>
+<h3>Что делать</h3>
+<ol><li>Подготовить 2-3 факта.</li><li>Начать спокойно.</li><li>Сказать, как это влияет на проект.</li><li>Спросить, что происходит у человека.</li><li>Назвать ожидание.</li><li>Обозначить, что изменится, если поведение не изменится.</li><li>Зафиксировать следующий шаг.</li></ol>
+<h3>Что написать / собрать</h3>
+<p class="body-p">Используй <em>Сценарий обратной связи</em>.</p>
+<h3>Артефакт</h3>
+<p class="body-p">Зафиксированные ожидания, срок проверки и следующий шаг.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Человек понимает, что именно не работает, что ожидается и когда будет проверка.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Твёрдость начинается с фактов и ясной границы.</p></div>
+      <div class="card-tags-row"><span class="ctag">команда</span><span class="ctag">обратная-связь</span><span class="ctag">границы</span><span class="ctag">ответственность</span></div>
+    </div>
+  </div>
+<div class="card" id="card-5">
+    <div class="card-header" onclick="toggleCard(5)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Нужно поставить задачу</div>
+        <div class="card-subtitle">Ситуация · Работать с командой</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> письменно зафиксированная задача</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Нужно передать задачу члену команды так, чтобы он понял результат, контекст и критерии.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Хорошая задача описывает не только действие, но и смысл результата.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Продюсер передаёт задачу монтажёру, дизайнеру, режиссёру или ассистенту. Человек делает, но результат расходится с ожиданием.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Нечёткая задача тратит время обоих: исполнитель делает не то, продюсер переделывает, проект теряет срок.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>задача звучит как действие без результата;</li><li>нет контекста;</li><li>нет критерия готовности;</li><li>не названа глубина проработки;</li><li>нет точки проверки.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">В задаче должны быть контекст, цель, результат, формат, критерии, срок и точка проверки.</p>
+<h3>Что делать</h3>
+<ol><li>Дать контекст.</li><li>Назвать цель.</li><li>Описать результат.</li><li>Указать формат и критерии.</li><li>Назвать срок.</li><li>Договориться о первой проверке.</li></ol>
+<h3>Что написать / собрать</h3>
+<pre><code>Нужна подборка референсов для созвона с клиентом по HR-ролику.
+
+Цель: помочь выбрать тон.
+Результат: 8-10 примеров с короткой подписью, что берём из каждого.
+Формат: ссылка + 2-3 предложения.
+Первый вариант покажи сегодня до 17:00.</code></pre>
+<h3>Артефакт</h3>
+<p class="body-p">Письменно зафиксированная задача.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Исполнитель может своими словами повторить, что делает, к какому сроку и как поймёт, что сделал правильно.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Задача должна передавать результат, а не только действие.</p></div>
+      <div class="card-tags-row"><span class="ctag">команда</span><span class="ctag">задача</span><span class="ctag">делегирование</span><span class="ctag">проект</span></div>
+    </div>
+  </div>
+<div class="card" id="card-6">
+    <div class="card-header" onclick="toggleCard(6)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Нужно предупредить о риске</div>
+        <div class="card-subtitle">Ситуация · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> сообщение о риске с вариантами решения</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Продюсер видит риск по сроку, качеству, бюджету или материалам и должен сообщить об этом заранее.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Риск, названный заранее, выглядит как управление. Карточка помогает сообщить о проблеме до того, как она стала кризисом.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Материалы не пришли, подрядчик не успевает, бюджет дрейфует, срок под угрозой. Продюсер видит это раньше клиента или руководителя.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Клиент оценивает не только проблему. Он смотрит, есть ли у команды контроль и варианты.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>риск путают с провалом;</li><li>сообщают слишком поздно;</li><li>приносят проблему без вариантов;</li><li>надеются, что ситуация сама исчезнет;</li><li>пишут эмоционально вместо фактов.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Риск - сигнал для раннего решения. Нужно назвать факт, возможное последствие, срочность, варианты и рекомендацию.</p>
+<h3>Что делать</h3>
+<ol><li>Зафиксировать факт риска.</li><li>Оценить срочность.</li><li>Подготовить 2-3 варианта действий.</li><li>Выбрать рекомендацию.</li><li>Сообщить письменно.</li></ol>
+<h3>Что написать / собрать</h3>
+<p class="body-p">Используй <em>Письмо о риске</em>.</p>
+<h3>Артефакт</h3>
+<p class="body-p">Сообщение о риске с вариантами и принятым решением.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Все стороны знают о риске, понимают его серьёзность и знают следующий шаг.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Риск стоит меньше, когда он назван до кризиса.</p></div>
+      <div class="card-tags-row"><span class="ctag">риск</span><span class="ctag">проект</span><span class="ctag">статус</span><span class="ctag">клиент</span></div>
+    </div>
+  </div>
+<div class="card" id="card-7">
+    <div class="card-header" onclick="toggleCard(7)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Нужно разобрать ошибку</div>
+        <div class="card-subtitle">Ситуация · Работать с командой</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> изменение процесса или правило</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">В проекте произошла ошибка, и её нужно разобрать с командой без поиска виноватого.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Хороший разбор ошибки заканчивается изменением процесса.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Пропустили дедлайн, отправили не ту версию, потеряли файл или дали клиенту некорректную информацию.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Ошибка без разбора повторится. Разбор с обвинениями разрушит доверие и не улучшит процесс.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>ищут виноватого;</li><li>обсуждают личность;</li><li>разбирают на эмоциях;</li><li>не фиксируют вывод;</li><li>заканчивают фразой «будем внимательнее».</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Ошибка почти всегда имеет системную точку: неясная задача, нереальный срок, отсутствие проверки, незаписанная договорённость, поздний запрос помощи.</p>
+<h3>Что делать</h3>
+<ol><li>Не разбирать в момент сильных эмоций.</li><li>Начать с фактов.</li><li>Найти точку, где риск можно было увидеть раньше.</li><li>Понять, что в процессе это допустило.</li><li>Ввести правило.</li><li>Назначить ответственного за изменение.</li></ol>
+<h3>Что написать / собрать</h3>
+<p class="body-p">Вопросы разбора:</p>
+<ol><li>Что произошло?</li><li>Какое последствие?</li><li>Где можно было заметить раньше?</li><li>Что в процессе позволило этому случиться?</li><li>Какое правило вводим?</li><li>Кто отвечает за изменение?</li></ol>
+<h3>Артефакт</h3>
+<p class="body-p">Записанное правило или изменение в процессе.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Команда понимает, что именно изменится в следующем проекте.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Разбирать нужно цепочку событий, а не характер человека.</p></div>
+      <div class="card-tags-row"><span class="ctag">команда</span><span class="ctag">ошибка</span><span class="ctag">процесс</span><span class="ctag">обратная-связь</span></div>
+    </div>
+  </div>
+<div class="card" id="card-8">
+    <div class="card-header" onclick="toggleCard(8)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">После встречи написать понимание задачи</div>
+        <div class="card-subtitle">Ситуация · Понять клиента</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> письмо с пониманием задачи</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">После первой встречи нужно зафиксировать, как агентство поняло задачу клиента.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">После встречи у участников часто остаются разные версии разговора. Письмо с пониманием задачи превращает устный контекст в основу для предложения.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Клиент рассказал ожидания, сроки, внутренние ограничения и сомнения. Часть прозвучала нечётко, часть участники могли понять по-разному.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Если сразу перейти к смете или идеям, проект начнёт строиться на предположениях. Расхождения проявятся позже и будут стоить дороже.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>письмо превращается в протокол;</li><li>текст слишком длинный;</li><li>нет вывода;</li><li>предположения подаются как факты;</li><li>нет просьбы подтвердить понимание.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Понимание задачи отвечает на вопросы: контекст, задача, аудитория, ожидаемый результат, ограничения, открытые вопросы, следующий шаг.</p>
+<h3>Что делать</h3>
+<ol><li>Сразу после встречи собрать заметки.</li><li>Отделить факты от предположений.</li><li>Сформулировать задачу через пользу для клиента.</li><li>Написать короткое письмо.</li><li>Попросить подтвердить или поправить.</li></ol>
+<h3>Что написать / собрать</h3>
+<p class="body-p">Используй <em>Письмо с пониманием задачи</em>.</p>
+<h3>Артефакт</h3>
+<p class="body-p">Письмо или документ с пониманием задачи.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Клиент отвечает «да, правильно поняли» или вносит точные правки до сметы и производства.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Понимание задачи нужно подтвердить до предложения.</p></div>
+      <div class="card-tags-row"><span class="ctag">клиент</span><span class="ctag">письмо</span><span class="ctag">бриф</span><span class="ctag">вход-в-задачу</span></div>
+    </div>
+  </div>
+<div class="card" id="card-9">
+    <div class="card-header" onclick="toggleCard(9)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Правка или новая задача</div>
+        <div class="card-subtitle">Ситуация · Деньги</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> фиксация правки или допработы</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Клиент просит изменить результат, и нужно понять: это правка в рамках объёма или новая работа.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Если не отделять правки от новых задач, проект теряет срок, деньги и ясность договорённостей.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Клиент присылает комментарий. Он может быть уточнением в рамках результата или просьбой, которая меняет объём, формат, сроки или производственную логику.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Незаметные допработы накапливаются. На закрытии появляется конфликт: клиент уверен, что это правки, команда видит новый объём.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>боятся обсуждать деньги;</li><li>нет зафиксированного результата;</li><li>просьбу принимают устно;</li><li>команда запускает работу до оценки;</li><li>продюсер объясняет доплату слишком поздно.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Правка уточняет согласованный результат. Новая задача меняет результат, объём, формат, количество версий, срок или состав специалистов.</p>
+<h3>Что делать</h3>
+<ol><li>Проверить просьбу по критериям.</li><li>Если это правка, принять в работу.</li><li>Если это новая задача, назвать её отдельно.</li><li>Оценить срок и стоимость.</li><li>Зафиксировать решение письменно.</li></ol>
+<h3>Что написать / собрать</h3>
+<pre><code>Это изменение влияет на согласованный объём.
+
+Чтобы не потерять контроль по срокам, сначала зафиксирую новый объём, затем оценю срок и стоимость. После вашего подтверждения запустим в работу.</code></pre>
+<h3>Артефакт</h3>
+<p class="body-p">Письменная фиксация: что принято как правка, что оформляется как допработа.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Клиент понимает границу, агентство не теряет объём незаметно, экономика проекта остаётся управляемой.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Допработу нужно назвать до запуска в работу.</p></div>
+      <div class="card-tags-row"><span class="ctag">правки</span><span class="ctag">деньги</span><span class="ctag">проект</span><span class="ctag">договоренности</span></div>
+    </div>
+  </div>
+<div class="card" id="card-10">
+    <div class="card-header" onclick="toggleCard(10)">
+      <div class="card-num">🎯</div>
+      <div class="card-header-text">
+        <div class="card-title">Срок сдвигается</div>
+        <div class="card-subtitle">Ситуация · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> сообщение с новым планом</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Проект не успевает к согласованному дедлайну, и клиенту нужно сказать об этом.</p></div>
+      <div class="section full material-content"><h3>Коротко</h3>
+<p class="body-p">Клиенту легче принять сдвиг, когда рядом с фактом есть причина, новый план и вариант решения.</p>
+<h3>Ситуация</h3>
+<p class="body-p">Дедлайн больше не реалистичен: материалы задержались, правок больше, техническая часть сложнее, подрядчик не успевает.</p>
+<h3>Почему важно</h3>
+<p class="body-p">Позднее сообщение отнимает у клиента выбор. Сообщение без плана создаёт тревогу.</p>
+<h3>Где обычно ломается</h3>
+<ul><li>тянут до последнего;</li><li>оправдываются;</li><li>перекладывают вину;</li><li>не дают новый план;</li><li>сообщают в момент, когда уже нельзя выбрать вариант.</li></ul>
+<h3>Как смотреть точнее</h3>
+<p class="body-p">Перед письмом нужно знать: что сдвигается, почему, на сколько, что команда уже делает, какие варианты есть.</p>
+<h3>Что делать</h3>
+<ol><li>Сообщить как можно раньше.</li><li>Назвать факт и причину без лишних подробностей.</li><li>Объяснить влияние на срок.</li><li>Дать новый план.</li><li>Спросить, какой вариант подходит, если выбор нужен.</li></ol>
+<h3>Что написать / собрать</h3>
+<pre><code>Добрый день.
+
+По текущему этапу есть сдвиг.
+
+Причина: [коротко].
+Что меняется: [новый срок / порядок].
+Что уже делаем: [действия команды].
+
+Если такой порядок подходит, двигаемся по нему. Если критичен прежний срок, предложу вариант сокращения объёма.</code></pre>
+<h3>Артефакт</h3>
+<p class="body-p">Сообщение с новым планом и подтверждением клиента.</p>
+<h3>Критерий хорошего результата</h3>
+<p class="body-p">Клиент получил информацию вовремя, понял причину, знает новый план и может принять решение.</p>
+<h3>Главное правило</h3>
+<p class="body-p">Сдвиг срока нужно приносить вместе с планом.</p></div>
+      <div class="card-tags-row"><span class="ctag">сроки</span><span class="ctag">клиент</span><span class="ctag">риск</span><span class="ctag">проект</span></div>
+    </div>
+  </div>
+    </div>
+  </section>
+<section class="material-section" id="process">
+    <div class="section-heading">
+      <div>
+        <div class="page-tag">Процесс</div>
+        <h2>Процесс</h2>
+      </div>
+      <div class="section-count">3 материалов</div>
+    </div>
+    <div class="cards">
+      <div class="card" id="card-11">
+    <div class="card-header" onclick="toggleCard(11)">
+      <div class="card-num">⚙️</div>
+      <div class="card-header-text">
+        <div class="card-title">Ведение проекта</div>
+        <div class="card-subtitle">Процесс · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> цикл управления проектом</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Когда проект уже запущен и нужно держать сроки, решения, риски, клиента и команду в одной картине.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">Когда проект уже запущен и нужно держать сроки, решения, риски, клиента и команду в одной картине.</p>
+<h3>Цикл управления</h3>
+<ol><li>Зафиксировать результат, этапы, роли и сроки.</li><li>Вести единый статус.</li><li>Проверять риски до того, как они станут проблемами.</li><li>Отделять правки от новых задач.</li><li>Письменно фиксировать решения.</li><li>Закрывать этапы с понятным артефактом.</li><li>После финала проводить постразбор.</li></ol>
+<h3>Контрольные вопросы</h3>
+<ul><li>Где проект сейчас?</li><li>Что готово?</li><li>Что ждём?</li><li>Где риск?</li><li>Кто принимает решение?</li><li>Какой следующий шаг?</li><li>Что изменилось в объёме, сроке или бюджете?</li></ul>
+<h3>Артефакт</h3>
+<p class="body-p">Единый статус проекта, история решений и список рисков.</p>
+<h3>Связанные материалы</h3>
+<ul><li><em>Нужно предупредить о риске</em></li><li><em>Срок сдвигается</em></li><li><em>Правка или новая задача</em></li><li><em>Постразбор проекта</em></li></ul></div>
+      <div class="card-tags-row"><span class="ctag">процесс</span><span class="ctag">проект</span><span class="ctag">статус</span><span class="ctag">риск</span></div>
+    </div>
+  </div>
+<div class="card" id="card-12">
+    <div class="card-header" onclick="toggleCard(12)">
+      <div class="card-num">⚙️</div>
+      <div class="card-header-text">
+        <div class="card-title">Вход в задачу</div>
+        <div class="card-subtitle">Процесс · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> последовательность входа в клиентскую задачу</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Когда клиент приходит с запросом, а продюсеру нужно перейти от формата к понятной задаче.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">Когда клиент приходит с запросом, а продюсеру нужно перейти от формата к понятной задаче.</p>
+<h3>Цель процесса</h3>
+<p class="body-p">Собрать контекст, результат, ограничения, критерии успеха и следующий шаг до сметы, идеи или запуска команды.</p>
+<h3>Шаги</h3>
+<ol><li>Принять запрос и показать, что он услышан.</li><li>Найти открытый контекст: клиент, продукт, событие, аудитория.</li><li>Задать стартовые вопросы.</li><li>Провести короткий созвон.</li><li>Зафиксировать понимание задачи письмом.</li><li>Проверить, какие вводные ещё неизвестны.</li><li>После подтверждения перейти к оценке, идее или плану.</li></ol>
+<h3>Минимум вопросов</h3>
+<ul><li>Для чего нужен материал?</li><li>Кто будет смотреть?</li><li>Где материал будет использоваться?</li><li>Что зритель должен понять или сделать?</li><li>Почему задача появилась сейчас?</li><li>Кто согласует результат?</li><li>Какие сроки и бюджетный ориентир?</li></ul>
+<h3>Артефакт</h3>
+<p class="body-p">Подтверждённое понимание задачи и список открытых вопросов.</p>
+<h3>Связанные материалы</h3>
+<ul><li><em>Клиент пишет: нужен ролик</em></li><li><em>Клиент просит быстро оценить бюджет</em></li><li><em>Письмо с пониманием задачи</em></li><li><em>Чеклист входа в задачу</em></li></ul></div>
+      <div class="card-tags-row"><span class="ctag">процесс</span><span class="ctag">бриф</span><span class="ctag">клиент</span><span class="ctag">вход-в-задачу</span></div>
+    </div>
+  </div>
+<div class="card" id="card-13">
+    <div class="card-header" onclick="toggleCard(13)">
+      <div class="card-num">⚙️</div>
+      <div class="card-header-text">
+        <div class="card-title">Работа с командой</div>
+        <div class="card-subtitle">Процесс · Работать с командой</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> цикл постановки задач, проверки и обратной связи</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Когда задача зависит от нескольких людей и продюсеру нужно сохранить ясность, ответственность и рабочий темп.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">Когда задача зависит от нескольких людей и продюсеру нужно сохранить ясность, ответственность и рабочий темп.</p>
+<h3>Цикл работы</h3>
+<ol><li>Поставить задачу через контекст, результат и критерии.</li><li>Договориться о первой точке проверки.</li><li>Проверять работу по фактам, а не по тревоге.</li><li>Помогать через диагностику стопора.</li><li>Давать обратную связь по работе.</li><li>Разбирать ошибки как цепочку событий.</li><li>Фиксировать новые правила.</li></ol>
+<h3>Артефакт</h3>
+<p class="body-p">Письменные задачи, точки проверки, правила после ошибок и договорённости по ответственности.</p>
+<h3>Связанные материалы</h3>
+<ul><li><em>Нужно поставить задачу</em></li><li><em>Нужно разобрать ошибку</em></li><li><em>Нужен твёрдый разговор</em></li><li><em>Сценарий обратной связи</em></li></ul></div>
+      <div class="card-tags-row"><span class="ctag">процесс</span><span class="ctag">команда</span><span class="ctag">задача</span><span class="ctag">обратная-связь</span></div>
+    </div>
+  </div>
+    </div>
+  </section>
+<section class="material-section" id="template">
+    <div class="section-heading">
+      <div>
+        <div class="page-tag">Шаблон</div>
+        <h2>Шаблон</h2>
+      </div>
+      <div class="section-count">6 материалов</div>
+    </div>
+    <div class="cards">
+      <div class="card" id="card-14">
+    <div class="card-header" onclick="toggleCard(14)">
+      <div class="card-num">📄</div>
+      <div class="card-header-text">
+        <div class="card-title">Письмо о риске</div>
+        <div class="card-subtitle">Шаблон · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> структура сообщения о риске</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Когда риск ещё управляемый, но уже требует решения клиента, руководителя или команды.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">Когда риск ещё управляемый, но уже требует решения клиента, руководителя или команды.</p>
+<h3>Шаблон</h3>
+<pre><code>Привет.
+
+Вижу риск по [сроку / качеству / бюджету / объёму].
+
+Факт:
+[что произошло]
+
+Возможное последствие:
+[что случится, если ничего не решить]
+
+Срочность:
+[когда нужно решение]
+
+Варианты:
+1. [вариант]
+2. [вариант]
+
+Рекомендация:
+[что предлагаю выбрать и почему]</code></pre>
+<h3>Критерий хорошего сообщения</h3>
+<p class="body-p">После письма понятно, что происходит, чем это грозит и какое решение нужно принять.</p></div>
+      <div class="card-tags-row"><span class="ctag">шаблон</span><span class="ctag">письмо</span><span class="ctag">риск</span><span class="ctag">статус</span></div>
+    </div>
+  </div>
+<div class="card" id="card-15">
+    <div class="card-header" onclick="toggleCard(15)">
+      <div class="card-num">📄</div>
+      <div class="card-header-text">
+        <div class="card-title">Письмо с пониманием задачи</div>
+        <div class="card-subtitle">Шаблон · Понять клиента</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> структура письма после встречи</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">После первой встречи с клиентом или после созвона, где появились новые вводные.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">После первой встречи с клиентом или после созвона, где появились новые вводные.</p>
+<h3>Шаблон</h3>
+<pre><code>Привет.
+
+Зафиксирую, как мы поняли задачу. Если где-то ошибся, поправьте, пожалуйста.
+
+Контекст:
+[что происходит у клиента и почему задача появилась сейчас]
+
+Задача:
+[что должно измениться после нашей работы]
+
+Аудитория:
+[кто будет смотреть и что для этих людей важно]
+
+Ожидаемый результат:
+[что зритель должен понять / почувствовать / сделать]
+
+Ограничения:
+[сроки, бюджет, согласующие, юридика, материалы]
+
+Открытые вопросы:
+1. ...
+2. ...
+
+Следующий шаг:
+[что готовим, кто отвечает, к какой дате]</code></pre>
+<h3>Критерий хорошего письма</h3>
+<p class="body-p">Клиент может подтвердить понимание или внести точные правки до сметы и производства.</p></div>
+      <div class="card-tags-row"><span class="ctag">шаблон</span><span class="ctag">письмо</span><span class="ctag">клиент</span><span class="ctag">бриф</span></div>
+    </div>
+  </div>
+<div class="card" id="card-16">
+    <div class="card-header" onclick="toggleCard(16)">
+      <div class="card-num">📄</div>
+      <div class="card-header-text">
+        <div class="card-title">Постразбор проекта</div>
+        <div class="card-subtitle">Шаблон · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> структура постразбора</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">После завершения проекта или этапа, особенно если были риски, сдвиги, конфликтные правки или перерасход часов.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">После завершения проекта или этапа, особенно если были риски, сдвиги, конфликтные правки или перерасход часов.</p>
+<h3>Структура</h3>
+<ol><li>Что было задачей?</li><li>Что получилось хорошо?</li><li>Где возникли риски?</li><li>Где потеряли время, деньги или ясность?</li><li>Какие решения помогли?</li><li>Что нужно изменить в процессе?</li><li>Какое правило фиксируем?</li><li>Кто отвечает за изменение?</li></ol>
+<h3>Артефакт</h3>
+<p class="body-p">Короткий документ с выводами и 1-3 изменениями в процессе.</p></div>
+      <div class="card-tags-row"><span class="ctag">шаблон</span><span class="ctag">постразбор</span><span class="ctag">проект</span><span class="ctag">команда</span></div>
+    </div>
+  </div>
+<div class="card" id="card-17">
+    <div class="card-header" onclick="toggleCard(17)">
+      <div class="card-num">📄</div>
+      <div class="card-header-text">
+        <div class="card-title">Статус проекта</div>
+        <div class="card-subtitle">Шаблон · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> структура статуса проекта</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Когда нужно синхронизировать клиента, команду или подрядчиков по текущему состоянию проекта.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">Когда нужно синхронизировать клиента, команду или подрядчиков по текущему состоянию проекта.</p>
+<h3>Структура</h3>
+<pre><code>Привет.
+
+Короткий статус по проекту:
+
+1. Что готово
+...
+2. Что в работе
+...
+3. Где нужен ответ / решение
+...
+4. Какой есть риск
+...
+5. Что предлагаем дальше
+...
+
+Следующий контрольный шаг: ...
+Срок: ...
+Ответственный: ...</code></pre>
+<h3>Критерий хорошего статуса</h3>
+<p class="body-p">После статуса всем понятно:</p>
+<ul><li>что уже сделано;</li><li>что происходит сейчас;</li><li>где нужен ответ;</li><li>какой срок под риском;</li><li>кто делает следующий шаг.</li></ul></div>
+      <div class="card-tags-row"><span class="ctag">шаблон</span><span class="ctag">статус</span><span class="ctag">клиент</span><span class="ctag">проект</span></div>
+    </div>
+  </div>
+<div class="card" id="card-18">
+    <div class="card-header" onclick="toggleCard(18)">
+      <div class="card-num">📄</div>
+      <div class="card-header-text">
+        <div class="card-title">Сценарий обратной связи</div>
+        <div class="card-subtitle">Шаблон · Работать с командой</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> структура разговора</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Когда нужно обсудить качество работы, нарушение договорённости или повторяющуюся проблему.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">Когда нужно обсудить качество работы, нарушение договорённости или повторяющуюся проблему.</p>
+<h3>Структура</h3>
+<pre><code>Хочу обсудить конкретную ситуацию.
+
+Факт:
+[что произошло без оценки личности]
+
+Влияние:
+[как это влияет на проект, клиента или команду]
+
+Ожидание:
+[что должно быть иначе]
+
+Вопрос:
+[что произошло с твоей стороны?]
+
+Договорённость:
+[какой следующий шаг, срок, проверка]</code></pre>
+<h3>Критерий хорошего разговора</h3>
+<p class="body-p">Человек понимает факт, влияние, ожидание и следующий шаг.</p></div>
+      <div class="card-tags-row"><span class="ctag">шаблон</span><span class="ctag">обратная-связь</span><span class="ctag">команда</span><span class="ctag">разговор</span></div>
+    </div>
+  </div>
+<div class="card" id="card-19">
+    <div class="card-header" onclick="toggleCard(19)">
+      <div class="card-num">📄</div>
+      <div class="card-header-text">
+        <div class="card-title">Чеклист входа в задачу</div>
+        <div class="card-subtitle">Шаблон · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> чеклист вопросов перед оценкой</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Перед оценкой, предложением, идеей или запуском команды.</p></div>
+      <div class="section full material-content"><h3>Когда использовать</h3>
+<p class="body-p">Перед оценкой, предложением, идеей или запуском команды.</p>
+<h3>Чеклист</h3>
+<ul><li>Зачем клиенту этот материал?</li><li>Почему задача появилась сейчас?</li><li>Кто зритель?</li><li>Где материал будет использоваться?</li><li>Что зритель должен понять, почувствовать или сделать?</li><li>Кто принимает решение?</li><li>Какие сроки важны?</li><li>Есть ли бюджетный ориентир?</li><li>Какие материалы уже есть?</li><li>Что клиент уже пробовал?</li><li>Какие ограничения есть у бренда, юристов, площадки, производства?</li><li>Какой следующий шаг после разговора?</li></ul>
+<h3>Критерий готовности</h3>
+<p class="body-p">Продюсер может пересказать задачу без слов «примерно», «кажется» и «наверное».</p></div>
+      <div class="card-tags-row"><span class="ctag">шаблон</span><span class="ctag">чеклист</span><span class="ctag">бриф</span><span class="ctag">клиент</span></div>
+    </div>
+  </div>
+    </div>
+  </section>
+<section class="material-section" id="principle">
+    <div class="section-heading">
+      <div>
+        <div class="page-tag">Принцип</div>
+        <h2>Принцип</h2>
+      </div>
+      <div class="section-count">3 материалов</div>
+    </div>
+    <div class="cards">
+      <div class="card" id="card-20">
+    <div class="card-header" onclick="toggleCard(20)">
+      <div class="card-num">💡</div>
+      <div class="card-header-text">
+        <div class="card-title">Контроль сохраняет доверие</div>
+        <div class="card-subtitle">Принцип · Работать с командой</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> рамка управленческого контроля</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Контроль помогает людям понимать ожидания, видеть срок и раньше замечать риск. Он работает, когда связан с задачей, а не с тревогой руководителя.</p></div>
+      <div class="section full material-content"><h3>Смысл</h3>
+<p class="body-p">Контроль помогает людям понимать ожидания, видеть срок и раньше замечать риск. Он работает, когда связан с задачей, а не с тревогой руководителя.</p>
+<h3>Где помогает</h3>
+<ul><li>постановка задачи;</li><li>делегирование проекта;</li><li>работа с человеком, который застрял;</li><li>разбор ошибки;</li><li>твёрдый разговор.</li></ul>
+<h3>Правило</h3>
+<p class="body-p">Доверие держится на ясных ожиданиях, точках проверки и спокойной фиксации фактов.</p></div>
+      <div class="card-tags-row"><span class="ctag">принцип</span><span class="ctag">команда</span><span class="ctag">контроль</span><span class="ctag">доверие</span></div>
+    </div>
+  </div>
+<div class="card" id="card-21">
+    <div class="card-header" onclick="toggleCard(21)">
+      <div class="card-num">💡</div>
+      <div class="card-header-text">
+        <div class="card-title">Неопределённость нужно называть</div>
+        <div class="card-subtitle">Принцип · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> правило работы с риском</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Пока риск не назван, команда и клиент додумывают реальность. Названная неопределённость становится управляемой.</p></div>
+      <div class="section full material-content"><h3>Смысл</h3>
+<p class="body-p">Пока риск не назван, команда и клиент додумывают реальность. Названная неопределённость становится управляемой.</p>
+<h3>Где помогает</h3>
+<ul><li>клиент не отвечает;</li><li>срок под риском;</li><li>материалов нет;</li><li>правка похожа на новую задачу;</li><li>команда не понимает следующий шаг.</li></ul>
+<h3>Правило</h3>
+<p class="body-p">Чем раньше названа неопределённость, тем меньше она стоит проекту.</p></div>
+      <div class="card-tags-row"><span class="ctag">принцип</span><span class="ctag">риск</span><span class="ctag">статус</span><span class="ctag">ответственность</span></div>
+    </div>
+  </div>
+<div class="card" id="card-22">
+    <div class="card-header" onclick="toggleCard(22)">
+      <div class="card-num">💡</div>
+      <div class="card-header-text">
+        <div class="card-title">Ясность до оценки</div>
+        <div class="card-subtitle">Принцип · Собрать проект</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> правило оценки задач</p></div>
+      <div class="section full"><h4>Ситуация</h4><p class="body-p">Оценивать задачу можно только после минимального понимания результата, аудитории, площадки, сроков, ограничений и состава работ.</p></div>
+      <div class="section full material-content"><h3>Смысл</h3>
+<p class="body-p">Оценивать задачу можно только после минимального понимания результата, аудитории, площадки, сроков, ограничений и состава работ.</p>
+<h3>Где помогает</h3>
+<ul><li>в первом ответе клиенту;</li><li>при просьбе назвать вилку;</li><li>перед сметой;</li><li>перед запуском команды.</li></ul>
+<h3>Правило</h3>
+<p class="body-p">Если вводных мало, можно дать ориентир. Его нужно сопровождать условиями, неизвестными параметрами и следующим шагом.</p></div>
+      <div class="card-tags-row"><span class="ctag">принцип</span><span class="ctag">оценка</span><span class="ctag">клиент</span><span class="ctag">бюджет</span></div>
+    </div>
+  </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  const TOTAL = 23;
+  const openCards = new Set();
+  function toggleCard(i) {
+    const card = document.getElementById('card-' + i);
+    if (!card) return;
+    if (card.classList.contains('open')) {
+      card.classList.remove('open');
+      openCards.delete(i);
+    } else {
+      card.classList.add('open');
+      openCards.add(i);
     }
-
-    function filtered() {
-      const q = search.value.trim().toLowerCase();
-      return items.filter(item => {
-        const haystack = [item.title, item.situation, item.artifact, item.type, item.section, ...item.tags].join(' ').toLowerCase();
-        return (activeType === 'all' || item.type === activeType)
-          && (activeSection === 'all' || item.section === activeSection)
-          && (!q || haystack.includes(q));
-      });
-    }
-
-    function renderCards(list) {
-      grid.innerHTML = list.map(item => {
-        const tags = item.tags.slice(0, 4).map(tag => '<span class="tag">' + tag + '</span>').join('');
-        return '<article class="card ' + (activeSlug === item.slug ? 'active' : '') + '" data-slug="' + item.slug + '" tabindex="0">' +
-          '<div class="card-top"><span>' + (typeLabels[item.type] || item.type) + '</span><span>' + (sectionLabels[item.section] || item.section) + '</span></div>' +
-          '<div><h2 class="card-title">' + item.title + '</h2></div>' +
-          '<p>' + (item.situation || '') + '</p>' +
-          '<div class="artifact">' + (item.artifact || 'рабочий материал') + '</div>' +
-          '<div class="tags">' + tags + '</div>' +
-        '</article>';
-      }).join('');
-      grid.querySelectorAll('.card').forEach(card => {
-        const open = () => {
-          activeSlug = card.dataset.slug;
-          showDetail(items.find(item => item.slug === activeSlug));
-          renderCards(filtered());
-        };
-        card.addEventListener('click', open);
-        card.addEventListener('keydown', event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            open();
-          }
-        });
-      });
-      empty.style.display = list.length ? 'none' : 'block';
-      totalCount.textContent = list.length;
-    }
-
-    function showDetail(item) {
-      if (!item) return;
-      detailTitle.textContent = item.title;
-      detailPath.textContent = item.path;
-      detailMeta.innerHTML = [
-        '<span class="pill acid">' + (typeLabels[item.type] || item.type) + '</span>',
-        '<span class="pill">' + (sectionLabels[item.section] || item.section) + '</span>',
-        item.artifact ? '<span class="pill">' + item.artifact + '</span>' : ''
-      ].join('');
-      detailContent.innerHTML = item.html;
-    }
-
-    function render() {
-      renderFilters();
-      const list = filtered();
-      if (!list.find(item => item.slug === activeSlug)) activeSlug = list[0]?.slug;
-      renderCards(list);
-      showDetail(items.find(item => item.slug === activeSlug) || list[0]);
-    }
-
-    search.addEventListener('input', render);
-    render();
-  </script>
+  }
+</script>
 </body>
 </html>

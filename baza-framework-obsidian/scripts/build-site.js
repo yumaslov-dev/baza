@@ -8,16 +8,57 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, '06-site', 'index.html');
 const CONTENT_DIRS = ['02-cards', '03-processes', '04-templates', '05-principles'];
 
+const TYPE_LABELS = {
+  'situation-card': 'Ситуация',
+  process: 'Процесс',
+  template: 'Шаблон',
+  principle: 'Принцип',
+  guide: 'Раздел',
+};
+
+const TYPE_ICONS = {
+  'situation-card': '🎯',
+  process: '⚙️',
+  template: '📄',
+  principle: '💡',
+  guide: '🗂️',
+};
+
+const SECTION_LABELS = {
+  self: 'Начать с себя',
+  client: 'Понять клиента',
+  project: 'Собрать проект',
+  team: 'Работать с командой',
+  production: 'Довести до результата',
+  money: 'Деньги',
+  agency: 'Управлять агентством',
+};
+
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];
-  const out = [];
+  const result = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name.startsWith('.')) continue;
     const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...walk(full));
-    if (entry.isFile() && entry.name.endsWith('.md')) out.push(full);
+    if (entry.isDirectory()) result.push(...walk(full));
+    if (entry.isFile() && entry.name.endsWith('.md')) result.push(full);
   }
-  return out;
+  return result;
+}
+
+function esc(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function inline(value) {
+  return esc(value)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, '<em>$1</em>');
 }
 
 function parseFrontmatter(text) {
@@ -25,39 +66,23 @@ function parseFrontmatter(text) {
   if (!text.startsWith('---\n')) return { fm, body: text };
   const end = text.indexOf('\n---\n', 4);
   if (end === -1) return { fm, body: text };
-  const raw = text.slice(4, end).split('\n');
+
   let current = null;
-  for (const line of raw) {
-    const keyValue = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-    if (keyValue) {
-      current = keyValue[1];
-      let value = keyValue[2].trim();
-      value = value.replace(/^"|"$/g, '');
-      fm[current] = value || '';
+  for (const line of text.slice(4, end).split('\n')) {
+    const kv = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (kv) {
+      current = kv[1];
+      fm[current] = kv[2].trim().replace(/^"|"$/g, '') || '';
       continue;
     }
-    const listItem = line.match(/^\s*-\s*(.*)$/);
-    if (listItem && current) {
+    const item = line.match(/^\s*-\s*(.*)$/);
+    if (item && current) {
       if (!Array.isArray(fm[current])) fm[current] = [];
-      fm[current].push(listItem[1].replace(/^"|"$/g, ''));
+      fm[current].push(item[1].replace(/^"|"$/g, ''));
     }
   }
+
   return { fm, body: text.slice(end + 5).trim() };
-}
-
-function esc(s) {
-  return String(s ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function inline(s) {
-  return esc(s)
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, '<span class="wiki-link">$1</span>');
 }
 
 function mdToHtml(md) {
@@ -65,18 +90,19 @@ function mdToHtml(md) {
   const out = [];
   let list = null;
   let code = false;
-  let codeBuf = [];
+  let codeLines = [];
 
-  const flushList = () => {
+  function flushList() {
     if (!list) return;
     out.push(`<${list.type}>${list.items.map(item => `<li>${inline(item)}</li>`).join('')}</${list.type}>`);
     list = null;
-  };
-  const flushCode = () => {
-    if (!codeBuf.length) return;
-    out.push(`<pre><code>${esc(codeBuf.join('\n'))}</code></pre>`);
-    codeBuf = [];
-  };
+  }
+
+  function flushCode() {
+    if (!codeLines.length) return;
+    out.push(`<pre><code>${esc(codeLines.join('\n'))}</code></pre>`);
+    codeLines = [];
+  }
 
   for (const raw of lines) {
     const line = raw.trimEnd();
@@ -91,63 +117,62 @@ function mdToHtml(md) {
       continue;
     }
     if (code) {
-      codeBuf.push(raw);
+      codeLines.push(raw);
       continue;
     }
     if (!line.trim()) {
       flushList();
       continue;
     }
-    const h = line.match(/^(#{1,4})\s+(.+)$/);
-    if (h) {
+    const heading = line.match(/^(#{1,4})\s+(.+)$/);
+    if (heading) {
       flushList();
-      const level = Math.min(h[1].length + 1, 5);
-      out.push(`<h${level}>${inline(h[2])}</h${level}>`);
+      const level = Math.min(heading[1].length + 1, 5);
+      out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
       continue;
     }
-    const ol = line.match(/^\d+\.\s+(.+)$/);
-    if (ol) {
+    const ordered = line.match(/^\d+\.\s+(.+)$/);
+    if (ordered) {
       if (!list || list.type !== 'ol') {
         flushList();
         list = { type: 'ol', items: [] };
       }
-      list.items.push(ol[1]);
+      list.items.push(ordered[1]);
       continue;
     }
-    const ul = line.match(/^-\s+(.+)$/);
-    if (ul) {
+    const bullet = line.match(/^-\s+(.+)$/);
+    if (bullet) {
       if (!list || list.type !== 'ul') {
         flushList();
         list = { type: 'ul', items: [] };
       }
-      list.items.push(ul[1]);
+      list.items.push(bullet[1]);
       continue;
     }
     const quote = line.match(/^>\s?(.+)$/);
     if (quote) {
       flushList();
-      out.push(`<blockquote>${inline(quote[1])}</blockquote>`);
+      out.push(`<div class="quote-block">${inline(quote[1])}</div>`);
       continue;
     }
     flushList();
-    out.push(`<p>${inline(line)}</p>`);
+    out.push(`<p class="body-p">${inline(line)}</p>`);
   }
+
   flushList();
   if (code) flushCode();
   return out.join('\n');
 }
 
 function excerpt(body) {
-  const cleaned = body
+  return body
     .replace(/```[\s\S]*?```/g, '')
     .replace(/^#.*$/gm, '')
     .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, '$1')
     .replace(/\*\*/g, '')
     .split('\n')
-    .map(s => s.trim())
-    .filter(Boolean)
-    .find(s => s.length > 40);
-  return cleaned || '';
+    .map(line => line.trim())
+    .filter(line => line.length > 40)[0] || '';
 }
 
 function collectItems() {
@@ -156,621 +181,243 @@ function collectItems() {
     const raw = fs.readFileSync(file, 'utf8');
     const { fm, body } = parseFrontmatter(raw);
     const title = fm.title || (body.match(/^#\s+(.+)$/m) || [null, path.basename(file, '.md')])[1];
-    const slug = path.basename(file, '.md');
+    const type = fm.type || 'guide';
+    const section = fm.section || 'agency';
     return {
       title,
-      slug,
-      path: path.relative(ROOT, file),
-      type: fm.type || 'guide',
+      type,
+      section,
       status: fm.status || 'draft',
-      section: fm.section || 'agency',
-      audience: fm.audience || '',
+      visibility: fm.visibility || 'internal',
       situation: fm.situation || excerpt(body),
       artifact: fm.artifact || '',
-      visibility: fm.visibility || 'internal',
       tags: Array.isArray(fm.tags) ? fm.tags : [],
-      related: Array.isArray(fm.related) ? fm.related : [],
+      path: path.relative(ROOT, file),
       html: mdToHtml(body.replace(/^#\s+.+\n?/, '').trim()),
     };
   }).filter(item => ['ready', 'published'].includes(item.status) && item.visibility !== 'private');
 }
 
-const sectionLabels = {
-  self: 'начать с себя',
-  client: 'понять клиента',
-  project: 'собрать проект',
-  team: 'работать с командой',
-  production: 'довести до результата',
-  money: 'деньги',
-  agency: 'управлять агентством',
-};
+function sectionCard(type, items) {
+  const label = TYPE_LABELS[type] || type;
+  const icon = TYPE_ICONS[type] || '📌';
+  const topics = items.slice(0, 4).map(item => `<div class="card-topic">${esc(item.title)}</div>`).join('');
+  return `<a href="#${esc(type)}" class="section-card">
+      <div class="card-top">
+        <div class="card-num-badge">${icon}</div>
+        <div class="card-arrow">↓</div>
+      </div>
+      <div class="card-section-label">Тип материала</div>
+      <div class="card-title">${esc(label)}</div>
+      <div class="card-desc">${typeDesc(type)}</div>
+      <div class="card-topics">${topics}</div>
+      <div class="card-footer">
+        <div class="card-count"><div class="card-count-dot"></div>${items.length} материалов</div>
+        <div class="card-tags-row"><span class="ctag">${esc(label)}</span></div>
+      </div>
+    </a>`;
+}
 
-const typeLabels = {
-  'situation-card': 'ситуация',
-  process: 'процесс',
-  template: 'шаблон',
-  principle: 'принцип',
-  guide: 'раздел',
-};
+function typeDesc(type) {
+  return {
+    'situation-card': 'Рабочие ситуации: что происходит, почему важно, где ломается и что делать дальше.',
+    process: 'Повторяемые процессы для входа в задачу, ведения проекта и работы с командой.',
+    template: 'Готовые структуры писем, статусов, чеклистов и разборов.',
+    principle: 'Короткие управленческие правила, которые держат систему решений.',
+  }[type] || 'Материалы базы знаний продюсера.';
+}
+
+function renderAccordion(type, items, startIndex) {
+  const label = TYPE_LABELS[type] || type;
+  return `<section class="material-section" id="${esc(type)}">
+    <div class="section-heading">
+      <div>
+        <div class="page-tag">${esc(label)}</div>
+        <h2>${esc(label)}</h2>
+      </div>
+      <div class="section-count">${items.length} материалов</div>
+    </div>
+    <div class="cards">
+      ${items.map((item, idx) => renderItem(item, startIndex + idx)).join('\n')}
+    </div>
+  </section>`;
+}
+
+function renderItem(item, idx) {
+  const section = SECTION_LABELS[item.section] || item.section;
+  const type = TYPE_LABELS[item.type] || item.type;
+  const tags = item.tags.slice(0, 4).map(tag => `<span class="ctag">${esc(tag)}</span>`).join('');
+  return `<div class="card" id="card-${idx}">
+    <div class="card-header" onclick="toggleCard(${idx})">
+      <div class="card-num">${TYPE_ICONS[item.type] || '📌'}</div>
+      <div class="card-header-text">
+        <div class="card-title">${esc(item.title)}</div>
+        <div class="card-subtitle">${esc(type)} · ${esc(section)}</div>
+      </div>
+      <div class="card-chevron">›</div>
+    </div>
+    <div class="card-body">
+      <div class="rule-callout"><p><strong>Артефакт:</strong> ${esc(item.artifact || 'рабочий материал')}</p></div>
+      ${item.situation ? `<div class="section full"><h4>Ситуация</h4><p class="body-p">${esc(item.situation)}</p></div>` : ''}
+      <div class="section full material-content">${item.html}</div>
+      <div class="card-tags-row">${tags}</div>
+    </div>
+  </div>`;
+}
 
 function page(items) {
-  const data = JSON.stringify(items).replace(/</g, '\\u003c');
-  const counts = {
-    cards: items.filter(i => i.type === 'situation-card').length,
-    processes: items.filter(i => i.type === 'process').length,
-    templates: items.filter(i => i.type === 'template').length,
-    principles: items.filter(i => i.type === 'principle').length,
-  };
-  const year = new Date().getFullYear();
+  const byType = ['situation-card', 'process', 'template', 'principle']
+    .map(type => [type, items.filter(item => item.type === type)])
+    .filter(([, list]) => list.length);
+  let index = 0;
+  const sections = byType.map(([type, list]) => {
+    const html = renderAccordion(type, list, index);
+    index += list.length;
+    return html;
+  }).join('\n');
+  const totalCards = items.length;
 
   return `<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>База знаний продюсера — MASS AGENCY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mass.agency — База знаний продюсера</title>
   <style>
     :root {
-      --bg: #0a0a09;
-      --panel: #121211;
-      --panel-2: #181815;
-      --ink: #f3f0e8;
-      --text: #d8d3c7;
-      --muted: #8e897d;
-      --line: #2d2b25;
-      --line-strong: #4a4639;
-      --acid: #d7ff2f;
-      --paper: #e7dfcc;
-      --black: #050505;
-      --radius: 6px;
+      --bg: #0f0f0f; --surface: #1a1a1a; --surface-hover: #212121;
+      --border: #2a2a2a; --border-active: #3d3d3d;
+      --text-primary: #e8e8e8; --text-secondary: #888; --text-muted: #555;
+      --accent: #c8ff00; --accent-dim: rgba(200,255,0,.08); --accent-border: rgba(200,255,0,.2);
+      --danger: #ff4d4d; --tag-bg: #242424;
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font: 14px/1.5 Inter, Arial, Helvetica, sans-serif;
-      letter-spacing: 0;
-    }
-    button, input { font: inherit; }
-    a { color: inherit; }
-    .noise { display: none; }
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      min-height: 48px;
-      padding: 0 22px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(10,10,9,.94);
-      backdrop-filter: blur(12px);
-    }
-    .brand {
-      text-transform: lowercase;
-      font-weight: 700;
-      letter-spacing: -.02em;
-    }
-    .brand span { color: var(--acid); }
-    .nav {
-      display: flex;
-      gap: 18px;
-      color: var(--muted);
-      font-size: 13px;
-      text-transform: lowercase;
-    }
-    .nav a { text-decoration: none; }
-    .shell {
-      position: relative;
-      z-index: 1;
-      width: min(1500px, calc(100vw - 28px));
-      margin: 0 auto;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 18px;
-      align-items: stretch;
-      padding: 22px 0 14px;
-    }
-    .hero-copy {
-      min-height: 178px;
-      display: grid;
-      align-content: space-between;
-      gap: 18px;
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-    }
-    .kicker {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      color: var(--muted);
-      text-transform: lowercase;
-      font-size: 12px;
-    }
-    .kicker:before {
-      content: "";
-      width: 34px;
-      height: 1px;
-      background: var(--acid);
-    }
-    h1 {
-      margin: 0;
-      max-width: 900px;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: clamp(42px, 5vw, 78px);
-      line-height: .92;
-      letter-spacing: -.052em;
-      text-transform: lowercase;
-    }
-    .hero-text {
-      max-width: 720px;
-      color: var(--text);
-      font-size: 18px;
-      line-height: 1.35;
-      letter-spacing: -.015em;
-    }
-    .hero-panel {
-      display: grid;
-      align-content: space-between;
-      min-height: 178px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-    }
-    .years {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      text-transform: lowercase;
-      font-size: 12px;
-    }
-    .big-count {
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 48px;
-      line-height: .95;
-      letter-spacing: -.045em;
-    }
-    .big-count span { color: var(--acid); }
-    .panel-caption {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px 12px;
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: lowercase;
-    }
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      margin: 0 0 10px;
-      padding: 10px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-    }
-    .search {
-      width: 100%;
-      height: 42px;
-      padding: 0 12px;
-      color: var(--ink);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      outline: none;
-      background: var(--black);
-    }
-    .search:focus { border-color: var(--acid); }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-    .filter {
-      height: 42px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      color: var(--muted);
-      background: transparent;
-      cursor: pointer;
-      text-transform: lowercase;
-    }
-    .filter.active {
-      color: #111;
-      border-color: var(--acid);
-      background: var(--acid);
-    }
-    .dashboard {
-      display: grid;
-      grid-template-columns: 230px minmax(430px, .86fr) minmax(430px, 1.14fr);
-      gap: 10px;
-      align-items: start;
-      padding-bottom: 36px;
-    }
-    .rail, .detail {
-      position: sticky;
-      top: 58px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-      overflow: hidden;
-    }
-    .rail-head, .detail-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: lowercase;
-    }
-    .section-list { display: grid; }
-    .section-button {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      width: 100%;
-      padding: 11px 12px;
-      border: 0;
-      border-bottom: 1px solid var(--line);
-      color: var(--ink);
-      text-align: left;
-      background: transparent;
-      cursor: pointer;
-      text-transform: lowercase;
-    }
-    .section-button span { color: var(--muted); }
-    .section-button.active {
-      color: #111;
-      background: var(--acid);
-    }
-    .section-button.active span { color: #111; }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
-    }
-    .card {
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px 16px;
-      padding: 13px 14px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-      cursor: pointer;
-      transition: border-color .15s ease, background .15s ease;
-    }
-    .card:hover, .card.active {
-      border-color: var(--acid);
-      background: var(--panel-2);
-    }
-    .card-top {
-      display: flex;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: lowercase;
-      grid-column: 1 / -1;
-    }
-    .card-title {
-      margin: 0;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: -.035em;
-      text-transform: lowercase;
-    }
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      grid-column: 1 / -1;
-      max-width: 680px;
-    }
-    .artifact {
-      color: var(--acid);
-      font-size: 13px;
-      text-transform: lowercase;
-      grid-column: 1 / -1;
-    }
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .tag {
-      padding: 3px 7px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: lowercase;
-    }
-    .detail {
-      max-height: calc(100vh - 58px);
-      overflow: auto;
-    }
-    .detail-body { padding: 20px 22px 28px; }
-    .detail-title {
-      margin: 0 0 14px;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 40px;
-      line-height: .98;
-      letter-spacing: -.04em;
-      text-transform: lowercase;
-    }
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .pill {
-      padding: 5px 9px;
-      color: #111;
-      background: #d9d1bd;
-      border-radius: 999px;
-      font-size: 12px;
-      text-transform: lowercase;
-    }
-    .pill.acid { background: var(--acid); }
-    .content h2, .content h3, .content h4 {
-      margin: 24px 0 8px;
-      font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-      font-size: 22px;
-      line-height: 1.05;
-      letter-spacing: -.025em;
-      text-transform: lowercase;
-    }
-    .content p, .content li {
-      color: var(--text);
-    }
-    .content ul, .content ol {
-      padding-left: 20px;
-    }
-    .content pre {
-      overflow: auto;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--black);
-      color: var(--paper);
-      white-space: pre-wrap;
-    }
-    .wiki-link {
-      color: var(--acid);
-    }
-    .empty {
-      display: none;
-      padding: 52px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      color: var(--muted);
-      text-align: center;
-      background: var(--panel);
-    }
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 18px 0 32px;
-      color: var(--muted);
-      border-top: 1px solid var(--line);
-      text-transform: lowercase;
-    }
-    @media (max-width: 1100px) {
-      .hero, .dashboard { grid-template-columns: 1fr; }
-      .hero-panel, .rail, .detail { position: static; }
-      .grid { grid-template-columns: 1fr; }
-      .controls { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 620px) {
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text-primary); font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 52px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .topbar-brand span { color: var(--accent); }
+    .topbar-nav { display: flex; gap: 24px; }
+    .topbar-nav a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color .15s; }
+    .topbar-nav a:hover { color: var(--text-secondary); }
+    .topbar-nav a.active { color: var(--text-primary); }
+    .breadcrumb { padding: 20px 32px 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb-sep { color: var(--border-active); }
+    .page { max-width: 1080px; margin: 0 auto; padding: 40px 32px 80px; }
+    .page-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-border); padding: 3px 10px; border-radius: 4px; margin-bottom: 14px; }
+    .page-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .page-title { font-size: 32px; font-weight: 700; line-height: 1.2; margin-bottom: 10px; }
+    .page-desc { color: var(--text-secondary); font-size: 14px; max-width: 620px; line-height: 1.7; margin-bottom: 8px; }
+    .page-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 40px; }
+    .divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+    .section-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 48px; }
+    .section-card { display: block; text-decoration: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: border-color .2s, background .2s, transform .15s; position: relative; overflow: hidden; }
+    .section-card:hover { border-color: var(--border-active); background: var(--surface-hover); transform: translateY(-1px); }
+    .section-card:hover .card-arrow { opacity: 1; transform: translate(0, 0); }
+    .section-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); opacity: 0; transition: opacity .2s; }
+    .section-card:hover::before { opacity: 1; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+    .card-num-badge { width: 36px; height: 36px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .card-arrow { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 16px; opacity: 0; transform: translate(-4px, 4px); transition: opacity .2s, transform .2s; }
+    .card-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin-bottom: 6px; }
+    .card-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; line-height: 1.3; }
+    .card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .card-count { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+    .card-count-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: .6; }
+    .card-tags-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ctag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .card-topics { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+    .card-topic { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .card-topic::before { content: '·'; color: var(--accent); font-size: 16px; line-height: 1; }
+    .material-section { margin-top: 40px; scroll-margin-top: 72px; }
+    .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+    .section-heading h2 { font-size: 22px; line-height: 1.2; }
+    .section-count { color: var(--text-muted); font-size: 12px; margin-bottom: 4px; }
+    .cards { display: flex; flex-direction: column; gap: 8px; }
+    .card { border: 1px solid var(--border); border-radius: 10px; background: var(--surface); overflow: hidden; transition: border-color .2s; }
+    .card:hover { border-color: var(--border-active); }
+    .card.open { border-color: var(--border-active); background: var(--surface-hover); }
+    .card-header { display: flex; align-items: center; gap: 16px; padding: 18px 20px; cursor: pointer; user-select: none; }
+    .card-num { width: 36px; height: 36px; border-radius: 8px; background: var(--tag-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; transition: all .2s; }
+    .card.open .card-num { background: var(--accent-dim); border-color: var(--accent-border); }
+    .card-header-text { flex: 1; }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); }
+    .card-chevron { color: var(--text-muted); font-size: 16px; transition: transform .25s; flex-shrink: 0; margin-left: 12px; }
+    .card.open .card-chevron { transform: rotate(90deg); color: var(--text-secondary); }
+    .card-body { display: none; padding: 0 20px 24px; border-top: 1px solid var(--border); }
+    .card.open .card-body { display: block; }
+    .rule-callout { display: flex; gap: 12px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; padding: 14px 16px; margin: 20px 0 16px; }
+    .rule-callout p { font-size: 13px; color: var(--text-primary); line-height: 1.6; }
+    .section { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+    .section h4, .section h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: 10px; }
+    .section h5 { font-size: 13px; color: var(--text-primary); margin: 14px 0 8px; }
+    .section ul, .section ol { display: flex; flex-direction: column; gap: 6px; padding-left: 18px; color: var(--text-secondary); }
+    .section li, .body-p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+    .section pre { background: #191919; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow: auto; color: var(--text-secondary); white-space: pre-wrap; font-size: 13px; line-height: 1.55; }
+    .quote-block { background: #191919; border-left: 2px solid var(--accent); border-radius: 0 6px 6px 0; padding: 12px 14px; margin: 8px 0; font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .material-content h3 { margin-top: 18px; }
+    @media (max-width: 760px) {
       .topbar { padding: 0 16px; }
-      .nav { display: none; }
-      .shell { width: min(100vw - 24px, 1480px); }
-      .hero { min-height: auto; padding-top: 52px; }
-      h1 { font-size: 44px; }
-      .hero-copy { padding: 16px; }
-      .hero-text { font-size: 16px; }
-      .big-count { font-size: 40px; }
-      .filters { display: grid; grid-template-columns: repeat(2, 1fr); }
-      .filter { width: 100%; }
-      .card-title { font-size: 22px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      * { scroll-behavior: auto !important; transition: none !important; }
+      .topbar-nav { gap: 12px; }
+      .page { padding: 28px 16px 56px; }
+      .section-grid { grid-template-columns: 1fr; }
+      .card-footer, .section-heading { align-items: flex-start; flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <div class="noise"></div>
-  <header class="topbar">
-    <div class="brand">mass<span>.</span> knowledge</div>
-    <nav class="nav">
-      <a href="#situations">ситуации</a>
-      <a href="#processes">процессы</a>
-      <a href="#templates">шаблоны</a>
-      <a href="#principles">принципы</a>
-    </nav>
-  </header>
+<header class="topbar">
+  <div class="topbar-brand"><a href="index.html" style="text-decoration:none;color:inherit">mass<span>.</span>agency</a></div>
+  <nav class="topbar-nav">
+    <a href="#situation-card" class="active">Ситуации</a>
+    <a href="#process">Процессы</a>
+    <a href="#template">Шаблоны</a>
+  </nav>
+</header>
 
-  <main class="shell">
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="kicker">2015-${year} / продакшн / люди / решения</div>
-        <h1>база знаний продюсера</h1>
-        <div class="hero-text">Рабочий интерфейс MASS AGENCY для ситуаций, где нужно быстро понять контекст, назвать риск и собрать следующий шаг.</div>
-      </div>
-      <aside class="hero-panel">
-        <div class="years"><span>внутренняя версия</span><span>ready</span></div>
-        <div>
-          <div class="big-count"><span>${items.length}</span> материалов</div>
-        </div>
-        <div class="panel-caption">
-          <span>${counts.cards} ситуаций</span>
-          <span>${counts.processes} процесса</span>
-          <span>${counts.templates} шаблонов</span>
-          <span>${counts.principles} принципа</span>
-        </div>
-      </aside>
-    </section>
+<div class="breadcrumb">
+  <span>База знаний</span>
+  <span class="breadcrumb-sep">›</span>
+  <span>Framework</span>
+</div>
 
-    <section class="controls" aria-label="фильтры базы">
-      <input class="search" id="search" placeholder="найти ситуацию, письмо, риск, задачу..." />
-      <div class="filters" id="typeFilters"></div>
-    </section>
+<div class="page">
+  <div class="page-tag">Framework</div>
+  <h1 class="page-title">База знаний продюсера</h1>
+  <p class="page-desc">Параллельная система на основе BAZA: рабочие ситуации, процессы, шаблоны и принципы MASS AGENCY.</p>
+  <div class="page-meta">Обновлено: 19 июня 2026 · ${totalCards} материалов</div>
+  <div class="divider"></div>
 
-    <section class="dashboard" id="situations">
-      <aside class="rail">
-        <div class="rail-head"><span>раздел</span><span id="totalCount"></span></div>
-        <div class="section-list" id="sectionFilters"></div>
-      </aside>
+  <div class="section-grid">
+    ${byType.map(([type, list]) => sectionCard(type, list)).join('\n')}
+  </div>
 
-      <div>
-        <div class="grid" id="grid"></div>
-        <div class="empty" id="empty">ничего не найдено. попробуйте убрать фильтр или изменить запрос.</div>
-      </div>
+  ${sections}
+</div>
 
-      <aside class="detail" id="detail">
-        <div class="detail-head"><span>предпросмотр</span><span id="detailPath"></span></div>
-        <div class="detail-body">
-          <h2 class="detail-title" id="detailTitle"></h2>
-          <div class="meta" id="detailMeta"></div>
-          <div class="content" id="detailContent"></div>
-        </div>
-      </aside>
-    </section>
-
-    <footer class="footer">
-      <span>mass agency / knowledge framework</span>
-      <span>локальный html-прототип</span>
-    </footer>
-  </main>
-
-  <script>
-    const items = ${data};
-    const sectionLabels = ${JSON.stringify(sectionLabels)};
-    const typeLabels = ${JSON.stringify(typeLabels)};
-    let activeType = 'all';
-    let activeSection = 'all';
-    let activeSlug = items[0]?.slug;
-
-    const grid = document.getElementById('grid');
-    const empty = document.getElementById('empty');
-    const search = document.getElementById('search');
-    const typeFilters = document.getElementById('typeFilters');
-    const sectionFilters = document.getElementById('sectionFilters');
-    const totalCount = document.getElementById('totalCount');
-    const detailTitle = document.getElementById('detailTitle');
-    const detailMeta = document.getElementById('detailMeta');
-    const detailContent = document.getElementById('detailContent');
-    const detailPath = document.getElementById('detailPath');
-
-    function uniq(list) { return [...new Set(list)].filter(Boolean); }
-
-    function renderFilters() {
-      const types = ['all', ...uniq(items.map(i => i.type))];
-      typeFilters.innerHTML = types.map(type => '<button class="filter ' + (activeType === type ? 'active' : '') + '" data-type="' + type + '">' + (type === 'all' ? 'все' : typeLabels[type] || type) + '</button>').join('');
-      typeFilters.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', () => {
-          activeType = button.dataset.type;
-          render();
-        });
-      });
-
-      const sections = ['all', ...uniq(items.map(i => i.section))];
-      sectionFilters.innerHTML = sections.map(section => {
-        const count = section === 'all' ? items.length : items.filter(i => i.section === section).length;
-        return '<button class="section-button ' + (activeSection === section ? 'active' : '') + '" data-section="' + section + '"><strong>' + (section === 'all' ? 'вся база' : sectionLabels[section] || section) + '</strong><span>' + count + '</span></button>';
-      }).join('');
-      sectionFilters.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', () => {
-          activeSection = button.dataset.section;
-          render();
-        });
-      });
+<script>
+  const TOTAL = ${totalCards};
+  const openCards = new Set();
+  function toggleCard(i) {
+    const card = document.getElementById('card-' + i);
+    if (!card) return;
+    if (card.classList.contains('open')) {
+      card.classList.remove('open');
+      openCards.delete(i);
+    } else {
+      card.classList.add('open');
+      openCards.add(i);
     }
-
-    function filtered() {
-      const q = search.value.trim().toLowerCase();
-      return items.filter(item => {
-        const haystack = [item.title, item.situation, item.artifact, item.type, item.section, ...item.tags].join(' ').toLowerCase();
-        return (activeType === 'all' || item.type === activeType)
-          && (activeSection === 'all' || item.section === activeSection)
-          && (!q || haystack.includes(q));
-      });
-    }
-
-    function renderCards(list) {
-      grid.innerHTML = list.map(item => {
-        const tags = item.tags.slice(0, 4).map(tag => '<span class="tag">' + tag + '</span>').join('');
-        return '<article class="card ' + (activeSlug === item.slug ? 'active' : '') + '" data-slug="' + item.slug + '" tabindex="0">' +
-          '<div class="card-top"><span>' + (typeLabels[item.type] || item.type) + '</span><span>' + (sectionLabels[item.section] || item.section) + '</span></div>' +
-          '<div><h2 class="card-title">' + item.title + '</h2></div>' +
-          '<p>' + (item.situation || '') + '</p>' +
-          '<div class="artifact">' + (item.artifact || 'рабочий материал') + '</div>' +
-          '<div class="tags">' + tags + '</div>' +
-        '</article>';
-      }).join('');
-      grid.querySelectorAll('.card').forEach(card => {
-        const open = () => {
-          activeSlug = card.dataset.slug;
-          showDetail(items.find(item => item.slug === activeSlug));
-          renderCards(filtered());
-        };
-        card.addEventListener('click', open);
-        card.addEventListener('keydown', event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            open();
-          }
-        });
-      });
-      empty.style.display = list.length ? 'none' : 'block';
-      totalCount.textContent = list.length;
-    }
-
-    function showDetail(item) {
-      if (!item) return;
-      detailTitle.textContent = item.title;
-      detailPath.textContent = item.path;
-      detailMeta.innerHTML = [
-        '<span class="pill acid">' + (typeLabels[item.type] || item.type) + '</span>',
-        '<span class="pill">' + (sectionLabels[item.section] || item.section) + '</span>',
-        item.artifact ? '<span class="pill">' + item.artifact + '</span>' : ''
-      ].join('');
-      detailContent.innerHTML = item.html;
-    }
-
-    function render() {
-      renderFilters();
-      const list = filtered();
-      if (!list.find(item => item.slug === activeSlug)) activeSlug = list[0]?.slug;
-      renderCards(list);
-      showDetail(items.find(item => item.slug === activeSlug) || list[0]);
-    }
-
-    search.addEventListener('input', render);
-    render();
-  </script>
+  }
+</script>
 </body>
 </html>`;
 }
 
 const items = collectItems().sort((a, b) => {
-  const order = { 'situation-card': 1, process: 2, template: 3, principle: 4, guide: 5 };
+  const order = { 'situation-card': 1, process: 2, template: 3, principle: 4 };
   return (order[a.type] || 9) - (order[b.type] || 9) || a.title.localeCompare(b.title, 'ru');
 });
 
