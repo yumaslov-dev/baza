@@ -66,7 +66,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ⠂ Обновление структуры карточек базы знаний"
+              "title": "Terminal: ⠐ Обновление структуры карточек базы знаний"
             }
           }
         ]
@@ -241,8 +241,9 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "8ab05c26bb3d42a7",
+  "active": "ea360124c461deac",
   "lastOpenFiles": [
+    "входящие/CLAUDE.md",
     "baza-framework-obsidian/06-site/index.md",
     "baza-framework-obsidian/00-system/TAXONOMY.md",
     "baza-framework-obsidian/00-system/STYLEGUIDE.md",
@@ -278,7 +279,6 @@
     "AGENTS.md",
     "CLAUDE.md",
     "_INDEX.md",
-    "_INBOX.md",
     "Без названия.canvas",
     "Без названия 3.canvas",
     "Без названия 2.canvas",
