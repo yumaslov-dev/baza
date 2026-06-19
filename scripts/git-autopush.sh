@@ -3,6 +3,9 @@ REPO="/Users/maslov/OBSIDIAN_ALL/BAZA/BAZA"
 PASSWORD_FILE="$HOME/.baza-password"
 cd "$REPO" || exit 1
 
+# Генерируем HTML из новых/изменённых markdown-карточек
+/usr/local/bin/node "$REPO/scripts/md-to-html.js" >> /tmp/baza-autopush.log 2>&1
+
 # Пересоздаём зашифрованные версии если есть исходники и пароль
 if [ -d "$REPO/docs-src" ] && [ -f "$PASSWORD_FILE" ]; then
   PASSWORD=$(cat "$PASSWORD_FILE")
