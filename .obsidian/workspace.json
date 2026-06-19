@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "входящие/README.md",
+                "file": "AGENTS.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "AGENTS"
             }
           }
         ]
@@ -66,49 +66,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: zsh"
-            }
-          },
-          {
-            "id": "0a52973285646682",
-            "type": "leaf",
-            "pinned": true,
-            "state": {
-              "type": "terminal:terminal",
-              "state": {
-                "terminal:terminal": {
-                  "cwd": "/Users/maslov/OBSIDIAN_ALL/BAZA/BAZA",
-                  "focus": false,
-                  "profile": {
-                    "args": [
-                      "--login"
-                    ],
-                    "executable": "/bin/zsh",
-                    "followTheme": true,
-                    "name": "",
-                    "platforms": {
-                      "darwin": true
-                    },
-                    "pythonExecutable": "python3",
-                    "restoreHistory": false,
-                    "rightClickAction": "copyPaste",
-                    "successExitCodes": [
-                      "0",
-                      "SIGINT",
-                      "SIGTERM"
-                    ],
-                    "terminalOptions": {
-                      "documentOverride": null
-                    },
-                    "type": "integrated",
-                    "useWin32Conhost": true
-                  },
-                  "serial": null
-                }
-              },
-              "pinned": true,
-              "icon": "terminal",
-              "title": "Terminal: zsh"
+              "title": "Terminal: ✳ Claude Code"
             }
           }
         ]
@@ -285,7 +243,17 @@
   },
   "active": "8ab05c26bb3d42a7",
   "lastOpenFiles": [
+    "CLAUDE.md",
+    "_INDEX.md",
+    "_INBOX.md",
     "AGENTS.md",
+    "Статьи/входящие/Модуль 1. Как продюсер входит в задачу клиента.md",
+    "знания/общие.md",
+    "Статьи/входящие/README.md",
+    "Статьи/_INDEX.md",
+    "знания/продюсер-вход-в-задачу.md",
+    "команда/стоплист.md",
+    "входящие/README.md",
     "docs/robots.txt",
     "docs-src/robots.txt",
     "docs-src/robots.txt.tmp.26032.5f29a95832d3",
@@ -296,26 +264,16 @@
     "docs-src/продюсерское-мышление.html",
     "docs-src/продюсер-вход-в-задачу.html",
     "docs-src/подрядчики.html",
-    "входящие/README.md",
     "входящие/обработано/Бюро. Переговоры от Ильи Синельникова. Введение.md",
     "знания/переговоры.md",
     "входящие/Бюро. Переговоры от Ильи Синельникова. Введение.md",
-    "Статьи/входящие/README.md",
-    "Статьи/входящие/Модуль 1. Как продюсер входит в задачу клиента.md",
-    "Статьи/_INDEX.md",
     "знания/рабочие-процессы.md",
-    "знания/продюсер-вход-в-задачу.md",
-    "CLAUDE.md",
-    "_INBOX.md",
-    "_INDEX.md",
     "процессы/Проекты.md",
     "знания/управление-командой.md",
     "знания/управление-проектом.md",
     "процессы/онбординг.md",
-    "знания/общие.md",
     "команда/история.md",
     "команда/культура.md",
-    "команда/стоплист.md",
     "команда/подрядчики.md",
     "команда/люди-и-роли.md",
     "входящие/обработано/Менеджмент для людей, которые делают.md",
