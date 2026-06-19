@@ -31,7 +31,9 @@ const SECTION_H4_EMOJIS = {
   'Где обычно ломается':          '🔴',
   'Как смотреть точнее':          '🔍',
   'Что сделать':                  '✅',
+  'Что делать':                   '✅',
   'Какой артефакт остается':      '📄',
+  'Артефакт':                     '📄',
   'Критерий хорошего результата': '🎯',
   'Главное правило':              '💡',
   'Вопросы клиенту':              '❓',
@@ -46,6 +48,7 @@ const SECTION_H4_EMOJIS = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function parseMd(content) {
+  content = content.replace(/^---\n[\s\S]*?\n---\n+/, '');
   const lines   = content.split('\n');
   let title = '', updated = '', desc = '', related = [];
 
@@ -178,6 +181,7 @@ function contentToHtml(text) {
 
 const FULL_WIDTH = new Set([
   'Ситуация','Почему важно','Как смотреть точнее','Какой артефакт остается',
+  'Артефакт',
   'Вопросы клиенту','Что написать клиенту','Что сказать на созвоне',
   'Когда звать руководителя','Структура письма','Шаблон письма','Шаблон',
   'Принцип человеческого языка','Минимальные вопросы перед вилкой',
@@ -223,7 +227,7 @@ function renderCard(card) {
 
   // Try to put "Где обычно ломается" and "Что сделать" side-by-side
   const breakIdx = mainSecs.findIndex(s => s.name === 'Где обычно ломается');
-  const doIdx    = mainSecs.findIndex(s => s.name === 'Что сделать');
+  const doIdx    = mainSecs.findIndex(s => s.name === 'Что сделать' || s.name === 'Что делать');
 
   const bodyParts = [];
   if (ruleSection) bodyParts.push(renderSectionBlock('Главное правило', ruleSection.content));

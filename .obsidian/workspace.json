@@ -24,11 +24,11 @@
         ]
       },
       {
-        "id": "1f82661ba2124ceb",
+        "id": "c9bc2c44a5b42550",
         "type": "tabs",
         "children": [
           {
-            "id": "ea360124c461deac",
+            "id": "b05eb763b1b8731f",
             "type": "leaf",
             "pinned": true,
             "state": {
@@ -66,7 +66,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ✳ Обновление структуры карточек базы знаний"
+              "title": "Terminal: ⠦ BAZA"
             }
           }
         ]
@@ -241,8 +241,10 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "ea360124c461deac",
+  "active": "b05eb763b1b8731f",
   "lastOpenFiles": [
+    "входящие/обработано/CLAUDE.md",
+    "входящие/README.md",
     "входящие/CLAUDE.md",
     "baza-framework-obsidian/06-site/index.md",
     "baza-framework-obsidian/00-system/TAXONOMY.md",
@@ -268,7 +270,6 @@
     "входящие/обработано/baza_znanii_vetka_programma_prodyuser.md",
     "знания/психология-и-рост.md",
     "знания/первый-клиент-и-деньги.md",
-    "входящие/README.md",
     "входящие/baza_znanii_vetka_programma_prodyuser.md",
     "Статьи/входящие/Модуль 1. Как продюсер входит в задачу клиента.md",
     "Статьи/входящие/README.md",
@@ -278,7 +279,6 @@
     "знания/управление-проектом.md",
     "AGENTS.md",
     "CLAUDE.md",
-    "_INDEX.md",
     "Без названия.canvas",
     "Без названия 3.canvas",
     "Без названия 2.canvas",
