@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AGENTS.md",
+                "file": "Статьи/входящие/Модуль 1. Как продюсер входит в задачу клиента.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "AGENTS"
+              "title": "Модуль 1. Как продюсер входит в задачу клиента"
             }
           }
         ]
@@ -66,7 +66,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ✳ Claude Code"
+              "title": "Terminal: ✳ Обновление структуры карточек базы знаний"
             }
           }
         ]
@@ -241,13 +241,14 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "8ab05c26bb3d42a7",
+  "active": "ea360124c461deac",
   "lastOpenFiles": [
+    "CLAUDE.md.tmp.42651.dbb712e5806b",
+    "Статьи/входящие/Модуль 1. Как продюсер входит в задачу клиента.md",
+    "AGENTS.md",
     "CLAUDE.md",
     "_INDEX.md",
     "_INBOX.md",
-    "AGENTS.md",
-    "Статьи/входящие/Модуль 1. Как продюсер входит в задачу клиента.md",
     "знания/общие.md",
     "Статьи/входящие/README.md",
     "Статьи/_INDEX.md",
@@ -278,7 +279,6 @@
     "команда/люди-и-роли.md",
     "входящие/обработано/Менеджмент для людей, которые делают.md",
     "знания/продюсерское-мышление.md",
-    "входящие/Менеджмент для людей, которые делают.md",
     "Без названия.canvas",
     "Без названия 3.canvas",
     "Без названия 2.canvas",
