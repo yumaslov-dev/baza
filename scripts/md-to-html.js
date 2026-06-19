@@ -290,11 +290,11 @@ function buildPageHtml(data, filename, relatedLinks) {
   <title>${escHtml(title)} — mass agency</title>
   <style>
     :root {
-      --bg:#f5f4f0;--surface:#ffffff;--surface-hover:#fafaf8;
-      --border:#e2e0db;--border-active:#c5c2bb;
-      --text-primary:#1a1918;--text-secondary:#5c5a56;--text-muted:#9a9692;
-      --accent:#3d6b00;--accent-dim:rgba(61,107,0,.08);--accent-border:rgba(61,107,0,.2);
-      --danger:#cc3535;--tag-bg:#eeece8;
+      --bg:#f8f5f0;--surface:#ffffff;--surface-hover:#fdf9f5;
+      --border:#e8e4dd;--border-active:#d0cbc3;
+      --text-primary:#0d0c0a;--text-secondary:#4a4845;--text-muted:#9a9690;
+      --accent:#e8612a;--accent-dim:rgba(232,97,42,.08);--accent-border:rgba(232,97,42,.25);
+      --danger:#cc3535;--tag-bg:#f0ece5;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
@@ -302,9 +302,12 @@ function buildPageHtml(data, filename, relatedLinks) {
     .topbar-brand{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
     .topbar-brand span{color:var(--accent)}
     .topbar-nav{display:flex;gap:24px}
-    .topbar-nav a{color:var(--text-muted);text-decoration:none;font-size:13px;transition:color .15s}
-    .topbar-nav a:hover{color:var(--text-secondary)}
+    .topbar-nav a{color:var(--text-secondary);text-decoration:none;font-size:13px;position:relative;padding-bottom:2px;transition:color .15s}
+    .topbar-nav a::before{content:'';width:0%;height:3px;position:absolute;display:block;background:var(--accent);left:0;bottom:-4px;transition:width .3s}
+    .topbar-nav a:hover{color:var(--text-primary)}
+    .topbar-nav a:hover::before{width:100%}
     .topbar-nav a.active{color:var(--text-primary)}
+    .topbar-nav a.active::before{width:100%}
     .breadcrumb{padding:20px 32px 0;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)}
     .breadcrumb a{color:var(--text-muted);text-decoration:none}
     .breadcrumb a:hover{color:var(--text-secondary)}
@@ -348,9 +351,9 @@ function buildPageHtml(data, filename, relatedLinks) {
     .section ol{list-style:none;counter-reset:item;display:flex;flex-direction:column;gap:6px}
     .section ol li{font-size:13px;color:var(--text-secondary);padding-left:24px;position:relative;counter-increment:item}
     .section ol li::before{content:counter(item);position:absolute;left:0;font-size:11px;font-weight:700;color:var(--accent);width:16px;height:16px;background:var(--accent-dim);border-radius:4px;display:flex;align-items:center;justify-content:center;top:1px}
-    .criteria-box{background:#eef5e8;border:1px solid #c5dca0;border-radius:8px;padding:14px 16px;margin-top:16px}
-    .criteria-box p{font-size:13px;color:#3d6b00;line-height:1.6}
-    .quote-block{background:#f0ede8;border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 14px;margin:8px 0;font-size:13px;color:var(--text-secondary);line-height:1.65}
+    .criteria-box{background:#fef3ec;border:1px solid #f0c4a0;border-radius:8px;padding:14px 16px;margin-top:16px}
+    .criteria-box p{font-size:13px;color:#c04a10;line-height:1.6}
+    .quote-block{background:#fdf0e8;border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 14px;margin:8px 0;font-size:13px;color:var(--text-secondary);line-height:1.65}
     .body-p{font-size:13px;color:var(--text-secondary);line-height:1.65;margin-bottom:8px}
     .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
     .toolbar-label{font-size:13px;font-weight:600;color:var(--text-secondary)}

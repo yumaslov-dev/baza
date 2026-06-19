@@ -66,7 +66,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ✳ Обновление структуры карточек базы знаний"
+              "title": "Terminal: ⠂ Обновление структуры карточек базы знаний"
             }
           }
         ]
@@ -243,6 +243,7 @@
   },
   "active": "ea360124c461deac",
   "lastOpenFiles": [
+    "scripts/migrate-cream.js",
     "scripts/migrate-to-light.js",
     "docs/психология-и-рост.html",
     "docs/первый-клиент-и-деньги.html",
@@ -264,7 +265,6 @@
     "знания/продюсерское-мышление.md",
     "знания/управление-командой.md",
     "знания/управление-проектом.md",
-    "CLAUDE.md.tmp.42651.dbb712e5806b",
     "AGENTS.md",
     "CLAUDE.md",
     "_INDEX.md",
