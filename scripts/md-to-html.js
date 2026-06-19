@@ -18,6 +18,29 @@ const REPO        = '/Users/maslov/OBSIDIAN_ALL/BAZA/BAZA';
 const AUTO_MARKER = '<!-- md-auto-generated -->';
 const SKIP_FILES  = new Set(['README.md', '_INDEX.md', 'общие.md']);
 
+// Иконки карточек по порядку (вместо цифр 1, 2, 3…)
+const CARD_ICONS = [
+  '🎯', '📋', '🔑', '💬', '⚡', '🛠', '🌱', '💡',
+  '📊', '🔍', '✅', '💪', '🎓', '🌟', '🔮', '🧩',
+];
+
+// Эмодзи для h4 заголовков разделов
+const SECTION_H4_EMOJIS = {
+  'Ситуация':                    '📍',
+  'Почему важно':                 '⚡',
+  'Где обычно ломается':          '🔴',
+  'Как смотреть точнее':          '🔍',
+  'Что сделать':                  '✅',
+  'Какой артефакт остается':      '📄',
+  'Критерий хорошего результата': '🎯',
+  'Главное правило':              '💡',
+  'Вопросы клиенту':              '❓',
+  'Что написать клиенту':         '✉️',
+  'Что сказать на созвоне':       '📞',
+  'Когда звать руководителя':     '🆘',
+  'Рабочие фразы':                '💬',
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Markdown parser
 // ─────────────────────────────────────────────────────────────────────────────
@@ -173,15 +196,16 @@ function renderSectionBlock(name, content) {
   }
 
   if (name === 'Критерий хорошего результата') {
-    return `<div class="criteria-box" style="display:flex;gap:10px;background:#161f00;border:1px solid #2d3d00;border-radius:8px;padding:14px 16px;margin-top:16px"><p style="font-size:13px;color:#b8d870;line-height:1.6">${html}</p></div>`;
+    return `<div class="criteria-box"><p>🎯 ${html}</p></div>`;
   }
 
   if (name === 'Где обычно ломается') {
-    return `<div class="section breaks"><h4>Где обычно ломается</h4>${html}</div>`;
+    return `<div class="section breaks"><h4>🔴 Где обычно ломается</h4>${html}</div>`;
   }
 
   const isFull = FULL_WIDTH.has(name);
-  return `<div class="section${isFull ? ' full' : ''}"><h4>${escHtml(name)}</h4>${html}</div>`;
+  const emoji  = SECTION_H4_EMOJIS[name] ? `${SECTION_H4_EMOJIS[name]} ` : '';
+  return `<div class="section${isFull ? ' full' : ''}"><h4>${emoji}${escHtml(name)}</h4>${html}</div>`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -189,7 +213,8 @@ function renderSectionBlock(name, content) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function renderCard(card) {
-  const idx         = card.num - 1;
+  const idx         = (card.num - 1);
+  const icon        = CARD_ICONS[idx] || '📌';
   const ruleSection = card.subsections.find(s => s.name === 'Главное правило');
   const critSection = card.subsections.find(s => s.name === 'Критерий хорошего результата');
   const mainSecs    = card.subsections.filter(
@@ -225,7 +250,7 @@ function renderCard(card) {
   return `
       <div class="card" id="card-${idx}">
         <div class="card-header" onclick="toggleCard(${idx})">
-          <div class="card-num">${card.num}</div>
+          <div class="card-num">${icon}</div>
           <div class="card-header-text">
             <div class="card-title">${escHtml(card.title)}</div>
           </div>
@@ -265,11 +290,11 @@ function buildPageHtml(data, filename, relatedLinks) {
   <title>${escHtml(title)} — mass agency</title>
   <style>
     :root {
-      --bg:#0f0f0f;--surface:#1a1a1a;--surface-hover:#212121;
-      --border:#2a2a2a;--border-active:#3d3d3d;
-      --text-primary:#e8e8e8;--text-secondary:#888;--text-muted:#555;
-      --accent:#c8ff00;--accent-dim:rgba(200,255,0,.08);--accent-border:rgba(200,255,0,.2);
-      --danger:#ff4d4d;--tag-bg:#242424;
+      --bg:#f5f4f0;--surface:#ffffff;--surface-hover:#fafaf8;
+      --border:#e2e0db;--border-active:#c5c2bb;
+      --text-primary:#1a1918;--text-secondary:#5c5a56;--text-muted:#9a9692;
+      --accent:#3d6b00;--accent-dim:rgba(61,107,0,.08);--accent-border:rgba(61,107,0,.2);
+      --danger:#cc3535;--tag-bg:#eeece8;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
@@ -295,14 +320,14 @@ function buildPageHtml(data, filename, relatedLinks) {
     .progress-bar{display:flex;gap:6px;margin-bottom:32px}
     .progress-step{flex:1;height:3px;background:var(--border);border-radius:2px;transition:background .3s;cursor:pointer}
     .progress-step.active{background:var(--accent)}
-    .progress-step.done{background:#4a4a4a}
+    .progress-step.done{background:#c8c4be}
     .cards{display:flex;flex-direction:column;gap:8px}
     .card{border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden;transition:border-color .2s}
     .card:hover{border-color:var(--border-active)}
     .card.open{border-color:var(--border-active);background:var(--surface-hover)}
     .card-header{display:flex;align-items:center;gap:16px;padding:18px 20px;cursor:pointer;user-select:none}
-    .card-num{width:30px;height:30px;border-radius:8px;background:var(--tag-bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--text-muted);flex-shrink:0;transition:all .2s}
-    .card.open .card-num{background:var(--accent-dim);border-color:var(--accent-border);color:var(--accent)}
+    .card-num{width:36px;height:36px;border-radius:8px;background:var(--tag-bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all .2s}
+    .card.open .card-num{background:var(--accent-dim);border-color:var(--accent-border)}
     .card-header-text{flex:1}
     .card-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
     .card-subtitle{font-size:12px;color:var(--text-muted)}
@@ -323,7 +348,9 @@ function buildPageHtml(data, filename, relatedLinks) {
     .section ol{list-style:none;counter-reset:item;display:flex;flex-direction:column;gap:6px}
     .section ol li{font-size:13px;color:var(--text-secondary);padding-left:24px;position:relative;counter-increment:item}
     .section ol li::before{content:counter(item);position:absolute;left:0;font-size:11px;font-weight:700;color:var(--accent);width:16px;height:16px;background:var(--accent-dim);border-radius:4px;display:flex;align-items:center;justify-content:center;top:1px}
-    .quote-block{background:#191919;border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 14px;margin:8px 0;font-size:13px;color:var(--text-secondary);line-height:1.65}
+    .criteria-box{background:#eef5e8;border:1px solid #c5dca0;border-radius:8px;padding:14px 16px;margin-top:16px}
+    .criteria-box p{font-size:13px;color:#3d6b00;line-height:1.6}
+    .quote-block{background:#f0ede8;border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 14px;margin:8px 0;font-size:13px;color:var(--text-secondary);line-height:1.65}
     .body-p{font-size:13px;color:var(--text-secondary);line-height:1.65;margin-bottom:8px}
     .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
     .toolbar-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
