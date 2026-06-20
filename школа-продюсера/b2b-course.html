@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Продюсерское мышление — B2B-курс</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+    a { color: inherit; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(18px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(245, 239, 226, .92);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; gap: 18px; }
+    .topbar nav a {
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .hero {
+      min-height: 62vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .48fr);
+      gap: clamp(28px, 5vw, 78px);
+      align-items: end;
+      padding: clamp(48px, 8vw, 104px) clamp(18px, 6vw, 86px);
+      background:
+        radial-gradient(circle at 82% 10%, rgba(200, 255, 0, .18), transparent 18rem),
+        linear-gradient(125deg, rgba(47, 81, 56, .10), transparent 48%);
+    }
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 5px 9px;
+      border-radius: 5px;
+      border: 1px solid rgba(47, 81, 56, .24);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 980px;
+      margin-bottom: 24px;
+      font-size: clamp(48px, 8vw, 104px);
+      line-height: .9;
+      letter-spacing: -.055em;
+    }
+    h2 {
+      margin-bottom: 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: .95;
+      letter-spacing: -.045em;
+    }
+    .lead {
+      max-width: 760px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.72;
+    }
+    .hero-card {
+      border-radius: 20px;
+      background: var(--green-dark);
+      color: var(--paper);
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+    .hero-card strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+    .hero-card p { color: rgba(255, 250, 240, .76); }
+    .hero-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: rgba(255, 250, 240, .84);
+    }
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--line);
+    }
+    .strip-item {
+      min-height: 112px;
+      padding: 22px clamp(18px, 4vw, 38px);
+      background: var(--paper);
+    }
+    .strip-item span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .strip-item strong {
+      display: block;
+      font-size: 19px;
+      line-height: 1.18;
+      letter-spacing: -.02em;
+    }
+    .section {
+      padding: clamp(44px, 6vw, 78px) clamp(18px, 6vw, 86px);
+      border-top: 1px solid var(--line);
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    .section-head p {
+      max-width: 600px;
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .module-card {
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      padding: 22px;
+      text-decoration: none;
+      box-shadow: 0 1px 0 rgba(255,255,255,.72) inset;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .module-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(47, 81, 56, .36);
+      box-shadow: var(--shadow);
+    }
+    .module-card.featured {
+      background: var(--green-dark);
+      color: var(--paper);
+    }
+    .module-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .num {
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--panel);
+      color: var(--green);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+    .module-card.featured .num {
+      background: rgba(255, 250, 240, .13);
+      color: var(--acid);
+    }
+    .count {
+      padding: 5px 9px;
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .module-card.featured .count {
+      background: rgba(255, 250, 240, .12);
+      color: var(--paper);
+    }
+    .module-card h3 {
+      margin-bottom: 10px;
+      font-size: 30px;
+      line-height: 1.02;
+      letter-spacing: -.035em;
+    }
+    .module-card p {
+      margin-bottom: 16px;
+      color: var(--muted);
+    }
+    .module-card.featured p { color: rgba(255, 250, 240, .78); }
+    .artifacts {
+      margin: auto 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .module-card.featured .artifacts { border-color: rgba(255, 250, 240, .16); }
+    .artifacts strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .module-card.featured .artifacts strong { color: var(--acid); }
+    .artifacts ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .module-card.featured .artifacts ul { color: rgba(255, 250, 240, .82); }
+    .footer {
+      padding: 26px clamp(18px, 6vw, 86px) 56px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 1080px) {
+      .hero { grid-template-columns: 1fr; }
+      .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      .topbar { height: auto; padding-top: 14px; padding-bottom: 14px; align-items: flex-start; flex-direction: column; }
+      .topbar nav { flex-wrap: wrap; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 14px; }
+      .module-grid, .strip { grid-template-columns: 1fr; }
+      h1 { font-size: 50px; }
+      .module-card { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">mass<span>.</span>method</a>
+    <nav>
+      <a href="#modules">6 модулей</a>
+      <a href="b2b-kurs-prodyuserskoe-myshlenie.md">Карта курса</a>
+      <a href="b2b-modul-ramka-zadachi.md">Рамка задачи</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">B2B-курс</div>
+        <h1>Продюсерское мышление для менеджеров креатива, медиа и дизайна</h1>
+        <p class="lead">Маршрут из 6 модулей для людей, которые работают с клиентами, задачами, проектами, командой, сроками, деньгами, рисками и сложными разговорами.</p>
+      </div>
+      <aside class="hero-card">
+        <strong>Что собирает участник</strong>
+        <p>К концу курса у менеджера появляется рабочий пакет продюсерской ясности:</p>
+        <ul>
+          <li>рамка задачи;</li>
+          <li>вопросы к клиенту или заказчику;</li>
+          <li>статус проекта;</li>
+          <li>сообщение о риске;</li>
+          <li>шаблон постановки задачи;</li>
+          <li>карта роста.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="strip">
+      <div class="strip-item">
+        <span>Структура</span>
+        <strong>6 модулей от роли к сложным разговорам</strong>
+      </div>
+      <div class="strip-item">
+        <span>Карточки</span>
+        <strong>60 ситуаций по стандарту BAZA</strong>
+      </div>
+      <div class="strip-item">
+        <span>Фокус</span>
+        <strong>управленческая ясность в реальной задаче</strong>
+      </div>
+      <div class="strip-item">
+        <span>Формат</span>
+        <strong>теория, карточки, фразы, шаблоны, критерии</strong>
+      </div>
+    </div>
+
+    <section class="section" id="modules">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Маршрут школы</div>
+          <h2>6 блоков курса</h2>
+        </div>
+        <p>Каждый блок ведёт от понимания к действию: участник разбирает ситуации, применяет рабочие фразы, собирает артефакты и проверяет критерий результата.</p>
+      </div>
+
+      <div class="module-grid">
+        <a class="module-card featured" href="b2b-modul-01-prodyuserskaya-rol.md">
+          <div class="module-top">
+            <div class="num">1</div>
+            <div class="count">10 карточек</div>
+          </div>
+          <h3>Продюсерская роль</h3>
+          <p>Роль, результат, видимая и невидимая работа. Участник учится видеть задачу как систему результата, решений, людей и рисков.</p>
+          <div class="artifacts">
+            <strong>Артефакты</strong>
+            <ul>
+              <li>карта роли;</li>
+              <li>карта результата;</li>
+              <li>stakeholder map;</li>
+              <li>карта решений.</li>
+            </ul>
+          </div>
+        </a>
+
+        <a class="module-card" href="b2b-modul-02-vhod-v-professiyu.md">
+          <div class="module-top">
+            <div class="num">2</div>
+            <div class="count">10 карточек</div>
+          </div>
+          <h3>Вход в профессию</h3>
+          <p>Самопродюсирование, первый самостоятельный контур, честное предъявление опыта и управленческий рост внутри роли.</p>
+          <div class="artifacts">
+            <strong>Артефакты</strong>
+            <ul>
+              <li>карта самопродюсирования;</li>
+              <li>контур ответственности;</li>
+              <li>карточка опыта;</li>
+              <li>план роста на 30 дней.</li>
+            </ul>
+          </div>
+        </a>
+
+        <a class="module-card" href="b2b-modul-03-klient-i-zadacha.md">
+          <div class="module-top">
+            <div class="num">3</div>
+            <div class="count">10 карточек</div>
+          </div>
+          <h3>Клиент и задача</h3>
+          <p>Первичный запрос, вопросы, ресурсная и бюджетная вилка, саммари, защита решения и работа с согласующими.</p>
+          <div class="artifacts">
+            <strong>Артефакты</strong>
+            <ul>
+              <li>первый ответ;</li>
+              <li>список вопросов;</li>
+              <li>саммари;</li>
+              <li>матрица эскалации.</li>
+            </ul>
+          </div>
+        </a>
+
+        <a class="module-card" href="b2b-modul-04-proekt-i-dengi.md">
+          <div class="module-top">
+            <div class="num">4</div>
+            <div class="count">10 карточек</div>
+          </div>
+          <h3>Проект и деньги</h3>
+          <p>Статус, риски, объём, правки, допработы, согласования, тайминг, закрытие и постразбор проекта.</p>
+          <div class="artifacts">
+            <strong>Артефакты</strong>
+            <ul>
+              <li>статус проекта;</li>
+              <li>сообщение о риске;</li>
+              <li>scope проекта;</li>
+              <li>постразбор.</li>
+            </ul>
+          </div>
+        </a>
+
+        <a class="module-card" href="b2b-modul-05-komanda-i-otvetstvennost.md">
+          <div class="module-top">
+            <div class="num">5</div>
+            <div class="count">10 карточек</div>
+          </div>
+          <h3>Команда и ответственность</h3>
+          <p>Постановка задач, приёмка результата, культура вопроса, помощь, ошибки, подрядчики и рост самостоятельности.</p>
+          <div class="artifacts">
+            <strong>Артефакты</strong>
+            <ul>
+              <li>шаблон постановки;</li>
+              <li>критерии приёмки;</li>
+              <li>рамка помощи;</li>
+              <li>шаблон разбора ошибки.</li>
+            </ul>
+          </div>
+        </a>
+
+        <a class="module-card" href="b2b-modul-06-slozhnye-razgovory-i-rost.md">
+          <div class="module-top">
+            <div class="num">6</div>
+            <div class="count">10 карточек</div>
+          </div>
+          <h3>Сложные разговоры и рост</h3>
+          <p>Твёрдость, отказ, цена, ресурс, сроки, ошибки, обратная связь, эскалация, этика и следующий уровень роста.</p>
+          <div class="artifacts">
+            <strong>Артефакты</strong>
+            <ul>
+              <li>отказ с альтернативой;</li>
+              <li>сообщение о сроке;</li>
+              <li>эскалация;</li>
+              <li>карта роста на 90 дней.</li>
+            </ul>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    B2B-курс «Продюсерское мышление». Рабочий экран модулей для прототипа продукта.
+  </footer>
+</body>
+</html>

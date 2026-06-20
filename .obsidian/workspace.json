@@ -11,10 +11,14 @@
             "id": "0302202e975a4253",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "знания/продюсер-вход-в-задачу.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "продюсер-вход-в-задачу"
             }
           }
         ]
@@ -62,7 +66,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ⠴ BAZA"
+              "title": "Terminal: ⠧ BAZA"
             }
           }
         ]
@@ -239,6 +243,16 @@
   },
   "active": "1a8e3e3eb826ebac",
   "lastOpenFiles": [
+    "школа-продюсера/b2b-course.html",
+    "школа-продюсера/b2b-modul-06-slozhnye-razgovory-i-rost.md",
+    "школа-продюсера/b2b-modul-05-komanda-i-otvetstvennost.md",
+    "школа-продюсера/b2b-modul-04-proekt-i-dengi.md",
+    "школа-продюсера/b2b-modul-03-klient-i-zadacha.md",
+    "школа-продюсера/b2b-modul-02-vhod-v-professiyu.md",
+    "школа-продюсера/b2b-modul-01-prodyuserskaya-rol.md",
+    "знания/продюсер-вход-в-задачу.md",
+    "школа-продюсера/b2b-kurs-prodyuserskoe-myshlenie.md",
+    "школа-продюсера/b2b-modul-ramka-zadachi.md",
     "школа-продюсера/сборка-продукта.md",
     "школа-продюсера/sendout.html",
     "школа-продюсера/proverka-mvp-ot-navyka-k-klientu.md",
@@ -265,16 +279,6 @@
     "baza-framework-obsidian/06-site/Понять клиента.md",
     "baza-framework-obsidian/06-site/Начать с себя.md",
     "baza-framework-obsidian/05-principles/контроль-сохраняет-доверие.md",
-    "baza-framework-obsidian/05-principles/неопределенность-нужно-называть.md",
-    "baza-framework-obsidian/05-principles/ясность-до-оценки.md",
-    "baza-framework-obsidian/04-templates/сценарий-обратной-связи.md",
-    "baza-framework-obsidian/04-templates/постразбор-проекта.md",
-    "baza-framework-obsidian/04-templates/письмо-о-риске.md",
-    "baza-framework-obsidian/04-templates/письмо-с-пониманием-задачи.md",
-    "baza-framework-obsidian/04-templates/чеклист-входа-в-задачу.md",
-    "baza-framework-obsidian/03-processes/работа-с-командой.md",
-    "baza-framework-obsidian/03-processes/ведение-проекта.md",
-    "baza-framework-obsidian/03-processes/вход-в-задачу.md",
     "Без названия.canvas",
     "Без названия 3.canvas",
     "Без названия 2.canvas",
