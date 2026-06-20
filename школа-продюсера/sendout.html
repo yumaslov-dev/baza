@@ -135,6 +135,34 @@
       gap: 10px;
       margin-top: 28px;
     }
+    .format-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--line);
+    }
+    .format-item {
+      min-height: 118px;
+      padding: 22px clamp(18px, 4vw, 38px);
+      background: var(--paper);
+    }
+    .format-item span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .format-item strong {
+      display: block;
+      font-size: 19px;
+      line-height: 1.18;
+      letter-spacing: -.02em;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -243,10 +271,126 @@
       text-transform: uppercase;
     }
 
+    .module-preview {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .48fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .module-main {
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      padding: clamp(22px, 4vw, 34px);
+    }
+    .module-main h3 {
+      margin-bottom: 12px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .module-main p { color: var(--muted); }
+    .module-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .mini-card {
+      border-radius: 14px;
+      background: var(--panel);
+      padding: 16px;
+    }
+    .mini-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .mini-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+      line-height: 1.16;
+    }
+    .mini-card p {
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+    .worksheet {
+      border-radius: 20px;
+      background: var(--green-dark);
+      color: var(--paper);
+      padding: clamp(22px, 4vw, 30px);
+      box-shadow: var(--shadow);
+    }
+    .worksheet h3 {
+      margin-bottom: 12px;
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+    .worksheet p { color: rgba(255, 250, 240, .74); }
+    .worksheet ol {
+      margin: 16px 0 0;
+      padding-left: 20px;
+      color: rgba(255, 250, 240, .86);
+    }
+    .worksheet li + li { margin-top: 8px; }
+
     .artifact-grid, .question-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
+    }
+
+    .pilot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .pilot-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      padding: 22px;
+    }
+    .pilot-card h3 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -.025em;
+    }
+    .pilot-card p { color: var(--muted); }
+    .pilot-card ul {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+    .pilot-card.featured {
+      background: var(--green-dark);
+      color: var(--paper);
+    }
+    .pilot-card.featured p,
+    .pilot-card.featured ul { color: rgba(255, 250, 240, .78); }
+    .pilot-card .tag {
+      display: inline-flex;
+      margin-bottom: 14px;
+      padding: 4px 8px;
+      border-radius: 5px;
+      background: var(--panel);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .pilot-card.featured .tag {
+      background: rgba(255, 250, 240, .12);
+      color: var(--acid);
     }
 
     .sample-grid {
@@ -288,6 +432,17 @@
       font-family: inherit;
       font-size: 14px;
     }
+    .feedback-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .copy-status {
+      color: rgba(255, 250, 240, .72);
+      font-size: 13px;
+    }
     .feedback-side {
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -307,17 +462,18 @@
     }
 
     @media (max-width: 1040px) {
-      .hero, .feedback { grid-template-columns: 1fr; }
+      .hero, .feedback, .module-preview { grid-template-columns: 1fr; }
+      .format-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .week-card { grid-template-columns: 72px minmax(0, 1fr); }
       .week-artifact { grid-column: 2; }
-      .fit-grid, .artifact-grid, .question-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fit-grid, .artifact-grid, .question-grid, .pilot-grid, .module-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 700px) {
       .topbar { height: auto; padding-top: 14px; padding-bottom: 14px; align-items: flex-start; flex-direction: column; }
       .topbar nav { flex-wrap: wrap; }
       .section-head { display: block; }
       .section-head p { margin-top: 14px; }
-      .fit-grid, .artifact-grid, .question-grid, .sample-grid { grid-template-columns: 1fr; }
+      .fit-grid, .artifact-grid, .question-grid, .sample-grid, .pilot-grid, .module-cards, .format-strip { grid-template-columns: 1fr; }
       .week-card { grid-template-columns: 1fr; }
       .week-artifact { grid-column: auto; }
       h1 { font-size: 52px; }
@@ -329,6 +485,8 @@
     <a class="brand" href="#">mass<span>.</span>method</a>
     <nav>
       <a href="#route">4 недели</a>
+      <a href="#module">Пробный модуль</a>
+      <a href="#pilot">Пилот</a>
       <a href="#samples">Примеры</a>
       <a href="#feedback">Обратная связь</a>
     </nav>
@@ -342,12 +500,13 @@
         <p class="lead">4-недельный практический маршрут для креативных специалистов, которые умеют делать работу, но хотят взрослее работать с клиентами, деньгами и проектами.</p>
         <div class="hero-actions">
           <a class="btn primary" href="#route">Посмотреть маршрут</a>
+          <a class="btn" href="#module">Открыть пробный модуль</a>
           <a class="btn" href="#feedback">Дать обратную связь</a>
         </div>
       </div>
       <aside class="hero-card">
         <strong>Что на выходе</strong>
-        <p>Не мотивация и не теория ради теории. Участник собирает пакет первого клиентского входа:</p>
+        <p>Фокус на прикладном действии. Участник собирает пакет первого клиентского входа:</p>
         <ul>
           <li>первое письмо клиенту;</li>
           <li>список вопросов;</li>
@@ -358,13 +517,32 @@
       </aside>
     </section>
 
+    <div class="format-strip" aria-label="Формат первой версии">
+      <div class="format-item">
+        <span>Длительность</span>
+        <strong>4 недели в компактном пилотном формате</strong>
+      </div>
+      <div class="format-item">
+        <span>Формат</span>
+        <strong>короткая теория, карточки, задания, разборы</strong>
+      </div>
+      <div class="format-item">
+        <span>Группа</span>
+        <strong>5-10 человек в первом пилоте</strong>
+      </div>
+      <div class="format-item">
+        <span>Проверка</span>
+        <strong>смотрим боль, пользу, формат и готовность платить</strong>
+      </div>
+    </div>
+
     <section class="section">
       <div class="section-head">
         <div>
           <div class="eyebrow">Для кого</div>
           <h2>Если навык есть, а опоры вокруг него пока мало</h2>
         </div>
-        <p>Этот прототип проверяет одну гипотезу: креативному специалисту часто нужны не новые “техники”, а управленческий минимум вокруг клиента, денег и проекта.</p>
+        <p>Этот прототип проверяет одну гипотезу: креативному специалисту часто нужна управленческая опора вокруг клиента, денег и проекта.</p>
       </div>
       <div class="fit-grid">
         <article class="fit-card">
@@ -377,7 +555,7 @@
         </article>
         <article class="fit-card">
           <h3>Хочется взрослеть</h3>
-          <p>Не просто выполнять задачи, а держать результат, условия, коммуникацию и рост.</p>
+          <p>Держать результат, условия, коммуникацию и собственный рост.</p>
         </article>
       </div>
     </section>
@@ -461,6 +639,52 @@
       </div>
     </section>
 
+    <section class="section" id="module">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Пробный модуль</div>
+          <h2>Как выглядит один кусок продукта</h2>
+        </div>
+        <p>Для теста показываем одну рабочую ситуацию из школы: клиент пишет короткий запрос, специалисту нужно ответить, задать вопросы и удержать цену в контексте задачи.</p>
+      </div>
+      <div class="module-preview">
+        <article class="module-main">
+          <h3>Вход в клиентскую задачу</h3>
+          <p>Задача модуля — перевести человека из реакции “да, сделаю” в управленческое мышление: понять контекст, результат, ограничения, деньги и следующий шаг.</p>
+          <div class="module-cards">
+            <div class="mini-card">
+              <span>Карточка 1</span>
+              <strong>Клиент пишет: “нам нужен ролик”</strong>
+              <p>Сначала отделить формат от задачи: зачем нужен ролик, где он живёт и какое действие должен вызвать.</p>
+            </div>
+            <div class="mini-card">
+              <span>Карточка 2</span>
+              <strong>Вопросы до цены</strong>
+              <p>Собрать вводные: аудитория, канал, сроки, согласующие, ограничения, бюджетный ориентир, критерий успеха.</p>
+            </div>
+            <div class="mini-card">
+              <span>Карточка 3</span>
+              <strong>Бюджетная вилка</strong>
+              <p>Дать сценарии и условия, при которых цена меняется, вместо одного числа без контекста.</p>
+            </div>
+          </div>
+        </article>
+        <aside class="worksheet">
+          <h3>Рабочий лист</h3>
+          <p>После модуля человек должен уметь заполнить это по реальному запросу.</p>
+          <ol>
+            <li>Что клиент просит буквально?</li>
+            <li>Какую задачу это может решать на самом деле?</li>
+            <li>Какие 7 вопросов нужно задать до оценки?</li>
+            <li>Какие 2-3 сценария решения возможны?</li>
+            <li>Что входит в минимальный вариант?</li>
+            <li>От чего зависит цена?</li>
+            <li>Какой следующий шаг предлагаем клиенту?</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
     <section class="section">
       <div class="section-head">
         <div>
@@ -478,13 +702,55 @@
       </div>
     </section>
 
+    <section class="section alt" id="pilot">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Первая версия продукта</div>
+          <h2>Собираем пилотную версию</h2>
+        </div>
+        <p>Главная цель сейчас — быстро понять, кому это нужно и в каком формате. Поэтому первая версия должна быть маленькой, живой и проверяемой.</p>
+      </div>
+      <div class="pilot-grid">
+        <article class="pilot-card featured">
+          <span class="tag">B2C</span>
+          <h3>Мини-группа для специалистов</h3>
+          <p>5-10 человек, 4 недели, один созвон в неделю, задания между встречами, разбор реальных писем и запросов.</p>
+          <ul>
+            <li>для фрилансеров и джунов;</li>
+            <li>фокус на первом клиенте;</li>
+            <li>результат — пакет клиентского входа.</li>
+          </ul>
+        </article>
+        <article class="pilot-card">
+          <span class="tag">B2B</span>
+          <h3>Модуль для компаний</h3>
+          <p>Отдельная упаковка для руководителей, которые растят самостоятельность сотрудников внутри креативных, маркетинговых и продуктовых команд.</p>
+          <ul>
+            <li>внутренний заказчик;</li>
+            <li>ответственность за результат;</li>
+            <li>коммуникация, статус, риски.</li>
+          </ul>
+        </article>
+        <article class="pilot-card">
+          <span class="tag">Проверка</span>
+          <h3>Что хотим узнать</h3>
+          <p>Нас интересует настоящая боль, понятность метода и готовность человека сделать следующий шаг.</p>
+          <ul>
+            <li>какие темы цепляют;</li>
+            <li>какой формат нужен;</li>
+            <li>за что можно платить.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
     <section class="section alt" id="samples">
       <div class="section-head">
         <div>
           <div class="eyebrow">Примеры</div>
           <h2>Фрагменты курса</h2>
         </div>
-        <p>Ниже не весь курс, а несколько рабочих фрагментов, чтобы понять тон и пользу.</p>
+        <p>Ниже несколько рабочих фрагментов, чтобы понять тон и пользу.</p>
       </div>
       <div class="sample-grid">
         <article class="sample-card">
@@ -514,14 +780,18 @@
       <div class="feedback">
         <div class="feedback-main">
           <div class="eyebrow">Мне нужна обратная связь</div>
-          <h2>Это пока не продажа</h2>
+          <h2>Сейчас мне нужна проверка</h2>
           <p>Я проверяю, есть ли в этой идее реальная польза. Посмотри страницу и ответь на вопросы ниже — лучше честно и конкретно.</p>
-          <pre>1. Узнаёшь ли ты себя в этой ситуации?
+          <pre id="feedbackQuestions">1. Узнаёшь ли ты себя в этой ситуации?
 2. Какая неделя кажется самой нужной?
 3. Какой артефакт хочется забрать сразу?
 4. Чего не хватает?
 5. В каком формате тебе было бы полезно продолжение: самостоятельный материал, группа, разборы, наставничество?
 6. За что здесь потенциально можно было бы платить?</pre>
+          <div class="feedback-actions">
+            <button class="btn" type="button" data-copy-feedback>Скопировать вопросы</button>
+            <span class="copy-status" data-copy-status></span>
+          </div>
         </div>
         <aside class="feedback-side">
           <strong>Хорошая обратная связь</strong>
@@ -540,5 +810,22 @@
   <footer class="footer">
     Прототип MVP “От навыка к клиенту”. Версия для первых респондентов.
   </footer>
+  <script>
+    const copyButton = document.querySelector('[data-copy-feedback]');
+    const copyStatus = document.querySelector('[data-copy-status]');
+    const feedbackQuestions = document.querySelector('#feedbackQuestions');
+
+    if (copyButton && copyStatus && feedbackQuestions) {
+      copyButton.addEventListener('click', async () => {
+        const text = feedbackQuestions.innerText.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          copyStatus.textContent = 'Вопросы скопированы.';
+        } catch (error) {
+          copyStatus.textContent = 'Не удалось скопировать автоматически. Можно выделить текст вручную.';
+        }
+      });
+    }
+  </script>
 </body>
 </html>
