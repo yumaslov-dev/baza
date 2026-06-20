@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тренажер продюсерского мышления — MVP</title>
+  <style>
+    :root {
+      --ink: #171713;
+      --muted: #706f66;
+      --soft: #a7a397;
+      --line: #ded8ca;
+      --paper: #f6f1e6;
+      --sheet: #fffaf0;
+      --panel: #ece4d4;
+      --green: #385a3f;
+      --green-2: #243b2a;
+      --acid: #c8ff00;
+      --clay: #a85638;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+    }
+
+    .rail {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px;
+      background: var(--green-2);
+      color: #f7f4e8;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .brand {
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .brand span { color: var(--acid); }
+
+    .rail-title {
+      margin-top: auto;
+      font-size: 26px;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      font-weight: 850;
+    }
+
+    .rail-copy {
+      color: rgba(247, 244, 232, .72);
+      font-size: 14px;
+      margin-top: -16px;
+    }
+
+    .rail-nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .rail-nav a {
+      color: rgba(247, 244, 232, .72);
+      text-decoration: none;
+      font-size: 13px;
+      border: 1px solid rgba(247, 244, 232, .12);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .rail-nav a:hover {
+      color: #fff;
+      border-color: rgba(200, 255, 0, .4);
+    }
+
+    main { min-width: 0; }
+
+    .hero {
+      padding: 52px clamp(24px, 5vw, 72px) 36px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(56, 90, 63, .10), transparent 42%),
+        var(--paper);
+    }
+
+    .kicker {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 20px;
+      padding: 5px 9px;
+      border-radius: 5px;
+      border: 1px solid rgba(56, 90, 63, .22);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 940px;
+      margin: 0;
+      font-size: clamp(46px, 8vw, 104px);
+      line-height: .9;
+      letter-spacing: -.045em;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 26px 0 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.7;
+    }
+
+    .choice-grid {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 1040px;
+    }
+
+    .choice {
+      min-height: 174px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--sheet);
+      text-align: left;
+      box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
+      transition: transform .16s, box-shadow .16s, border-color .16s;
+    }
+
+    .choice:hover, .choice.active {
+      transform: translateY(-2px);
+      border-color: rgba(56, 90, 63, .45);
+      box-shadow: var(--shadow);
+    }
+
+    .choice small {
+      display: block;
+      color: var(--clay);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .choice strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
+    }
+
+    .choice span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section {
+      padding: 42px clamp(24px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+
+    .note {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(280px, .9fr) minmax(420px, 1.35fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .profile {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--sheet);
+      text-align: left;
+    }
+
+    .profile.active {
+      border-color: rgba(56, 90, 63, .5);
+      outline: 3px solid rgba(56, 90, 63, .08);
+    }
+
+    .profile strong {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .profile span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .result {
+      min-height: 460px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--sheet);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .result-top {
+      padding: 22px;
+      background: var(--green);
+      color: #fffaf0;
+    }
+
+    .result-top small {
+      color: rgba(255, 250, 240, .7);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .result-top h3 {
+      margin: 8px 0 8px;
+      font-size: 30px;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+
+    .result-top p {
+      max-width: 680px;
+      margin: 0;
+      color: rgba(255, 250, 240, .78);
+    }
+
+    .path {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .path-card {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      gap: 13px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fffdf7;
+      text-align: left;
+    }
+
+    .path-card:hover {
+      border-color: rgba(56, 90, 63, .42);
+    }
+
+    .path-num {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--panel);
+      color: var(--green);
+      font-weight: 850;
+    }
+
+    .path-card strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .path-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(420px, 1.18fr);
+      gap: 18px;
+    }
+
+    .situation-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .situation {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--sheet);
+      text-align: left;
+    }
+
+    .situation.active {
+      border-color: rgba(56, 90, 63, .5);
+      background: #fffdf7;
+      outline: 3px solid rgba(56, 90, 63, .08);
+    }
+
+    .situation strong { display: block; font-size: 17px; }
+    .situation span { display: block; color: var(--muted); margin-top: 5px; font-size: 14px; }
+
+    .reader {
+      position: sticky;
+      top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--sheet);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .reader-head {
+      padding: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .reader-head small {
+      color: var(--clay);
+      font-weight: 850;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .reader-head h3 {
+      margin: 8px 0 8px;
+      font-size: 32px;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+
+    .reader-head p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .reader-body {
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .block h4 {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .block p, .block li {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .block ol {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .template {
+      padding: 16px;
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--ink);
+      white-space: pre-line;
+      font-size: 14px;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .principle {
+      padding: 20px;
+      min-height: 210px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--sheet);
+    }
+
+    .principle small {
+      color: var(--clay);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .principle h3 {
+      margin: 12px 0 10px;
+      font-size: 22px;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+    }
+
+    .principle p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .feedback {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .75fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .feedback-main, .feedback-side {
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: var(--green-2);
+      color: #fffaf0;
+      padding: 24px;
+    }
+
+    .feedback-main h2 { color: #fffaf0; }
+    .feedback-main p, .feedback-side li {
+      color: rgba(255, 250, 240, .74);
+    }
+
+    .feedback-side ol {
+      margin: 12px 0 0;
+      padding-left: 20px;
+    }
+
+    .copybox {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.08);
+      color: rgba(255, 250, 240, .86);
+      white-space: pre-line;
+      font-size: 14px;
+    }
+
+    .footer {
+      padding: 26px clamp(24px, 5vw, 72px) 50px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1060px) {
+      .shell { grid-template-columns: 1fr; }
+      .rail {
+        position: static;
+        height: auto;
+        padding: 18px 24px;
+      }
+      .rail-title, .rail-copy { display: none; }
+      .rail-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .choice-grid, .workspace, .split, .feedback { grid-template-columns: 1fr; }
+      .reader { position: static; }
+      .method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .rail-nav { grid-template-columns: 1fr 1fr; }
+      h1 { font-size: 52px; }
+      .section-head { display: grid; }
+      .method-grid { grid-template-columns: 1fr; }
+      .path-card { grid-template-columns: 38px minmax(0, 1fr); }
+      .tag { grid-column: 2; width: fit-content; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <div class="brand">mass<span>.</span>agency</div>
+      <nav class="rail-nav" aria-label="Навигация">
+        <a href="#diagnostic">Диагностика</a>
+        <a href="#situations">Ситуации</a>
+        <a href="#method">Метод</a>
+        <a href="#market">Проверка</a>
+      </nav>
+      <div class="rail-title">MVP для рыночной проверки</div>
+      <p class="rail-copy">Не финальная школа. Продуктовая разведка: понять, где людям правда полезен этот опыт.</p>
+    </aside>
+
+    <main>
+      <section class="hero">
+        <div class="kicker">Рабочая версия 2</div>
+        <h1>Тренажер продюсерского мышления</h1>
+        <p class="lead">Для креативных специалистов, которые хотят научиться держать клиента, проект, команду и результат. Внутри: короткая диагностика, маршрут роста, рабочие ситуации, шаблоны и авторская методология.</p>
+
+        <div class="choice-grid" aria-label="Три входа в продукт">
+          <button class="choice active" data-entry="route">
+            <small>Вход 1</small>
+            <strong>Я хочу расти по маршруту</strong>
+            <span>Понять, где я сейчас, и какие навыки развивать первыми.</span>
+          </button>
+          <button class="choice" data-entry="situation">
+            <small>Вход 2</small>
+            <strong>У меня есть рабочая ситуация</strong>
+            <span>Открыть проблему, забрать действие, фразу или шаблон.</span>
+          </button>
+          <button class="choice" data-entry="method">
+            <small>Вход 3</small>
+            <strong>Хочу понять метод автора</strong>
+            <span>Увидеть принципы: ясность, ответственность, деньги, команда, разговор.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section" id="diagnostic">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Первый сеанс</div>
+            <h2>Где ты сейчас?</h2>
+          </div>
+          <p class="note">Вместо стены материалов человек выбирает свою точку. Продукт сразу собирает короткий маршрут: что понять, что попробовать, какой артефакт получить.</p>
+        </div>
+
+        <div class="workspace">
+          <div class="stack" id="profiles"></div>
+          <div class="result" id="result"></div>
+        </div>
+      </section>
+
+      <section class="section" id="situations">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Быстрый вход</div>
+            <h2>Рабочие ситуации</h2>
+          </div>
+          <p class="note">Карточка открывается отдельно и не перегружает экран. Сначала короткий смысл, затем действие, затем шаблон. Глубина появляется только по запросу.</p>
+        </div>
+
+        <div class="split">
+          <div class="situation-list" id="situationList"></div>
+          <article class="reader" id="reader"></article>
+        </div>
+      </section>
+
+      <section class="section" id="method">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Авторский слой</div>
+            <h2>Метод, который проверяем</h2>
+          </div>
+          <p class="note">Это не упаковка эго. Это набор принципов, которые надо проверить на рынке: узнают ли люди свои проблемы и помогает ли им такой язык думать точнее.</p>
+        </div>
+        <div class="method-grid" id="methodGrid"></div>
+      </section>
+
+      <section class="section" id="market">
+        <div class="feedback">
+          <div class="feedback-main">
+            <div class="kicker">Маркетинговая система</div>
+            <h2>Что спрашивать у рынка</h2>
+            <p>На первой проверке не спрашиваем “купил бы курс?”. Рано. Проверяем узнавание, пользу, язык, вход и желание продолжить.</p>
+            <div class="copybox">Сообщение для первых респондентов:
+
+Я собираю прототип продукта про продюсерское и управленческое мышление для креативной индустрии. Это пока не курс и не финальная школа, а рабочая версия.
+
+Посмотри, пожалуйста, 10-15 минут и ответь:
+1. Где ты узнал себя?
+2. Какая ситуация показалась полезной?
+3. Что было непонятно или тяжело?
+4. В каком формате ты бы хотел продолжение: база, курс, разборы, наставничество, воркшоп?
+5. За что здесь потенциально можно было бы платить?</div>
+          </div>
+          <div class="feedback-side">
+            <strong>Сигналы интереса</strong>
+            <ol>
+              <li>Человек называет конкретную ситуацию из своей работы.</li>
+              <li>Просит продолжение или другой пример.</li>
+              <li>Сохраняет шаблон или пересылает коллеге.</li>
+              <li>Спорит с формулировкой, но вовлечённо.</li>
+              <li>Спрашивает про формат участия, разборов или сопровождения.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        Версия 2: продуктовый прототип для обсуждения с продюсерами, редакторами, маркетологами и потенциальными участниками. Старый плотный прототип сохранён в index.html.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const profiles = [
+      {
+        id: "maker",
+        title: "Я исполнитель и хочу расти",
+        desc: "Делаю руками, но всё чаще сталкиваюсь с клиентом, сроками и ответственностью.",
+        routeTitle: "Маршрут: от исполнителя к человеку, который держит результат",
+        routeText: "Сначала нужно увидеть, что управленческая функция уже есть в твоей работе. Затем научиться фиксировать результат, задавать вопросы и предупреждать о рисках.",
+        steps: [
+          ["Кто такой продюсер", "Понять, что продюсерство начинается с ответственности за результат.", "смысл"],
+          ["Самопродюсирование", "Найти, где ты уже организуешь клиентов, проекты или аудиторию.", "упражнение"],
+          ["Ясный результат", "Научиться отличать формат от результата.", "чеклист"]
+        ]
+      },
+      {
+        id: "client",
+        title: "У меня первый клиент",
+        desc: "Есть запрос, но я не уверен, что отвечать, как спрашивать и как говорить о цене.",
+        routeTitle: "Маршрут: от первого запроса к взрослому входу в задачу",
+        routeText: "Главное — не продавать случайный формат. Нужно понять задачу, аудиторию, ограничения, бюджет и следующий шаг.",
+        steps: [
+          ["Клиент пишет: нужен ролик", "Ответить без суеты и открыть разговор о задаче.", "письмо"],
+          ["Быстрая оценка бюджета", "Дать вилку без случайных обязательств.", "шаблон"],
+          ["Понимание задачи", "После встречи письменно собрать общую реальность.", "саммари"]
+        ]
+      },
+      {
+        id: "project",
+        title: "Я уже веду проект",
+        desc: "Появляются риски, правки, деньги, зависшие согласования и ощущение, что проект расползается.",
+        routeTitle: "Маршрут: вернуть проект в управляемое состояние",
+        routeText: "Продюсеру нужно раньше называть неопределённость, держать статус и разделять правки, новые задачи и допработы.",
+        steps: [
+          ["Предупредить о риске", "Сообщить проблему как управление, а не как провал.", "сообщение"],
+          ["Правка или новая задача", "Защитить объём, срок и экономику.", "критерии"],
+          ["Говорить о доплате", "Обсудить новый объём без извинений.", "письмо"]
+        ]
+      },
+      {
+        id: "team",
+        title: "Я работаю с командой",
+        desc: "Нужно ставить задачи, помогать людям, разбирать ошибки и не тащить всё на себе.",
+        routeTitle: "Маршрут: от ручного контроля к системе ответственности",
+        routeText: "Команде нужна не героическая помощь, а понятные задачи, безопасные вопросы, обратная связь и правила после ошибок.",
+        steps: [
+          ["Поставить задачу", "Передать не действие, а смысл результата.", "структура"],
+          ["Помочь застрявшему", "Сначала диагностировать, потом советовать.", "разговор"],
+          ["Разобрать ошибку", "Закончить разбор изменением процесса.", "правило"]
+        ]
+      }
+    ];
+
+    const situations = [
+      {
+        tag: "Клиент",
+        title: "Клиент пишет: «Нам нужен ролик»",
+        short: "Короткий запрос ещё не описывает настоящую задачу.",
+        situation: "Клиент просит ролик, презентацию или видео. Хочется сразу назвать цену, показать портфолио или назначить созвон.",
+        action: ["Ответить спокойно.", "Сказать, что для оценки нужен контекст.", "Задать 5-7 стартовых вопросов.", "После разговора вернуть понимание задачи письменно."],
+        template: "Привет! Да, можем помочь.\n\nЧтобы корректно оценить ролик, нужно понять задачу: где он будет использоваться, кто зритель, какое действие вы ждёте после просмотра, какие сроки и есть ли бюджетный ориентир.\n\nДавайте проведём короткий созвон на 20-30 минут.",
+        result: "Продюсер понимает: зачем ролик, кто зритель, где используется, кто принимает решение и какой следующий шаг."
+      },
+      {
+        tag: "Деньги",
+        title: "Клиент просит быстро оценить бюджет",
+        short: "Ранняя цифра может стать опасным якорем.",
+        situation: "Клиенту нужна вилка сегодня, а вводных мало. Иногда это планирование, иногда попытка зафиксировать цену без разговора.",
+        action: ["Задать минимальные вопросы.", "Дать три сценария.", "Назвать состав работ.", "Зафиксировать неизвестные параметры.", "Предложить следующий шаг."],
+        template: "При таких вводных ориентир может быть от X до Y.\n\nВ эту вилку входит: [состав работ]. Пока не учтено: [неизвестные параметры]. Для точной оценки нужно уточнить [параметры].",
+        result: "Клиент получил ориентир, а команда сохранила возможность уточнить объём и защитить экономику."
+      },
+      {
+        tag: "Проект",
+        title: "Нужно предупредить о риске",
+        short: "Риск, названный вовремя, выглядит как управление.",
+        situation: "Материалы не пришли, подрядчик не успевает, срок под угрозой, бюджет дрейфует.",
+        action: ["Назвать факт.", "Описать последствие.", "Оценить срочность.", "Дать варианты.", "Добавить рекомендацию."],
+        template: "Вижу риск по сроку. Сейчас он ещё управляемый.\n\nФакт: [что произошло]. Последствие: [что может случиться]. Есть два варианта: [1] или [2]. Я бы выбрал [вариант], потому что [причина].",
+        result: "Все стороны знают о риске, понимают серьёзность и следующий шаг."
+      },
+      {
+        tag: "Команда",
+        title: "Нужно поставить задачу",
+        short: "Хорошая задача описывает не только действие, но и смысл результата.",
+        situation: "Человек получил задачу, сделал, но результат не совпал с ожиданием.",
+        action: ["Дать контекст.", "Назвать цель.", "Описать результат.", "Указать критерии.", "Назначить точку проверки."],
+        template: "Контекст: [зачем задача нужна].\nЦель: [что должно измениться].\nРезультат: [что нужно на выходе].\nКритерии: [как поймём, что хорошо].\nСрок и точка проверки: [дата / время].",
+        result: "Исполнитель может своими словами повторить, что делает, зачем и как поймёт, что сделал правильно."
+      },
+      {
+        tag: "Рост",
+        title: "Позиция нужды",
+        short: "Когда очень хочешь проект, легко потерять способность выбирать.",
+        situation: "Продюсер быстро соглашается, не задаёт вопросов, боится назвать цену и воспринимает проект как последний шанс.",
+        action: ["Взять паузу.", "Уточнить условия.", "Проверить экономику.", "Назвать ограничения.", "Быть готовым отказаться."],
+        template: "Спасибо, задачу поняли. Мне нужно сверить объём, сроки и команду, чтобы не обещать случайно. Вернёмся завтра с реалистичным вариантом по формату и бюджету.",
+        result: "Решение принято из взрослой позиции: условия подходят или не подходят."
+      }
+    ];
+
+    const principles = [
+      ["01", "Ясность до оценки", "Пока не понятны задача, аудитория, результат и ограничения, любая цена или идея будет случайной."],
+      ["02", "Результат важнее формата", "Клиент просит ролик, но покупает изменение: понять, поверить, согласовать, выбрать, прийти."],
+      ["03", "Риск нужно называть раньше", "Риск не является провалом. Это момент, когда ещё можно принять решение и сохранить управление."],
+      ["04", "Команда важнее героизма", "Если всё держится на одном человеке, система слабая. Задача продюсера — растить самостоятельность."],
+      ["05", "Деньги защищают процесс", "Разговор о цене, объёме и доплате нужен не ради торга, а ради честной управляемости работы."],
+      ["06", "Твёрдость без жёсткости", "Можно спокойно назвать факт, границу и последствие, не унижая человека и не превращая разговор в конфликт."]
+    ];
+
+    const profilesEl = document.querySelector("#profiles");
+    const resultEl = document.querySelector("#result");
+    const situationListEl = document.querySelector("#situationList");
+    const readerEl = document.querySelector("#reader");
+    const methodGridEl = document.querySelector("#methodGrid");
+
+    function renderProfiles(activeId = profiles[0].id) {
+      profilesEl.innerHTML = profiles.map((profile) => `
+        <button class="profile ${profile.id === activeId ? "active" : ""}" data-profile="${profile.id}">
+          <strong>${profile.title}</strong>
+          <span>${profile.desc}</span>
+        </button>
+      `).join("");
+      renderResult(activeId);
+    }
+
+    function renderResult(profileId) {
+      const profile = profiles.find((item) => item.id === profileId);
+      resultEl.innerHTML = `
+        <div class="result-top">
+          <small>Персональный маршрут</small>
+          <h3>${profile.routeTitle}</h3>
+          <p>${profile.routeText}</p>
+        </div>
+        <div class="path">
+          ${profile.steps.map((step, index) => `
+            <button class="path-card" data-jump="${step[0]}">
+              <span class="path-num">${index + 1}</span>
+              <span><strong>${step[0]}</strong><span>${step[1]}</span></span>
+              <span class="tag">${step[2]}</span>
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderSituations(activeIndex = 0) {
+      situationListEl.innerHTML = situations.map((item, index) => `
+        <button class="situation ${index === activeIndex ? "active" : ""}" data-situation="${index}">
+          <strong>${item.title}</strong>
+          <span>${item.short}</span>
+        </button>
+      `).join("");
+      renderReader(activeIndex);
+    }
+
+    function renderReader(index) {
+      const item = situations[index];
+      readerEl.innerHTML = `
+        <div class="reader-head">
+          <small>${item.tag}</small>
+          <h3>${item.title}</h3>
+          <p>${item.short}</p>
+        </div>
+        <div class="reader-body">
+          <div class="block"><h4>Ситуация</h4><p>${item.situation}</p></div>
+          <div class="block"><h4>Что делать</h4><ol>${item.action.map((step) => `<li>${step}</li>`).join("")}</ol></div>
+          <div class="block"><h4>Шаблон</h4><div class="template">${item.template}</div></div>
+          <div class="block"><h4>Критерий результата</h4><p>${item.result}</p></div>
+        </div>
+      `;
+    }
+
+    function renderPrinciples() {
+      methodGridEl.innerHTML = principles.map((item) => `
+        <article class="principle">
+          <small>${item[0]}</small>
+          <h3>${item[1]}</h3>
+          <p>${item[2]}</p>
+        </article>
+      `).join("");
+    }
+
+    document.addEventListener("click", (event) => {
+      const entry = event.target.closest(".choice");
+      if (entry) {
+        document.querySelectorAll(".choice").forEach((button) => button.classList.remove("active"));
+        entry.classList.add("active");
+        const target = entry.dataset.entry === "route" ? "#diagnostic" : entry.dataset.entry === "situation" ? "#situations" : "#method";
+        document.querySelector(target).scrollIntoView({ block: "start" });
+      }
+
+      const profile = event.target.closest(".profile");
+      if (profile) renderProfiles(profile.dataset.profile);
+
+      const situation = event.target.closest(".situation");
+      if (situation) renderSituations(Number(situation.dataset.situation));
+
+      const jump = event.target.closest(".path-card");
+      if (jump) document.querySelector("#situations").scrollIntoView({ block: "start" });
+    });
+
+    renderProfiles();
+    renderSituations();
+    renderPrinciples();
+  </script>
+</body>
+</html>
