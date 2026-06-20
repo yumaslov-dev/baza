@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>От навыка к клиенту — прототип мини-курса</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --clay: #a95636;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+
+    a { color: inherit; }
+    button { font: inherit; cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(18px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(245, 239, 226, .92);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; gap: 18px; }
+    .topbar nav a {
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .hero {
+      min-height: calc(100vh - 58px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .58fr);
+      gap: clamp(26px, 5vw, 74px);
+      align-items: end;
+      padding: clamp(48px, 8vw, 100px) clamp(18px, 6vw, 86px);
+      background:
+        radial-gradient(circle at 82% 8%, rgba(200, 255, 0, .22), transparent 18rem),
+        linear-gradient(125deg, rgba(47, 81, 56, .10), transparent 48%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 5px 9px;
+      border-radius: 5px;
+      border: 1px solid rgba(47, 81, 56, .24);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 920px;
+      margin-bottom: 24px;
+      font-size: clamp(52px, 9vw, 118px);
+      line-height: .88;
+      letter-spacing: -.06em;
+    }
+    h2 {
+      margin-bottom: 0;
+      font-size: clamp(34px, 5vw, 60px);
+      line-height: .95;
+      letter-spacing: -.045em;
+    }
+    .lead {
+      max-width: 760px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.72;
+    }
+
+    .hero-card {
+      border-radius: 20px;
+      background: var(--green-dark);
+      color: var(--paper);
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+    .hero-card strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+    .hero-card p { color: rgba(255, 250, 240, .76); }
+    .hero-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: rgba(255, 250, 240, .82);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .btn.primary {
+      border-color: var(--green);
+      background: var(--green);
+      color: var(--paper);
+    }
+
+    .section {
+      padding: clamp(44px, 6vw, 78px) clamp(18px, 6vw, 86px);
+      border-top: 1px solid var(--line);
+    }
+    .section.alt { background: #efe6d5; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    .section-head p {
+      max-width: 560px;
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .fit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .fit-card, .week-card, .artifact, .sample-card, .question-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      padding: 22px;
+      box-shadow: 0 1px 0 rgba(255,255,255,.7) inset;
+    }
+    .fit-card h3, .artifact h3, .sample-card h3, .question-card h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+    }
+    .fit-card p, .week-card p, .artifact p, .sample-card p, .question-card p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .route {
+      display: grid;
+      gap: 14px;
+    }
+    .week-card {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) minmax(280px, .55fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .week-num {
+      width: 72px;
+      height: 72px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--panel);
+      color: var(--green);
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+    .week-card h3 {
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+    .week-card ul {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+    .week-artifact {
+      border-radius: 12px;
+      background: var(--panel);
+      padding: 16px;
+    }
+    .week-artifact strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .artifact-grid, .question-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .sample-card pre {
+      white-space: pre-wrap;
+      margin: 14px 0 0;
+      padding: 16px;
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .feedback {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .62fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+    .feedback-main {
+      border-radius: 20px;
+      background: var(--green-dark);
+      color: var(--paper);
+      padding: 28px;
+    }
+    .feedback-main p { color: rgba(255, 250, 240, .76); }
+    .feedback-main pre {
+      white-space: pre-wrap;
+      margin: 18px 0 0;
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.08);
+      color: rgba(255, 250, 240, .86);
+      font-family: inherit;
+      font-size: 14px;
+    }
+    .feedback-side {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--paper);
+      padding: 24px;
+    }
+    .feedback-side ol {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 26px clamp(18px, 6vw, 86px) 56px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1040px) {
+      .hero, .feedback { grid-template-columns: 1fr; }
+      .week-card { grid-template-columns: 72px minmax(0, 1fr); }
+      .week-artifact { grid-column: 2; }
+      .fit-grid, .artifact-grid, .question-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      .topbar { height: auto; padding-top: 14px; padding-bottom: 14px; align-items: flex-start; flex-direction: column; }
+      .topbar nav { flex-wrap: wrap; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 14px; }
+      .fit-grid, .artifact-grid, .question-grid, .sample-grid { grid-template-columns: 1fr; }
+      .week-card { grid-template-columns: 1fr; }
+      .week-artifact { grid-column: auto; }
+      h1 { font-size: 52px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">mass<span>.</span>method</a>
+    <nav>
+      <a href="#route">4 недели</a>
+      <a href="#samples">Примеры</a>
+      <a href="#feedback">Обратная связь</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Прототип мини-курса</div>
+        <h1>От навыка к клиенту</h1>
+        <p class="lead">4-недельный практический маршрут для креативных специалистов, которые умеют делать работу, но хотят взрослее работать с клиентами, деньгами и проектами.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#route">Посмотреть маршрут</a>
+          <a class="btn" href="#feedback">Дать обратную связь</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <strong>Что на выходе</strong>
+        <p>Не мотивация и не теория ради теории. Участник собирает пакет первого клиентского входа:</p>
+        <ul>
+          <li>первое письмо клиенту;</li>
+          <li>список вопросов;</li>
+          <li>бюджетную вилку;</li>
+          <li>письмо с пониманием задачи;</li>
+          <li>план первого проекта.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Для кого</div>
+          <h2>Если навык есть, а опоры вокруг него пока мало</h2>
+        </div>
+        <p>Этот прототип проверяет одну гипотезу: креативному специалисту часто нужны не новые “техники”, а управленческий минимум вокруг клиента, денег и проекта.</p>
+      </div>
+      <div class="fit-grid">
+        <article class="fit-card">
+          <h3>Ты умеешь делать работу</h3>
+          <p>Дизайн, фото, видео, монтаж, тексты, контент, продакшн или редактура.</p>
+        </article>
+        <article class="fit-card">
+          <h3>Сложно с клиентской частью</h3>
+          <p>Что писать, что спрашивать, как назвать цену, как не соглашаться на всё.</p>
+        </article>
+        <article class="fit-card">
+          <h3>Хочется взрослеть</h3>
+          <p>Не просто выполнять задачи, а держать результат, условия, коммуникацию и рост.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section alt" id="route">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Маршрут</div>
+          <h2>4 недели от навыка к первому клиентскому входу</h2>
+        </div>
+      </div>
+
+      <div class="route">
+        <article class="week-card">
+          <div class="week-num">1</div>
+          <div>
+            <h3>Я и мой навык</h3>
+            <p>Понять, что твой навык уже находится внутри системы: клиент, проект, аудитория, деньги, ожидания, договорённости.</p>
+            <ul>
+              <li>кто такой продюсер, если убрать должность;</li>
+              <li>самопродюсирование;</li>
+              <li>как показать опыт, когда кейсов мало.</li>
+            </ul>
+          </div>
+          <div class="week-artifact">
+            <strong>Артефакт</strong>
+            Личная карта профессиональной пользы.
+          </div>
+        </article>
+
+        <article class="week-card">
+          <div class="week-num">2</div>
+          <div>
+            <h3>Первый клиент</h3>
+            <p>Перевести поиск клиента из абстрактного страха в конкретное действие: тёплый круг, первое письмо, взрослая позиция.</p>
+            <ul>
+              <li>первый клиент из тёплого круга;</li>
+              <li>позиция нужды;</li>
+              <li>первое письмо клиенту.</li>
+            </ul>
+          </div>
+          <div class="week-artifact">
+            <strong>Артефакт</strong>
+            Список тёплых контактов и первое письмо.
+          </div>
+        </article>
+
+        <article class="week-card">
+          <div class="week-num">3</div>
+          <div>
+            <h3>Вход в клиентскую задачу</h3>
+            <p>Научиться отвечать на запрос, задавать вопросы и не продавать случайный формат или случайную цену.</p>
+            <ul>
+              <li>клиент пишет: «нам нужен ролик»;</li>
+              <li>как задавать вопросы клиенту;</li>
+              <li>как дать бюджетную вилку.</li>
+            </ul>
+          </div>
+          <div class="week-artifact">
+            <strong>Артефакт</strong>
+            Пакет входа в задачу: вопросы, сценарии, вилка, следующий шаг.
+          </div>
+        </article>
+
+        <article class="week-card">
+          <div class="week-num">4</div>
+          <div>
+            <h3>Проект, границы и следующий рост</h3>
+            <p>Получить проект мало. Нужно провести его так, чтобы результат, деньги, отношения и профессиональная опора не развалились.</p>
+            <ul>
+              <li>письмо с пониманием задачи;</li>
+              <li>правка или новая задача;</li>
+              <li>как понять, что ты вырос.</li>
+            </ul>
+          </div>
+          <div class="week-artifact">
+            <strong>Артефакт</strong>
+            План первого клиентского проекта и план роста на 30 дней.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Что забираешь</div>
+          <h2>Артефакты</h2>
+        </div>
+      </div>
+      <div class="artifact-grid">
+        <article class="artifact"><h3>Карта пользы</h3><p>Что умею, кому полезен, какие задачи беру, что пока не беру.</p></article>
+        <article class="artifact"><h3>Первое письмо</h3><p>Человеческое сообщение без позы, давления и продажи всего подряд.</p></article>
+        <article class="artifact"><h3>Вопросы клиенту</h3><p>Задача, аудитория, результат, ограничения, согласующие, сроки, бюджет.</p></article>
+        <article class="artifact"><h3>Бюджетная вилка</h3><p>Сценарии, состав работ, неизвестные параметры и условия изменения цены.</p></article>
+        <article class="artifact"><h3>Саммари</h3><p>Письмо, которое превращает встречу в общую реальность.</p></article>
+        <article class="artifact"><h3>План проекта</h3><p>Что входит, что не входит, сроки, правки, риски, договорённости.</p></article>
+      </div>
+    </section>
+
+    <section class="section alt" id="samples">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Примеры</div>
+          <h2>Фрагменты курса</h2>
+        </div>
+        <p>Ниже не весь курс, а несколько рабочих фрагментов, чтобы понять тон и пользу.</p>
+      </div>
+      <div class="sample-grid">
+        <article class="sample-card">
+          <h3>Первое письмо</h3>
+          <p>Для человека из тёплого круга, которому может быть полезен твой навык.</p>
+          <pre>Привет.
+
+Я сейчас развиваю направление [что делаю] и подумал, что вам это может быть полезно для [задача / контекст].
+
+Могу помочь с [конкретный результат].
+
+Если актуально, давай созвонимся на 20 минут — пойму задачу и скажу, какой формат выглядит реалистично.</pre>
+        </article>
+        <article class="sample-card">
+          <h3>Ответ на запрос</h3>
+          <p>Когда клиент пишет коротко: “Нам нужен ролик / дизайн / контент”.</p>
+          <pre>Да, могу помочь.
+
+Чтобы корректно оценить задачу, нужно понять контекст: где материал будет использоваться, кто зритель, какое действие вы ждёте, какие сроки и есть ли бюджетный ориентир.
+
+Давайте проведём короткий созвон на 20-30 минут.</pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="feedback">
+      <div class="feedback">
+        <div class="feedback-main">
+          <div class="eyebrow">Мне нужна обратная связь</div>
+          <h2>Это пока не продажа</h2>
+          <p>Я проверяю, есть ли в этой идее реальная польза. Посмотри страницу и ответь на вопросы ниже — лучше честно и конкретно.</p>
+          <pre>1. Узнаёшь ли ты себя в этой ситуации?
+2. Какая неделя кажется самой нужной?
+3. Какой артефакт хочется забрать сразу?
+4. Чего не хватает?
+5. В каком формате тебе было бы полезно продолжение: самостоятельный материал, группа, разборы, наставничество?
+6. За что здесь потенциально можно было бы платить?</pre>
+        </div>
+        <aside class="feedback-side">
+          <strong>Хорошая обратная связь</strong>
+          <ol>
+            <li>Назови конкретную ситуацию из своей работы.</li>
+            <li>Отметь, что кажется полезным.</li>
+            <li>Скажи, что лишнее или непонятное.</li>
+            <li>Предложи формат, в котором ты бы правда участвовал.</li>
+            <li>Подскажи, кому ещё это стоит показать.</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Прототип MVP “От навыка к клиенту”. Версия для первых респондентов.
+  </footer>
+</body>
+</html>
