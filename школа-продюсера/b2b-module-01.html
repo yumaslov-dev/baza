@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Модуль 1. Продюсерская роль — B2B-курс</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.62; }
+    a { color: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px clamp(18px, 5vw, 72px); border-bottom: 1px solid var(--line); background: rgba(245, 239, 226, .94); backdrop-filter: blur(14px); }
+    .brand { text-decoration: none; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .topbar nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 10px; border-radius: 7px; border: 1px solid transparent; color: var(--muted); font-size: 13px; text-decoration: none; }
+    .topbar nav a:hover { border-color: var(--line); color: var(--ink); background: var(--paper); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .42fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding: clamp(44px, 7vw, 92px) clamp(18px, 6vw, 86px); background: radial-gradient(circle at 82% 10%, rgba(200,255,0,.18), transparent 18rem), linear-gradient(125deg, rgba(47,81,56,.10), transparent 48%); }
+    .eyebrow { display: inline-flex; width: fit-content; margin-bottom: 18px; padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(47,81,56,.24); color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 980px; margin-bottom: 20px; font-size: clamp(44px, 7vw, 92px); line-height: .92; letter-spacing: -.052em; }
+    .lead { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.72; }
+    .module-summary { border-radius: 20px; background: var(--green-dark); color: var(--paper); padding: 24px; box-shadow: var(--shadow); }
+    .module-summary strong { display: block; margin-bottom: 12px; font-size: 22px; line-height: 1.14; }
+    .module-summary p { color: rgba(255,250,240,.76); margin-bottom: 16px; }
+    .progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .progress a { height: 32px; display: grid; place-items: center; border-radius: 7px; background: rgba(255,250,240,.12); color: rgba(255,250,240,.76); text-decoration: none; font-size: 12px; font-weight: 900; }
+    .progress a.active { background: var(--acid); color: var(--green-dark); }
+    .layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 28px; padding: 34px clamp(18px, 6vw, 86px) 78px; }
+    .toc { position: sticky; top: 82px; align-self: start; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 18px; max-height: calc(100vh - 110px); overflow: auto; }
+    .toc-title { margin-bottom: 12px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .toc a { display: block; padding: 8px 0; border-top: 1px solid rgba(221,211,191,.6); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.25; }
+    .toc a:hover { color: var(--ink); }
+    .content { display: grid; gap: 18px; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--paper); padding: clamp(22px, 4vw, 34px); box-shadow: 0 1px 0 rgba(255,255,255,.72) inset; scroll-margin-top: 88px; }
+    .card-kicker { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .card h2 { margin-bottom: 22px; font-size: clamp(30px, 4vw, 46px); line-height: 1; letter-spacing: -.04em; }
+    .card-section { padding: 18px 0; border-top: 1px solid var(--line); }
+    .card-section h3 { margin-bottom: 10px; color: var(--green); font-size: 15px; line-height: 1.2; letter-spacing: -.01em; }
+    .card-section p { color: var(--muted); }
+    .card-section p:last-child, .card-section ul:last-child, .card-section ol:last-child, .card-section blockquote:last-child, .card-section pre:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 22px; color: var(--muted); }
+    li + li { margin-top: 6px; }
+    strong { color: var(--ink); }
+    blockquote { margin: 12px 0; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); color: var(--ink); }
+    pre { overflow: auto; margin: 14px 0; padding: 16px; border-radius: 12px; background: var(--panel); color: var(--ink); font-family: inherit; font-size: 14px; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .pager { display: flex; justify-content: space-between; gap: 14px; padding: 0 clamp(18px, 6vw, 86px) 56px; }
+    .pager a { flex: 1; min-height: 64px; display: flex; align-items: center; justify-content: center; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; text-decoration: none; font-weight: 800; }
+    .pager a:hover { border-color: rgba(47,81,56,.36); box-shadow: var(--shadow); }
+    .footer { padding: 0 clamp(18px, 6vw, 86px) 46px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) { .hero, .layout { grid-template-columns: 1fr; } .toc { position: static; max-height: none; } }
+    @media (max-width: 700px) { .topbar { align-items: flex-start; flex-direction: column; } .topbar nav { justify-content: flex-start; } h1 { font-size: 48px; } .pager { flex-direction: column; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="b2b-course.html">mass<span>.</span>method</a>
+    <nav>
+      <a href="b2b-course.html">Все модули</a>
+      <a href="b2b-kurs-prodyuserskoe-myshlenie.md">Карта курса</a>
+      
+      <a href="b2b-module-02.html">Следующий</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Модуль 1</div>
+        <h1>Продюсерская роль</h1>
+        <p class="lead">Роль, результат, видимая и невидимая работа.</p>
+      </div>
+      <aside class="module-summary">
+        <strong>Навигация по курсу</strong>
+        <p>В модуле 10 ситуационных карточек. Каждая ведёт от рабочей ситуации к действию, артефакту и критерию результата.</p>
+        <div class="progress" aria-label="Модули курса"><a class="active" href="b2b-module-01.html">1</a><a class="" href="b2b-module-02.html">2</a><a class="" href="b2b-module-03.html">3</a><a class="" href="b2b-module-04.html">4</a><a class="" href="b2b-module-05.html">5</a><a class="" href="b2b-module-06.html">6</a></div>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <aside class="toc">
+        <div class="toc-title">Карточки модуля</div>
+        <a href="#card-01">1. Кто такой продюсер, если убрать должность</a>
+<a href="#card-02">2. Результат раньше формата</a>
+<a href="#card-03">3. Видимая и невидимая работа менеджера</a>
+<a href="#card-04">4. Зона ответственности и границы роли</a>
+<a href="#card-05">5. Карта участников и влияния</a>
+<a href="#card-06">6. Кто принимает решение</a>
+<a href="#card-07">7. Продюсер как переводчик между бизнесом и креативом</a>
+<a href="#card-08">8. Критерии результата до старта</a>
+<a href="#card-09">9. Проактивная ясность</a>
+<a href="#card-10">10. Уровни продюсерского роста</a>
+      </aside>
+      <section class="content">
+        <article class="card" id="card-01">
+      <div class="card-kicker">Карточка 1</div>
+      <h2>Кто такой продюсер, если убрать должность</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер ведёт задачи, отвечает в чатах, собирает людей и следит за сроками, но не понимает, где начинается продюсерская ответственность. Роль выглядит как набор поручений.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без ясной роли человек либо ждёт точных указаний, либо берёт на себя лишнее и быстро выгорает. Команда теряет управление, потому что никто не держит результат целиком.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Роль путают с должностью.</strong> Человек думает, что продюсерство начинается после назначения.</li><li><strong>Фокус остаётся на задачах.</strong> Менеджер двигает пункты, но не проверяет, к какому результату они ведут.</li><li><strong>Ответственность размазана.</strong> Непонятно, кто должен увидеть риск, задать вопрос и зафиксировать решение.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Продюсерская роль начинается там, где человек связывает задачу, клиента, команду, сроки, деньги, ограничения и решения. Главный вопрос: что должно получиться и что нужно сделать, чтобы это случилось в реальности.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выписать текущие задачи, в которых вы влияете на результат.</li><li>Для каждой задачи назвать клиента или внутреннего заказчика.</li><li>Определить, какие решения, риски и люди влияют на результат.</li><li>Зафиксировать свою зону ответственности и точки, где нужна поддержка.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Правильно понимаю, что моя зона здесь — собрать вводные, держать статус и вовремя поднять риски?»</li><li>«Я могу вести этот контур, если заранее зафиксируем результат и точки решений».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта продюсерской роли: задачи, результат, заказчик, команда, решения, риски, зона ответственности, точки эскалации.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер может объяснить свою роль через результат и управленческие действия, без сведения роли к списку поручений.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Продюсерская роль — это ответственность за то, чтобы результат стал управляемым.</p>
+      </section>
+    </article>
+<article class="card" id="card-02">
+      <div class="card-kicker">Карточка 2</div>
+      <h2>Результат раньше формата</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Заказчик просит ролик, дизайн, презентацию, лендинг, текст или кампанию. Команда быстро начинает обсуждать формат, визуал, сроки и производство.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Формат может быть верным только после понимания результата. Если результат не назван, команда делает красивую работу, которая не решает задачу клиента или бизнеса.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Формат принимают за задачу.</strong> «Нужен ролик» звучит как готовое решение.</li><li><strong>Критерий успеха появляется поздно.</strong> На финале выясняется, что клиент ждал другой эффект.</li><li><strong>Команда спорит о вкусе.</strong> Участники обсуждают стиль без опоры на задачу.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Результат отвечает на вопрос: что должно измениться после работы. Формат отвечает на вопрос: каким способом мы этого добьёмся.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Записать буквальный запрос заказчика.</li><li>Спросить, зачем нужен этот формат и где он будет использоваться.</li><li>Сформулировать ожидаемое изменение для аудитории, клиента или команды.</li><li>Проверить, подходит ли исходный формат под этот результат.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Чтобы выбрать формат, нужно понять, какой результат он должен дать».</li><li>«Что зритель / пользователь / команда должны понять или сделать после этого материала?»</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Формулировка результата: для кого делаем, что должно измениться, где материал будет жить, как поймём, что получилось.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда может объяснить проект через результат, а формат становится осознанным способом решения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Формат должен служить результату.</p>
+      </section>
+    </article>
+<article class="card" id="card-03">
+      <div class="card-kicker">Карточка 3</div>
+      <h2>Видимая и невидимая работа менеджера</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>В проекте есть таблица, дедлайны и список задач, но работа буксует. Люди тревожатся, решения зависают, договорённости теряются, часть вопросов остаётся в личных переписках.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Проект держится на двух слоях: видимом и невидимом. Видимый слой — задачи, сроки, статусы. Невидимый — доверие, страхи, усталость, ясность, ожидания и право задавать вопросы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Управляют только таблицей.</strong> Статус выглядит заполненным, но напряжение в команде растёт.</li><li><strong>Не замечают эмоциональные сигналы.</strong> Молчание, резкость и затягивание часто показывают проблему раньше дедлайна.</li><li><strong>Договорённости остаются устными.</strong> Люди по-разному помнят один разговор.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Продюсер смотрит на проект как на среду, где люди должны сделать работу. Нужно видеть, что мешает результату: отсутствие решения, неясность роли, конфликт ожиданий, перегруз, страх ошибки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Разделить проект на видимый и невидимый слой.</li><li>Выписать, какие факторы мешают движению.</li><li>Назвать, что можно зафиксировать письменно.</li><li>Поднять вопрос, который команда обходит молчанием.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Вижу, что формально задача есть, но по решению ещё нет ясности».</li><li>«Давайте зафиксируем договорённость, чтобы не держать её в памяти».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта видимой и невидимой работы: задачи, сроки, решения, напряжения, ожидания, риски, незакрытые вопросы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер видит не только план работ, но и условия, которые помогают или мешают команде выполнить этот план.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Невидимая работа становится управляемой, когда её называют.</p>
+      </section>
+    </article>
+<article class="card" id="card-04">
+      <div class="card-kicker">Карточка 4</div>
+      <h2>Зона ответственности и границы роли</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер не понимает, какие решения принимать самому, где подключать руководителя, что можно обещать клиенту и где заканчивается его зона.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Размытая ответственность создаёт хаос: человек либо тормозит каждое решение, либо принимает на себя чужие риски. В обоих случаях проект теряет скорость и качество.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Нет границы решений.</strong> Менеджер не знает, какие вопросы решает сам.</li><li><strong>Эскалация происходит поздно.</strong> Руководителя зовут, когда выбор уже сузился.</li><li><strong>Обещания даются без полномочий.</strong> Клиент слышит уверенность, а внутри команды решения ещё нет.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Зона ответственности состоит из трёх частей: что я держу сам, что согласую заранее, что эскалирую при риске. Границы роли нужны для скорости, а не для ухода от ответственности.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выписать типовые решения в своей работе.</li><li>Разделить их на три группы: сам, согласую, эскалирую.</li><li>Договориться с руководителем о порогах: бюджет, срок, риск, клиентская чувствительность.</li><li>Зафиксировать правила для команды.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Это решение я могу принять сам в рамках согласованного объёма».</li><li>«Здесь нужен ваш выбор, потому что решение влияет на срок и бюджет».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Рамка ответственности: решения менеджера, решения руководителя, условия эскалации, ограничения обещаний клиенту.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер быстрее принимает понятные решения и раньше поднимает вопросы, которые выходят за его полномочия.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Границы роли помогают ответственности быть точной.</p>
+      </section>
+    </article>
+<article class="card" id="card-05">
+      <div class="card-kicker">Карточка 5</div>
+      <h2>Карта участников и влияния</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Проект кажется простым, но на результат влияют клиент, внутренний заказчик, бренд, юристы, руководитель, команда, подрядчики и согласующие.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Если не увидеть всех участников, решения будут приходить неожиданно. Проект может остановиться из-за человека, которого не включили в процесс на старте.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Смотрят только на прямого клиента.</strong> Финальное решение принимает другой человек.</li><li><strong>Не учитывают скрытых согласующих.</strong> Юристы, бренд или руководство появляются ближе к финалу.</li><li><strong>Команда не понимает, кто влияет на результат.</strong> Люди делают работу для одного адресата, а принимает другой.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>У каждого проекта есть карта влияния: кто ставит задачу, кто даёт вводные, кто делает, кто согласует, кто утверждает, кто может остановить процесс.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать всех участников проекта.</li><li>Отметить их роль: заказчик, исполнитель, согласующий, эксперт, финальный утверждающий.</li><li>Понять, кого нужно вовлечь до ключевого решения.</li><li>Зафиксировать карту для команды.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Кто ещё будет смотреть и согласовывать этот результат?»</li><li>«Предлагаю заранее включить бренд / юристов / руководителя, чтобы не получить разворот на финале».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Stakeholder map: участники, роль, влияние, ожидания, момент вовлечения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда понимает, кто влияет на проект и когда нужно получать согласование.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Участник, которого не увидели на старте, часто появляется как риск на финале.</p>
+      </section>
+    </article>
+<article class="card" id="card-06">
+      <div class="card-kicker">Карточка 6</div>
+      <h2>Кто принимает решение</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>На встрече все согласны, задача движется, но потом появляется новый комментарий: «Нужно показать директору», «Бренд не пропустил», «Юристы попросили изменить».</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Проект управляем, когда понятна цепочка решений. Если неясно, кто утверждает результат, команда теряет время на лишние версии и повторные согласования.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Согласование называют обсуждением.</strong> Люди говорят мнение, но не принимают решение.</li><li><strong>Финальный утверждающий не включён.</strong> Его ожидания всплывают слишком поздно.</li><li><strong>Не фиксируют статус решения.</strong> Непонятно, что уже принято, а что ещё открыто.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Решения нужно разделять на уровни: кто даёт мнение, кто влияет, кто согласует, кто утверждает. Для каждого ключевого этапа должен быть владелец решения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выписать ключевые решения проекта.</li><li>Для каждого решения назначить человека, который утверждает.</li><li>Отделить комментарии от обязательных требований.</li><li>Фиксировать принятые решения письменно.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Правильно понимаю, что финальное решение по этому этапу за вами?»</li><li>«Зафиксирую: этот вариант согласован, открытым остаётся только блок с текстом».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта решений: решение, кто даёт вводные, кто согласует, кто утверждает, дата, статус.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда знает, какие решения приняты и кто может изменить траекторию проекта.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Решение существует, когда понятен человек, который его принял.</p>
+      </section>
+    </article>
+<article class="card" id="card-07">
+      <div class="card-kicker">Карточка 7</div>
+      <h2>Продюсер как переводчик между бизнесом и креативом</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Бизнес говорит о целях, воронке, найме, продажах или репутации. Креативная команда говорит о формате, визуале, тексте, монтаже, UX и производстве.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без перевода бизнес получает красивое решение без управленческого смысла, а команда получает абстрактные ожидания. Менеджер должен связать язык цели и язык исполнения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Бизнес-задача остаётся слишком общей.</strong> «Нужно повысить узнаваемость» не помогает команде делать выбор.</li><li><strong>Креатив защищают только вкусом.</strong> Клиент не видит связи решения с задачей.</li><li><strong>Команда не понимает ограничений бизнеса.</strong> Срок, бюджет и внутренние правила воспринимаются как помеха.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Продюсер переводит задачу в четыре слоя: бизнес-цель, аудитория, сообщение, формат. Затем связывает креативное решение с каждым слоем.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Сформулировать бизнес-цель простыми словами.</li><li>Перевести её в задачу для аудитории.</li><li>Назвать, какое решение предлагает команда.</li><li>Объяснить, как решение помогает цели.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Если перевести это в задачу для аудитории, нам нужно добиться вот такого понимания».</li><li>«Это решение работает, потому что закрывает страх / барьер / ожидание аудитории».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Перевод задачи: бизнес-цель, аудитория, сообщение, формат, критерий результата.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Клиент понимает, зачем нужно решение, а команда понимает, почему выбрана именно такая форма.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Сильное решение держится на связи между целью и формой.</p>
+      </section>
+    </article>
+<article class="card" id="card-08">
+      <div class="card-kicker">Карточка 8</div>
+      <h2>Критерии результата до старта</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Команда начинает работу, опираясь на общее ощущение «должно быть хорошо». На финале оказывается, что у клиента, руководителя и команды разные критерии.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Критерии результата экономят время и снижают конфликтность. Они помогают спорить не о вкусе, а о том, работает ли решение под задачу.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Критерии звучат абстрактно.</strong> «Современно», «дорого», «динамично» не дают команде опоры.</li><li><strong>Критерии не записаны.</strong> Все помнят разговор по-своему.</li><li><strong>Критерии меняются на финале.</strong> Проект начинает двигаться по новой логике.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Критерий должен быть проверяемым: кто оценивает, по каким признакам, в каком контексте, что считается провалом, какие ограничения обязательны.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Спросить, как заказчик поймёт, что работа получилась.</li><li>Собрать 3–5 признаков результата.</li><li>Убрать абстрактные слова или раскрыть их через примеры.</li><li>Зафиксировать критерии в брифе или саммари.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Как мы поймём, что результат сработал?»</li><li>«Когда вы говорите “дорого”, какие признаки имеете в виду?»</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Критерии результата: признаки успеха, ограничения, примеры, антипримеры, финальный утверждающий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда может проверить решение по заранее согласованным признакам.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Критерии результата нужно согласовать до производства.</p>
+      </section>
+    </article>
+<article class="card" id="card-09">
+      <div class="card-kicker">Карточка 9</div>
+      <h2>Проактивная ясность</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер видит, что в задаче есть неясность: нет вводных, не назван утверждающий, непонятен срок, размыта аудитория. Но он ждёт, что руководитель или клиент уточнит сам.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Неясность, оставленная без внимания, превращается в переделки, задержки и взаимное раздражение. Проактивная ясность показывает зрелость менеджера.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Боятся показаться сложным.</strong> Вопросы воспринимаются как помеха скорости.</li><li><strong>Собирают вводные поздно.</strong> К моменту уточнения часть работы уже сделана.</li><li><strong>Не отделяют важное от вторичного.</strong> Менеджер задаёт много вопросов, но не снимает главный риск.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Проактивная ясность — это не поток вопросов. Это способность назвать, какая неизвестность мешает старту, решению или качеству.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Найти неизвестности, которые влияют на результат.</li><li>Разделить их на критичные и второстепенные.</li><li>Сформулировать короткий список уточнений.</li><li>Поднять вопрос до старта работы или до следующего этапа.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Перед стартом нужно уточнить три вещи, иначе есть риск уйти в неверный формат».</li><li>«Эта вводная влияет на срок, поэтому предлагаю решить её сегодня».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Список уточнений до старта: вопрос, почему важен, кто отвечает, срок ответа.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер заранее снимает неизвестности, которые могли бы ударить по сроку, бюджету или качеству.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Ясность создают до того, как проект начал терять управление.</p>
+      </section>
+    </article>
+<article class="card" id="card-10">
+      <div class="card-kicker">Карточка 10</div>
+      <h2>Уровни продюсерского роста</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер хочет расти, но оценивает себя по должности, количеству проектов или внешнему одобрению. Непонятно, какой следующий навык развивать.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Рост без критериев становится случайным. Человек может брать больше задач, но не становиться самостоятельнее, спокойнее и точнее в решениях.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Рост путают с загрузкой.</strong> Больше задач не всегда означает больше зрелости.</li><li><strong>Нет честной самооценки.</strong> Человек не видит, где ему ещё нужна опора.</li><li><strong>Руководитель и сотрудник смотрят по-разному.</strong> Один ждёт самостоятельности, другой ждёт инструкции.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Продюсерский рост виден по тому, сколько реальности человек удерживает: результат, клиентов, команду, деньги, сроки, риски, решения и сложные разговоры.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Оценить себя по уровням: исполнитель, участник, владелец задачи, владелец проекта, владелец системы.</li><li>Найти сильные и слабые зоны.</li><li>Выбрать один навык для ближайших 30 дней.</li><li>Договориться с руководителем о практике и обратной связи.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Сейчас я уверенно держу задачи, хочу тренировать уровень проекта».</li><li>«Мне нужна обратная связь по самостоятельности решений».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Личная шкала продюсерского роста: текущий уровень, следующий уровень, навык, практика, критерий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Участник понимает свой текущий уровень и может назвать ближайший шаг роста в реальной работе.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Рост продюсера измеряется объёмом ответственности, который он удерживает без потери ясности.</p>
+      </section>
+    </article>
+      </section>
+    </div>
+
+    <nav class="pager" aria-label="Навигация между модулями">
+      <a href="b2b-course.html">← Все модули</a>
+      <a href="b2b-module-02.html">Модуль 2. Вход в профессию →</a>
+    </nav>
+  </main>
+
+  <footer class="footer">B2B-курс «Продюсерское мышление». Модуль 1 из 6.</footer>
+</body>
+</html>

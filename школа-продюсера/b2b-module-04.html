@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Модуль 4. Проект и деньги — B2B-курс</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.62; }
+    a { color: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px clamp(18px, 5vw, 72px); border-bottom: 1px solid var(--line); background: rgba(245, 239, 226, .94); backdrop-filter: blur(14px); }
+    .brand { text-decoration: none; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .topbar nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 10px; border-radius: 7px; border: 1px solid transparent; color: var(--muted); font-size: 13px; text-decoration: none; }
+    .topbar nav a:hover { border-color: var(--line); color: var(--ink); background: var(--paper); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .42fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding: clamp(44px, 7vw, 92px) clamp(18px, 6vw, 86px); background: radial-gradient(circle at 82% 10%, rgba(200,255,0,.18), transparent 18rem), linear-gradient(125deg, rgba(47,81,56,.10), transparent 48%); }
+    .eyebrow { display: inline-flex; width: fit-content; margin-bottom: 18px; padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(47,81,56,.24); color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 980px; margin-bottom: 20px; font-size: clamp(44px, 7vw, 92px); line-height: .92; letter-spacing: -.052em; }
+    .lead { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.72; }
+    .module-summary { border-radius: 20px; background: var(--green-dark); color: var(--paper); padding: 24px; box-shadow: var(--shadow); }
+    .module-summary strong { display: block; margin-bottom: 12px; font-size: 22px; line-height: 1.14; }
+    .module-summary p { color: rgba(255,250,240,.76); margin-bottom: 16px; }
+    .progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .progress a { height: 32px; display: grid; place-items: center; border-radius: 7px; background: rgba(255,250,240,.12); color: rgba(255,250,240,.76); text-decoration: none; font-size: 12px; font-weight: 900; }
+    .progress a.active { background: var(--acid); color: var(--green-dark); }
+    .layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 28px; padding: 34px clamp(18px, 6vw, 86px) 78px; }
+    .toc { position: sticky; top: 82px; align-self: start; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 18px; max-height: calc(100vh - 110px); overflow: auto; }
+    .toc-title { margin-bottom: 12px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .toc a { display: block; padding: 8px 0; border-top: 1px solid rgba(221,211,191,.6); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.25; }
+    .toc a:hover { color: var(--ink); }
+    .content { display: grid; gap: 18px; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--paper); padding: clamp(22px, 4vw, 34px); box-shadow: 0 1px 0 rgba(255,255,255,.72) inset; scroll-margin-top: 88px; }
+    .card-kicker { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .card h2 { margin-bottom: 22px; font-size: clamp(30px, 4vw, 46px); line-height: 1; letter-spacing: -.04em; }
+    .card-section { padding: 18px 0; border-top: 1px solid var(--line); }
+    .card-section h3 { margin-bottom: 10px; color: var(--green); font-size: 15px; line-height: 1.2; letter-spacing: -.01em; }
+    .card-section p { color: var(--muted); }
+    .card-section p:last-child, .card-section ul:last-child, .card-section ol:last-child, .card-section blockquote:last-child, .card-section pre:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 22px; color: var(--muted); }
+    li + li { margin-top: 6px; }
+    strong { color: var(--ink); }
+    blockquote { margin: 12px 0; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); color: var(--ink); }
+    pre { overflow: auto; margin: 14px 0; padding: 16px; border-radius: 12px; background: var(--panel); color: var(--ink); font-family: inherit; font-size: 14px; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .pager { display: flex; justify-content: space-between; gap: 14px; padding: 0 clamp(18px, 6vw, 86px) 56px; }
+    .pager a { flex: 1; min-height: 64px; display: flex; align-items: center; justify-content: center; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; text-decoration: none; font-weight: 800; }
+    .pager a:hover { border-color: rgba(47,81,56,.36); box-shadow: var(--shadow); }
+    .footer { padding: 0 clamp(18px, 6vw, 86px) 46px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) { .hero, .layout { grid-template-columns: 1fr; } .toc { position: static; max-height: none; } }
+    @media (max-width: 700px) { .topbar { align-items: flex-start; flex-direction: column; } .topbar nav { justify-content: flex-start; } h1 { font-size: 48px; } .pager { flex-direction: column; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="b2b-course.html">mass<span>.</span>method</a>
+    <nav>
+      <a href="b2b-course.html">Все модули</a>
+      <a href="b2b-kurs-prodyuserskoe-myshlenie.md">Карта курса</a>
+      <a href="b2b-module-03.html">Предыдущий</a>
+      <a href="b2b-module-05.html">Следующий</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Модуль 4</div>
+        <h1>Проект и деньги</h1>
+        <p class="lead">Риски, правки, доплаты, статус и экономическая управляемость.</p>
+      </div>
+      <aside class="module-summary">
+        <strong>Навигация по курсу</strong>
+        <p>В модуле 10 ситуационных карточек. Каждая ведёт от рабочей ситуации к действию, артефакту и критерию результата.</p>
+        <div class="progress" aria-label="Модули курса"><a class="" href="b2b-module-01.html">1</a><a class="" href="b2b-module-02.html">2</a><a class="" href="b2b-module-03.html">3</a><a class="active" href="b2b-module-04.html">4</a><a class="" href="b2b-module-05.html">5</a><a class="" href="b2b-module-06.html">6</a></div>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <aside class="toc">
+        <div class="toc-title">Карточки модуля</div>
+        <a href="#card-01">1. Статус проекта без тумана</a>
+<a href="#card-02">2. Как предупредить о риске</a>
+<a href="#card-03">3. Базовая рамка объёма работ</a>
+<a href="#card-04">4. Правка или новая задача</a>
+<a href="#card-05">5. Допработы и доплаты</a>
+<a href="#card-06">6. Экономика времени команды</a>
+<a href="#card-07">7. Управление согласованиями</a>
+<a href="#card-08">8. Проектный тайминг и зависимости</a>
+<a href="#card-09">9. Закрытие проекта</a>
+<a href="#card-10">10. Постразбор проекта</a>
+      </aside>
+      <section class="content">
+        <article class="card" id="card-01">
+      <div class="card-kicker">Карточка 1</div>
+      <h2>Статус проекта без тумана</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Проект идёт, задач много, участники общаются в разных чатах. Руководителю, клиенту и команде трудно понять реальное положение дел.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без статуса менеджер управляет из памяти. Клиент теряет уверенность, руководитель задаёт лишние вопросы, команда не видит приоритеты.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Статус живёт в голове.</strong> Информация доступна только одному человеку.</li><li><strong>Пишут общие фразы.</strong> «Работаем» не объясняет реальное состояние.</li><li><strong>Не называют риски.</strong> Статус выглядит спокойным до момента срыва.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Хороший статус отвечает на вопросы: что готово, что в работе, что ждём, где риск, кто отвечает, какой следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Завести единое место статуса.</li><li>Обновлять его при значимых изменениях.</li><li>Отделять факты от эмоций.</li><li>В каждом статусе фиксировать следующий шаг.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Шаблон статуса</h3>
+        <pre><code>Готово:
+В работе:
+Ждём:
+Риски:
+Решения:
+Следующий шаг:</code></pre>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Проектный статус в документе или сообщении.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Любой ключевой участник может быстро понять, где проект сейчас и что будет дальше.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Статус нужен для управления проектом.</p>
+      </section>
+    </article>
+<article class="card" id="card-02">
+      <div class="card-kicker">Карточка 2</div>
+      <h2>Как предупредить о риске</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер видит, что срок, качество, материалы, подрядчик, бюджет или согласование могут сорваться. Нужно сообщить об этом клиенту или руководителю.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Риск, названный вовремя, даёт возможность выбрать. Риск, скрытый до последнего, становится кризисом.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Риск путают с провалом.</strong> Менеджер боится выглядеть слабым.</li><li><strong>Сообщают слишком поздно.</strong> Вариантов уже мало.</li><li><strong>Приносят только тревогу.</strong> Руководитель получает проблему без рамки решения.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Риск — это сигнал к решению. Сообщение должно содержать факт, возможное последствие, срочность, варианты и рекомендацию.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать факт риска.</li><li>Оценить влияние на срок, качество, деньги или отношения.</li><li>Подготовить 2–3 варианта действий.</li><li>Сообщить с рекомендацией.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Вижу риск по сроку. Сейчас он ещё управляемый».</li><li>«Есть два варианта. Я рекомендую первый, потому что он сохраняет дату показа».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Сообщение о риске: факт, последствие, варианты, рекомендация, решение.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Стороны знают риск и понимают, какое решение нужно принять.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Риск нужно поднимать, пока он ещё управляем.</p>
+      </section>
+    </article>
+<article class="card" id="card-03">
+      <div class="card-kicker">Карточка 3</div>
+      <h2>Базовая рамка объёма работ</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Все согласны «делать проект», но состав работ, количество версий, этапы, правки, роли и границы не зафиксированы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без рамки объёма проект начинает расширяться незаметно. Это бьёт по срокам, деньгам, качеству и отношениям.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Объём обсуждён устно.</strong> Позже участники помнят разное.</li><li><strong>Не названы исключения.</strong> Клиент считает, что “это тоже входит”.</li><li><strong>Нет связи с бюджетом.</strong> Команда не видит, как изменения влияют на экономику.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Scope описывает, что входит в работу, что не входит, какие версии и правки предусмотрены, какие решения меняют срок или стоимость.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выписать все элементы работы.</li><li>Отдельно указать, что не входит.</li><li>Назвать количество версий, раундов и этапов.</li><li>Согласовать рамку письменно.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Зафиксирую состав работ, чтобы дальше управлять сроком и ожиданиями».</li><li>«Этот пункт сейчас не входит в согласованный объём, его нужно оценить отдельно».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Scope проекта: входит, не входит, версии, правки, этапы, точки согласования.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда и клиент одинаково понимают объём работ и условия изменения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Объём работы должен быть видимым до старта.</p>
+      </section>
+    </article>
+<article class="card" id="card-04">
+      <div class="card-kicker">Карточка 4</div>
+      <h2>Правка или новая задача</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Клиент или заказчик просит изменить работу. Непонятно, это обычная правка в рамках договорённости или новый объём.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Если не различать правки и новые задачи, проект незаметно теряет экономику. Команда делает больше, сроки растут, напряжение копится.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Любую просьбу принимают как правку.</strong> Граница объёма исчезает.</li><li><strong>Нет исходной рамки.</strong> Непонятно, с чем сравнивать просьбу.</li><li><strong>Разговор о допработах откладывается.</strong> Потом обсуждать деньги труднее.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Правка уточняет согласованный результат. Новая задача меняет результат, объём, формат, количество версий, срок, ресурс или производственную логику.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Сравнить просьбу с согласованным scope.</li><li>Определить, влияет ли она на результат, срок или ресурс.</li><li>Если это новая задача, назвать это спокойно.</li><li>Предложить оценить новый объём.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Это изменение влияет на согласованный объём, давайте отдельно оценим срок».</li><li>«Как правку можем сделать вот это. Всё остальное меняет рамку проекта».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Классификация правки: входит в scope, требует оценки, влияет на срок, влияет на бюджет.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда не берёт новый объём молча, а клиент понимает влияние изменений.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Правка уточняет результат, новая задача меняет объём.</p>
+      </section>
+    </article>
+<article class="card" id="card-05">
+      <div class="card-kicker">Карточка 5</div>
+      <h2>Допработы и доплаты</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Проект вырос: появились новые версии, дополнительный формат, новые согласующие, срочность или переработка. Разговор о деньгах откладывается.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Допработы без фиксации превращаются в скрытую скидку. Команда теряет ресурс, а клиент не видит реальную стоимость решений.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Стесняются говорить о деньгах.</strong> Менеджер надеется обсудить потом.</li><li><strong>Допработы уже сделаны.</strong> Клиент воспринимает их как часть проекта.</li><li><strong>Нет объяснения влияния.</strong> Разговор звучит как требование без управленческой логики.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Доплата обсуждается через изменение объёма, срока, ресурса или условий. Важно показать связь между просьбой и дополнительной работой.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать, что изменилось относительно рамки.</li><li>Описать дополнительный объём.</li><li>Дать оценку срока и стоимости.</li><li>Получить подтверждение до запуска.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Что написать клиенту</h3>
+        <blockquote>Этот блок выходит за согласованный объём: добавляется новая версия и отдельная адаптация. Оценка допработ — X, срок — Y. Если подтверждаете, запускаем в работу.</blockquote>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Письмо о допработах: изменение, объём, срок, стоимость, подтверждение.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Дополнительная работа согласована до старта, экономика проекта остаётся видимой.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Допработу нужно согласовывать до выполнения.</p>
+      </section>
+    </article>
+<article class="card" id="card-06">
+      <div class="card-kicker">Карточка 6</div>
+      <h2>Экономика времени команды</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Проект кажется небольшим, но съедает много часов из-за переписок, созвонов, ожиданий, правок, согласований и переделок.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Экономика проекта состоит не только из производства. Коммуникация, ожидания и неясность тоже стоят денег и времени.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Считают только видимые часы.</strong> Время на координацию не учитывается.</li><li><strong>Не видят потери от переделок.</strong> Ошибка входа в задачу кажется бесплатной.</li><li><strong>Не обсуждают ресурс с командой.</strong> Люди перегружаются молча.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Нужно видеть полную стоимость проекта: производство, коммуникация, управление, правки, ожидания, согласования, риски.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Разложить проект по типам затрат времени.</li><li>Отметить, где время уходит незаметно.</li><li>Найти причины потерь.</li><li>Изменить процесс: бриф, статус, согласования, рамку правок.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Этот проект теряет время не на производстве, а на согласованиях».</li><li>«Если добавляем ещё один круг правок, нужно пересчитать ресурс команды».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта трудозатрат и потерь: производство, коммуникация, ожидание, правки, согласования.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер понимает, где проект теряет ресурс, и может предложить управленческое решение.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Время команды — часть экономики проекта.</p>
+      </section>
+    </article>
+<article class="card" id="card-07">
+      <div class="card-kicker">Карточка 7</div>
+      <h2>Управление согласованиями</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Проект застревает между несколькими людьми. Комментарии приходят поздно, противоречат друг другу, финальное решение переносится.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Согласования могут быть главным риском проекта. Если ими не управлять, команда теряет сроки и переделывает работу без ясного решения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Нет плана согласований.</strong> Команда узнаёт цепочку по ходу дела.</li><li><strong>Комментарии собираются по одному.</strong> Каждый новый участник открывает новый круг.</li><li><strong>Не назначен финальный ответственный.</strong> Мнения есть, решения нет.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Согласование — это отдельный процесс: кто смотрит, когда, по каким критериям, в каком формате собираются комментарии, кто утверждает финально.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Составить список согласующих.</li><li>Определить порядок и сроки обратной связи.</li><li>Договориться о едином сборе комментариев.</li><li>Назначить человека, который собирает финальное решение.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Предлагаю собрать комментарии единым списком до пятницы 12:00».</li><li>«Кто будет финально утверждать версию после сбора комментариев?»</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>План согласований: участники, сроки, формат комментариев, финальный утверждающий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Согласование идёт по понятной цепочке, а команда не получает бесконечные разрозненные правки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Согласованиями нужно управлять как отдельным этапом проекта.</p>
+      </section>
+    </article>
+<article class="card" id="card-08">
+      <div class="card-kicker">Карточка 8</div>
+      <h2>Проектный тайминг и зависимости</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>У проекта есть дедлайн, но зависимости между этапами не видны. Один сдвиг незаметно тянет за собой весь график.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Тайминг без зависимостей выглядит оптимистично и быстро ломается. Команда должна видеть критические точки заранее.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Планируют только финальную дату.</strong> Промежуточные решения не видны.</li><li><strong>Не учитывают зависимость от клиента.</strong> Материалы и комментарии приходят поздно.</li><li><strong>Нет буфера на согласования.</strong> Любая задержка сразу бьёт по финалу.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Тайминг должен показывать этапы, зависимости, решения, точки входа клиента и критический путь.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Разложить проект на этапы.</li><li>Для каждого этапа указать входящие условия.</li><li>Отметить критические зависимости.</li><li>Согласовать даты решений и дату финала.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Если комментарии придут позже этой даты, финальный показ сдвинется».</li><li>«Здесь критическая зависимость — согласование сценария до запуска производства».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Тайминг с критическими зависимостями и точками решений.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда понимает, какие события влияют на финальный срок и где нужно принимать решения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Тайминг управляет проектом только тогда, когда показывает зависимости.</p>
+      </section>
+    </article>
+<article class="card" id="card-09">
+      <div class="card-kicker">Карточка 9</div>
+      <h2>Закрытие проекта</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Финал проекта размазывается: остаются мелкие правки, файлы, доступы, версии, закрывающие письма, акты, публикации, архивы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без закрытия проект продолжает забирать внимание. У клиента и команды остаётся ощущение незавершённости.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Нет финальной точки.</strong> Все считают проект почти закрытым.</li><li><strong>Хвосты не собраны.</strong> Мелкие задачи всплывают неделями.</li><li><strong>Не зафиксирована передача результата.</strong> Непонятно, какая версия финальная.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Закрытие — это отдельный этап: финальные материалы, подтверждение результата, список хвостов, финансовые и административные действия, архив.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Составить чеклист закрытия.</li><li>Подтвердить финальные версии.</li><li>Передать материалы и доступы.</li><li>Зафиксировать, что проект закрыт.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Фиксирую финальный комплект материалов и оставшиеся действия».</li><li>«После передачи этих файлов проект можно считать закрытым».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Чеклист закрытия проекта.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Все стороны понимают, что проект завершён, материалы переданы, открытых действий нет или они названы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Проект закрыт, когда результат передан и хвосты названы.</p>
+      </section>
+    </article>
+<article class="card" id="card-10">
+      <div class="card-kicker">Карточка 10</div>
+      <h2>Постразбор проекта</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Проект завершён. Команда устала и сразу переходит к следующему. Ошибки, удачные решения и выводы не фиксируются.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без постразбора опыт не превращается в улучшение системы. Команда повторяет те же ошибки и теряет сильные находки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Разбор заменяют эмоциями.</strong> Всем просто хочется выдохнуть.</li><li><strong>Ищут виноватых.</strong> Команда защищается вместо обучения.</li><li><strong>Не меняют процесс.</strong> Выводы остаются словами.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Постразбор нужен, чтобы улучшить следующий проект: что сработало, что сломалось, где причина, что меняем в процессе.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Провести разбор в течение недели после закрытия.</li><li>Разделить факты, причины и решения.</li><li>Зафиксировать 3–5 изменений в процессе.</li><li>Назначить ответственных за внедрение.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Вопросы для разбора</h3>
+        <ul><li>Что сработало?</li><li>Где потеряли управление?</li><li>Какой риск увидели поздно?</li><li>Что изменим в следующем проекте?</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Постразбор проекта: факты, выводы, изменения процесса, ответственные.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>После разбора появляется конкретное улучшение, которое команда применит в следующем проекте.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Опыт становится полезным, когда меняет следующий процесс.</p>
+      </section>
+    </article>
+      </section>
+    </div>
+
+    <nav class="pager" aria-label="Навигация между модулями">
+      <a href="b2b-module-03.html">← Модуль 3. Клиент и задача</a>
+      <a href="b2b-module-05.html">Модуль 5. Команда и ответственность →</a>
+    </nav>
+  </main>
+
+  <footer class="footer">B2B-курс «Продюсерское мышление». Модуль 4 из 6.</footer>
+</body>
+</html>

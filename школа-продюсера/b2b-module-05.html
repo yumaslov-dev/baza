@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Модуль 5. Команда и ответственность — B2B-курс</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.62; }
+    a { color: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px clamp(18px, 5vw, 72px); border-bottom: 1px solid var(--line); background: rgba(245, 239, 226, .94); backdrop-filter: blur(14px); }
+    .brand { text-decoration: none; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .topbar nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 10px; border-radius: 7px; border: 1px solid transparent; color: var(--muted); font-size: 13px; text-decoration: none; }
+    .topbar nav a:hover { border-color: var(--line); color: var(--ink); background: var(--paper); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .42fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding: clamp(44px, 7vw, 92px) clamp(18px, 6vw, 86px); background: radial-gradient(circle at 82% 10%, rgba(200,255,0,.18), transparent 18rem), linear-gradient(125deg, rgba(47,81,56,.10), transparent 48%); }
+    .eyebrow { display: inline-flex; width: fit-content; margin-bottom: 18px; padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(47,81,56,.24); color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 980px; margin-bottom: 20px; font-size: clamp(44px, 7vw, 92px); line-height: .92; letter-spacing: -.052em; }
+    .lead { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.72; }
+    .module-summary { border-radius: 20px; background: var(--green-dark); color: var(--paper); padding: 24px; box-shadow: var(--shadow); }
+    .module-summary strong { display: block; margin-bottom: 12px; font-size: 22px; line-height: 1.14; }
+    .module-summary p { color: rgba(255,250,240,.76); margin-bottom: 16px; }
+    .progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .progress a { height: 32px; display: grid; place-items: center; border-radius: 7px; background: rgba(255,250,240,.12); color: rgba(255,250,240,.76); text-decoration: none; font-size: 12px; font-weight: 900; }
+    .progress a.active { background: var(--acid); color: var(--green-dark); }
+    .layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 28px; padding: 34px clamp(18px, 6vw, 86px) 78px; }
+    .toc { position: sticky; top: 82px; align-self: start; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 18px; max-height: calc(100vh - 110px); overflow: auto; }
+    .toc-title { margin-bottom: 12px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .toc a { display: block; padding: 8px 0; border-top: 1px solid rgba(221,211,191,.6); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.25; }
+    .toc a:hover { color: var(--ink); }
+    .content { display: grid; gap: 18px; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--paper); padding: clamp(22px, 4vw, 34px); box-shadow: 0 1px 0 rgba(255,255,255,.72) inset; scroll-margin-top: 88px; }
+    .card-kicker { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .card h2 { margin-bottom: 22px; font-size: clamp(30px, 4vw, 46px); line-height: 1; letter-spacing: -.04em; }
+    .card-section { padding: 18px 0; border-top: 1px solid var(--line); }
+    .card-section h3 { margin-bottom: 10px; color: var(--green); font-size: 15px; line-height: 1.2; letter-spacing: -.01em; }
+    .card-section p { color: var(--muted); }
+    .card-section p:last-child, .card-section ul:last-child, .card-section ol:last-child, .card-section blockquote:last-child, .card-section pre:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 22px; color: var(--muted); }
+    li + li { margin-top: 6px; }
+    strong { color: var(--ink); }
+    blockquote { margin: 12px 0; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); color: var(--ink); }
+    pre { overflow: auto; margin: 14px 0; padding: 16px; border-radius: 12px; background: var(--panel); color: var(--ink); font-family: inherit; font-size: 14px; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .pager { display: flex; justify-content: space-between; gap: 14px; padding: 0 clamp(18px, 6vw, 86px) 56px; }
+    .pager a { flex: 1; min-height: 64px; display: flex; align-items: center; justify-content: center; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; text-decoration: none; font-weight: 800; }
+    .pager a:hover { border-color: rgba(47,81,56,.36); box-shadow: var(--shadow); }
+    .footer { padding: 0 clamp(18px, 6vw, 86px) 46px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) { .hero, .layout { grid-template-columns: 1fr; } .toc { position: static; max-height: none; } }
+    @media (max-width: 700px) { .topbar { align-items: flex-start; flex-direction: column; } .topbar nav { justify-content: flex-start; } h1 { font-size: 48px; } .pager { flex-direction: column; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="b2b-course.html">mass<span>.</span>method</a>
+    <nav>
+      <a href="b2b-course.html">Все модули</a>
+      <a href="b2b-kurs-prodyuserskoe-myshlenie.md">Карта курса</a>
+      <a href="b2b-module-04.html">Предыдущий</a>
+      <a href="b2b-module-06.html">Следующий</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Модуль 5</div>
+        <h1>Команда и ответственность</h1>
+        <p class="lead">Постановка задач, помощь, ошибки и рост самостоятельности.</p>
+      </div>
+      <aside class="module-summary">
+        <strong>Навигация по курсу</strong>
+        <p>В модуле 10 ситуационных карточек. Каждая ведёт от рабочей ситуации к действию, артефакту и критерию результата.</p>
+        <div class="progress" aria-label="Модули курса"><a class="" href="b2b-module-01.html">1</a><a class="" href="b2b-module-02.html">2</a><a class="" href="b2b-module-03.html">3</a><a class="" href="b2b-module-04.html">4</a><a class="active" href="b2b-module-05.html">5</a><a class="" href="b2b-module-06.html">6</a></div>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <aside class="toc">
+        <div class="toc-title">Карточки модуля</div>
+        <a href="#card-01">1. Как поставить задачу команде</a>
+<a href="#card-02">2. Как принимать задачу от команды обратно</a>
+<a href="#card-03">3. Брифинг перед стартом работы</a>
+<a href="#card-04">4. Культура вопроса</a>
+<a href="#card-05">5. Как помогать без спасательства</a>
+<a href="#card-06">6. Разбор ошибки без унижения</a>
+<a href="#card-07">7. Уровни самостоятельности сотрудника</a>
+<a href="#card-08">8. Работа с подрядчиком</a>
+<a href="#card-09">9. Командный ритм проекта</a>
+<a href="#card-10">10. Конфликт между командой и клиентом</a>
+      </aside>
+      <section class="content">
+        <article class="card" id="card-01">
+      <div class="card-kicker">Карточка 1</div>
+      <h2>Как поставить задачу команде</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер получает запрос от клиента или руководителя и быстро пересылает его исполнителю. Часть смысла теряется, исполнитель начинает делать по буквальной формулировке.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Плохая постановка задачи создаёт переделки и напряжение. Исполнитель должен понимать не только что сделать, но и зачем, для кого, по каким критериям.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Пересылают сырой запрос.</strong> Команда получает слова заказчика без управленческой рамки.</li><li><strong>Не называют результат.</strong> Исполнитель не понимает, что должно измениться.</li><li><strong>Не фиксируют ограничения.</strong> Сроки, формат, бренд и согласующие всплывают позже.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Постановка задачи должна содержать результат, контекст, аудиторию, ограничения, критерии, срок и точку проверки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Перевести запрос заказчика в задачу для исполнителя.</li><li>Назвать результат и критерии.</li><li>Указать ограничения и материалы.</li><li>Договориться о первом показе или точке сверки.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Шаблон постановки</h3>
+        <pre><code>Задача:
+Результат:
+Контекст:
+Аудитория:
+Ограничения:
+Критерии:
+Срок:
+Первая точка сверки:</code></pre>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Шаблон постановки задачи.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Исполнитель может пересказать задачу и понимает, по каким признакам работа будет принята.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Задачу нужно передавать вместе с контекстом результата.</p>
+      </section>
+    </article>
+<article class="card" id="card-02">
+      <div class="card-kicker">Карточка 2</div>
+      <h2>Как принимать задачу от команды обратно</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Исполнитель говорит «готово», но менеджер видит, что результат требует доработки. Готовность понимается по-разному.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Если критерии приёмки не названы заранее, финальная проверка превращается в спор вкусов и ожиданий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Приёмка происходит по ощущению.</strong> Менеджер говорит «не так», исполнитель не понимает почему.</li><li><strong>Критерии появляются на финале.</strong> Человек не мог ориентироваться на них в работе.</li><li><strong>Нет промежуточных показов.</strong> Ошибка обнаруживается слишком поздно.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Приёмка должна проверять работу по заранее согласованным критериям: задача, полнота, качество, ограничения, срок, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать критерии до старта.</li><li>Договориться о промежуточной сверке.</li><li>Принимать работу по критериям.</li><li>Если нужна доработка, формулировать её как конкретное действие.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Проверяю по критериям: задача закрыта, но не хватает версии для второго канала».</li><li>«Доработка такая: усилить вводный блок и убрать лишний пример».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Критерии приёмки работы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Исполнитель понимает, что именно принято, что нужно доработать и почему.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Приёмка должна опираться на критерии, согласованные до работы.</p>
+      </section>
+    </article>
+<article class="card" id="card-03">
+      <div class="card-kicker">Карточка 3</div>
+      <h2>Брифинг перед стартом работы</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Команда начинает делать задачу, не понимая клиента, аудиторию, ограничения и внутренний контекст. Брифинг кажется лишней встречей.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Короткий брифинг снижает количество неверных решений. Он помогает команде увидеть не только задачу, но и причину, для которой она делается.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Брифинг заменяют пересылкой сообщения.</strong> Контекст не передаётся.</li><li><strong>Команда не задаёт вопросы.</strong> Люди уходят делать с неясностью.</li><li><strong>Не фиксируют договорённости.</strong> После встречи каждый помнит разное.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Брифинг нужен, чтобы собрать общее понимание: задача, аудитория, результат, ограничения, роли, риски, первая точка сверки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Подготовить короткую рамку брифа.</li><li>Провести встречу до начала работы.</li><li>Спросить команду, что непонятно.</li><li>Зафиксировать итог письменно.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Вопросы команде</h3>
+        <ul><li>Что должно получиться?</li><li>Где видите риск?</li><li>Какие вводные нужны до старта?</li><li>Какая первая точка показа?</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Короткий командный бриф.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда уходит в работу с общим пониманием результата, ролей и рисков.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Брифинг нужен для общей реальности команды.</p>
+      </section>
+    </article>
+<article class="card" id="card-04">
+      <div class="card-kicker">Карточка 4</div>
+      <h2>Культура вопроса</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Люди молчат, когда задача непонятна. Боятся выглядеть слабыми, мешать процессу или получить раздражение от менеджера.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Команда, которая не задаёт вопросы, позже приносит ошибки. Вопросы на старте дешевле переделок на финале.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Вопросы воспринимаются как слабость.</strong> Люди скрывают неясность.</li><li><strong>Менеджер отвечает резко.</strong> Команда перестаёт уточнять.</li><li><strong>Нет места для вопросов.</strong> Встречи проходят как монолог.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Вопрос — это инструмент качества. Его нужно встроить в процесс: до старта, на промежуточной точке, при появлении риска.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Явно разрешить вопросы на старте.</li><li>Самому показывать пример уточнения.</li><li>Отличать вопрос от снятия ответственности.</li><li>Фиксировать важные ответы.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Сейчас хороший момент задать вопросы, чтобы потом не переделывать».</li><li>«Если что-то непонятно, это нужно поднять до первой версии».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Правила вопросов в проекте: когда задаём, куда пишем, что фиксируем, кто отвечает.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда раньше поднимает неясности и меньше ошибается из-за молчания.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Вопросы защищают результат.</p>
+      </section>
+    </article>
+<article class="card" id="card-05">
+      <div class="card-kicker">Карточка 5</div>
+      <h2>Как помогать без спасательства</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер видит, что человеку трудно, и начинает делать за него: дописывает, додумывает, решает, прикрывает. В моменте это быстрее, но самостоятельность не растёт.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Помощь должна усиливать человека и сохранять его ответственность. Иначе менеджер становится бутылочным горлышком.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Менеджер сразу даёт решение.</strong> Человек не учится думать.</li><li><strong>Помощь превращается в контроль.</strong> Исполнитель ждёт проверки каждого шага.</li><li><strong>Не названа зона ответственности.</strong> Непонятно, что человек должен попробовать сам.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Перед помощью нужно понять: человек не знает, не умеет, боится, перегружен или не принимает ответственность. Тип помощи зависит от причины.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Спросить, что человек уже попробовал.</li><li>Попросить принести 2 варианта решения.</li><li>Дать рамку или вопрос вместо готового ответа.</li><li>Зафиксировать, что человек делает сам дальше.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Что ты уже попробовал и где именно застрял?»</li><li>«Принеси два варианта, вместе выберем сильный».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Рамка помощи: что человек пробует сам, где просит поддержку, какое решение остаётся за ним.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Человек получает поддержку и сохраняет ответственность за следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Помощь должна растить самостоятельность.</p>
+      </section>
+    </article>
+<article class="card" id="card-06">
+      <div class="card-kicker">Карточка 6</div>
+      <h2>Разбор ошибки без унижения</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>В проекте случилась ошибка: забыли срок, неверно поняли задачу, отправили не ту версию, не предупредили о риске. Команда уходит в защиту или обвинения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Ошибка может стать источником роста или источником страха. Если разбор унижает, люди начинают скрывать проблемы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Ищут виноватого.</strong> Причина процесса остаётся невидимой.</li><li><strong>Разбор проводят на эмоциях.</strong> Человек защищается и не слышит смысл.</li><li><strong>Не меняют правило работы.</strong> Ошибка повторяется.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Разбор должен отделять факт, влияние, причину, решение и новый стандарт. Цель — улучшить процесс, а не наказать.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать факт ошибки.</li><li>Объяснить влияние на проект.</li><li>Найти причину в процессе.</li><li>Согласовать новое правило или действие.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Шаблон разбора</h3>
+        <pre><code>Что случилось:
+На что повлияло:
+Почему так произошло:
+Что меняем:
+Кто отвечает:</code></pre>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Шаблон разбора ошибки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>После разбора команда понимает причину ошибки и новый способ работы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Ошибка полезна, когда меняет процесс.</p>
+      </section>
+    </article>
+<article class="card" id="card-07">
+      <div class="card-kicker">Карточка 7</div>
+      <h2>Уровни самостоятельности сотрудника</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Руководитель требует самостоятельности, но человек пока не готов держать весь контур. Менеджер не понимает, сколько свободы и контроля дать.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Самостоятельность растёт постепенно. Если дать слишком много свободы рано, человек провалится. Если держать слишком крепко, он не вырастет.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Все ждут полной самостоятельности сразу.</strong> Промежуточные уровни не описаны.</li><li><strong>Контроль воспринимается как недоверие.</strong> Человек не понимает учебную логику.</li><li><strong>Нет плана перехода.</strong> Самостоятельность остаётся пожеланием.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Самостоятельность можно разложить на уровни: выполняет по инструкции, задаёт вопросы, предлагает варианты, ведёт блок, ведёт проект, улучшает систему.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Определить текущий уровень сотрудника.</li><li>Назначить следующий уровень.</li><li>Дать практику на реальном блоке.</li><li>Согласовать точки контроля и обратной связи.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Сейчас твой следующий уровень — приносить варианты вместе с вопросом».</li><li>«Этот блок ты ведёшь сам, я подключаюсь на двух точках».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Шкала самостоятельности и план перехода на следующий уровень.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Человек понимает, какой уровень самостоятельности от него ждут и как его тренировать.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Самостоятельность нужно растить по уровням.</p>
+      </section>
+    </article>
+<article class="card" id="card-08">
+      <div class="card-kicker">Карточка 8</div>
+      <h2>Работа с подрядчиком</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Внешний специалист делает часть работы: дизайн, монтаж, текст, съёмку, графику, разработку. Ожидания не зафиксированы, результат приходится переделывать.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Подрядчик не находится внутри контекста команды. Ему нужно дать ясную рамку задачи, критерии, сроки и формат сдачи.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Бриф слишком короткий.</strong> Подрядчик додумывает контекст.</li><li><strong>Нет критериев сдачи.</strong> Менеджер принимает работу по ощущению.</li><li><strong>Не согласованы точки проверки.</strong> Ошибка обнаруживается на финале.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Подрядчику нужна такая же управленческая рамка, как внутренней команде: результат, вводные, ограничения, критерии, материалы, сроки, коммуникация.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Подготовить бриф подрядчику.</li><li>Передать материалы и ограничения.</li><li>Договориться о промежуточном показе.</li><li>Зафиксировать критерии сдачи и формат файлов.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Перед стартом зафиксирую критерии сдачи и формат финальных материалов».</li><li>«Покажите черновик на ранней стадии, чтобы мы сверили направление».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Бриф подрядчику и критерии сдачи.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Подрядчик понимает задачу, формат результата, сроки, критерии и точки проверки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Внешний человек должен получить внутренний контекст задачи.</p>
+      </section>
+    </article>
+<article class="card" id="card-09">
+      <div class="card-kicker">Карточка 9</div>
+      <h2>Командный ритм проекта</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Коммуникация живёт в хаотичных чатах. Статусы теряются, решения разбросаны, встречи назначаются только при пожаре.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Командный ритм снижает тревогу и количество ручных напоминаний. Люди понимают, когда сверяемся, где фиксируем решения и как поднимаем риски.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Нет регулярной точки статуса.</strong> Все спрашивают друг друга отдельно.</li><li><strong>Решения остаются в чатах.</strong> Потом их трудно найти.</li><li><strong>Встречи появляются только в кризис.</strong> Команда связывает синк с проблемой.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Ритм проекта состоит из коротких регулярных действий: статус, синк, фиксация решений, проверка рисков, демо, закрытие этапа.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назначить регулярный статус.</li><li>Определить место фиксации решений.</li><li>Договориться, как поднимаются риски.</li><li>Проводить короткие синки по необходимости.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Статус обновляем каждый день до 17:00».</li><li>«Все решения фиксируем в одном документе, чат используем для обсуждения».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Командный ритм проекта: статусы, встречи, документы, правила риска, точки показа.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда понимает, где искать информацию и когда ожидать следующую точку синхронизации.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Ритм снижает зависимость от личных напоминаний.</p>
+      </section>
+    </article>
+<article class="card" id="card-10">
+      <div class="card-kicker">Карточка 10</div>
+      <h2>Конфликт между командой и клиентом</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Команда считает запрос плохим или вредным для результата. Клиент недоволен скоростью, качеством или решением. Менеджер оказывается между сторонами.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Если менеджер просто переносит давление с одной стороны на другую, конфликт растёт. Его задача — вернуть разговор к фактам, интересам и вариантам.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Менеджер становится курьером эмоций.</strong> Команда и клиент слышат раздражение друг друга.</li><li><strong>Разговор уходит в обвинения.</strong> Факты и задача исчезают.</li><li><strong>Нет вариантов решения.</strong> Все доказывают правоту вместо движения дальше.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>В конфликте нужно отделить интересы сторон, факты, ограничения и возможные решения. Менеджер держит рамку разговора.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать факты без оценок.</li><li>Выяснить интересы клиента и команды.</li><li>Сформулировать варианты.</li><li>Зафиксировать решение и следующий шаг.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Давайте отделим факт от оценки: что именно не работает?»</li><li>«Наша задача — выбрать вариант, который сохраняет результат и реалистичен по сроку».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Рамка конфликта: факты, интересы сторон, ограничения, варианты, решение.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Разговор возвращается к задаче, стороны видят варианты и принимают следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Менеджер в конфликте держит рамку решения.</p>
+      </section>
+    </article>
+      </section>
+    </div>
+
+    <nav class="pager" aria-label="Навигация между модулями">
+      <a href="b2b-module-04.html">← Модуль 4. Проект и деньги</a>
+      <a href="b2b-module-06.html">Модуль 6. Сложные разговоры и рост →</a>
+    </nav>
+  </main>
+
+  <footer class="footer">B2B-курс «Продюсерское мышление». Модуль 5 из 6.</footer>
+</body>
+</html>

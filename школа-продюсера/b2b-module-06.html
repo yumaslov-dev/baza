@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Модуль 6. Сложные разговоры и рост — B2B-курс</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.62; }
+    a { color: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px clamp(18px, 5vw, 72px); border-bottom: 1px solid var(--line); background: rgba(245, 239, 226, .94); backdrop-filter: blur(14px); }
+    .brand { text-decoration: none; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .topbar nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 10px; border-radius: 7px; border: 1px solid transparent; color: var(--muted); font-size: 13px; text-decoration: none; }
+    .topbar nav a:hover { border-color: var(--line); color: var(--ink); background: var(--paper); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .42fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding: clamp(44px, 7vw, 92px) clamp(18px, 6vw, 86px); background: radial-gradient(circle at 82% 10%, rgba(200,255,0,.18), transparent 18rem), linear-gradient(125deg, rgba(47,81,56,.10), transparent 48%); }
+    .eyebrow { display: inline-flex; width: fit-content; margin-bottom: 18px; padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(47,81,56,.24); color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 980px; margin-bottom: 20px; font-size: clamp(44px, 7vw, 92px); line-height: .92; letter-spacing: -.052em; }
+    .lead { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.72; }
+    .module-summary { border-radius: 20px; background: var(--green-dark); color: var(--paper); padding: 24px; box-shadow: var(--shadow); }
+    .module-summary strong { display: block; margin-bottom: 12px; font-size: 22px; line-height: 1.14; }
+    .module-summary p { color: rgba(255,250,240,.76); margin-bottom: 16px; }
+    .progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .progress a { height: 32px; display: grid; place-items: center; border-radius: 7px; background: rgba(255,250,240,.12); color: rgba(255,250,240,.76); text-decoration: none; font-size: 12px; font-weight: 900; }
+    .progress a.active { background: var(--acid); color: var(--green-dark); }
+    .layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 28px; padding: 34px clamp(18px, 6vw, 86px) 78px; }
+    .toc { position: sticky; top: 82px; align-self: start; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 18px; max-height: calc(100vh - 110px); overflow: auto; }
+    .toc-title { margin-bottom: 12px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .toc a { display: block; padding: 8px 0; border-top: 1px solid rgba(221,211,191,.6); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.25; }
+    .toc a:hover { color: var(--ink); }
+    .content { display: grid; gap: 18px; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--paper); padding: clamp(22px, 4vw, 34px); box-shadow: 0 1px 0 rgba(255,255,255,.72) inset; scroll-margin-top: 88px; }
+    .card-kicker { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .card h2 { margin-bottom: 22px; font-size: clamp(30px, 4vw, 46px); line-height: 1; letter-spacing: -.04em; }
+    .card-section { padding: 18px 0; border-top: 1px solid var(--line); }
+    .card-section h3 { margin-bottom: 10px; color: var(--green); font-size: 15px; line-height: 1.2; letter-spacing: -.01em; }
+    .card-section p { color: var(--muted); }
+    .card-section p:last-child, .card-section ul:last-child, .card-section ol:last-child, .card-section blockquote:last-child, .card-section pre:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 22px; color: var(--muted); }
+    li + li { margin-top: 6px; }
+    strong { color: var(--ink); }
+    blockquote { margin: 12px 0; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); color: var(--ink); }
+    pre { overflow: auto; margin: 14px 0; padding: 16px; border-radius: 12px; background: var(--panel); color: var(--ink); font-family: inherit; font-size: 14px; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .pager { display: flex; justify-content: space-between; gap: 14px; padding: 0 clamp(18px, 6vw, 86px) 56px; }
+    .pager a { flex: 1; min-height: 64px; display: flex; align-items: center; justify-content: center; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; text-decoration: none; font-weight: 800; }
+    .pager a:hover { border-color: rgba(47,81,56,.36); box-shadow: var(--shadow); }
+    .footer { padding: 0 clamp(18px, 6vw, 86px) 46px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) { .hero, .layout { grid-template-columns: 1fr; } .toc { position: static; max-height: none; } }
+    @media (max-width: 700px) { .topbar { align-items: flex-start; flex-direction: column; } .topbar nav { justify-content: flex-start; } h1 { font-size: 48px; } .pager { flex-direction: column; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="b2b-course.html">mass<span>.</span>method</a>
+    <nav>
+      <a href="b2b-course.html">Все модули</a>
+      <a href="b2b-kurs-prodyuserskoe-myshlenie.md">Карта курса</a>
+      <a href="b2b-module-05.html">Предыдущий</a>
+      
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Модуль 6</div>
+        <h1>Сложные разговоры и рост</h1>
+        <p class="lead">Твёрдость, позиция нужды, отказ и зрелость продюсера.</p>
+      </div>
+      <aside class="module-summary">
+        <strong>Навигация по курсу</strong>
+        <p>В модуле 10 ситуационных карточек. Каждая ведёт от рабочей ситуации к действию, артефакту и критерию результата.</p>
+        <div class="progress" aria-label="Модули курса"><a class="" href="b2b-module-01.html">1</a><a class="" href="b2b-module-02.html">2</a><a class="" href="b2b-module-03.html">3</a><a class="" href="b2b-module-04.html">4</a><a class="" href="b2b-module-05.html">5</a><a class="active" href="b2b-module-06.html">6</a></div>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <aside class="toc">
+        <div class="toc-title">Карточки модуля</div>
+        <a href="#card-01">1. Позиция нужды</a>
+<a href="#card-02">2. Как сказать «нет» клиенту или заказчику</a>
+<a href="#card-03">3. Разговор о цене, ресурсе или сроке</a>
+<a href="#card-04">4. Разговор о сорванном сроке</a>
+<a href="#card-05">5. Разговор после ошибки</a>
+<a href="#card-06">6. Жёсткая обратная связь участнику команды</a>
+<a href="#card-07">7. Эскалация без драмы</a>
+<a href="#card-08">8. Как выдерживать отказ</a>
+<a href="#card-09">9. Личные границы и профессиональная этика</a>
+<a href="#card-10">10. Следующий уровень роста</a>
+      </aside>
+      <section class="content">
+        <article class="card" id="card-01">
+      <div class="card-kicker">Карточка 1</div>
+      <h2>Позиция нужды</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер слишком хочет сохранить проект, клиента, одобрение руководителя или образ хорошего сотрудника. Из-за этого он соглашается на лишнее и боится назвать риск.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Позиция нужды снижает управленческую точность. Человек начинает обслуживать чужое ожидание вместо того, чтобы держать реальность проекта.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Согласие появляется автоматически.</strong> Менеджер не проверяет срок, ресурс и границы.</li><li><strong>Страх управляет речью.</strong> Голос становится мягче, формулировки расплываются.</li><li><strong>Неприятный факт откладывается.</strong> Риск растёт, потому что его страшно назвать.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Перед сложным разговором нужно увидеть, что именно страшно потерять: клиента, доверие, статус, деньги, возможность роста, спокойствие руководителя.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать свой страх перед разговором.</li><li>Выписать факты проекта.</li><li>Подготовить границу и варианты.</li><li>Говорить через результат и факты.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Я хочу сохранить качество, поэтому нужно обсудить ограничение по сроку».</li><li>«Перед обещанием проверю ресурс команды».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Самопроверка позиции нужды: страх, факт, граница, варианты, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер говорит спокойно и точно, не обещая из желания понравиться.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Сложный разговор начинается с возвращения к фактам.</p>
+      </section>
+    </article>
+<article class="card" id="card-02">
+      <div class="card-kicker">Карточка 2</div>
+      <h2>Как сказать «нет» клиенту или заказчику</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Клиент или внутренний заказчик просит то, что нарушает сроки, бюджет, качество, договорённости или границы команды.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Отказ может сохранять доверие, если он объясняет причину и предлагает реалистичную альтернативу. Молчаливое согласие часто приводит к худшему результату.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Отказ звучит резко.</strong> Клиент слышит закрытую дверь.</li><li><strong>Причина не объяснена.</strong> Запрос выглядит отклонённым без логики.</li><li><strong>Нет альтернативы.</strong> Разговор останавливается.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Хороший отказ состоит из признания задачи, ограничения, последствия и альтернативы. Он защищает результат и рабочие отношения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Признать важность запроса.</li><li>Назвать ограничение.</li><li>Объяснить влияние на срок, качество или ресурс.</li><li>Предложить реалистичный вариант.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Что сказать</h3>
+        <blockquote>Понимаю, зачем это нужно. В текущем сроке мы не сможем добавить этот блок без потери качества. Могу предложить два варианта: оставить текущий объём или перенести финальный срок и добавить блок отдельно.</blockquote>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Отказ с альтернативой: запрос, ограничение, причина, варианты, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Сторона понимает причину отказа и видит, как можно двигаться дальше.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Отказ должен защищать результат и предлагать следующий выбор.</p>
+      </section>
+    </article>
+<article class="card" id="card-03">
+      <div class="card-kicker">Карточка 3</div>
+      <h2>Разговор о цене, ресурсе или сроке</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Клиент хочет быстрее, дешевле или больше в том же объёме. Руководитель просит ужать срок, команда уже перегружена.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Цена, ресурс, объём и качество связаны. Если изменить один элемент и не обсудить остальные, проект теряет управляемость.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Соглашаются без пересчёта.</strong> Команда платит временем и качеством.</li><li><strong>Говорят только про деньги.</strong> Клиент не видит связь с объёмом и сроком.</li><li><strong>Не предлагают выбор.</strong> Разговор превращается в сопротивление.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Нужно показать развилку: быстрее — значит меньше объём или больше ресурс; дешевле — значит другой уровень решения; больше — значит новый срок или бюджет.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать, что именно меняется.</li><li>Объяснить влияние на остальные параметры.</li><li>Дать 2–3 варианта.</li><li>Попросить выбрать приоритет.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Можно сохранить срок, если сократим объём».</li><li>«Если добавляем этот блок, нужно выбрать: сдвигаем срок или увеличиваем ресурс».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Сообщение о выборе между сроком, объёмом, качеством и ресурсом.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Клиент или руководитель видит последствия выбора и принимает решение осознанно.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Изменение одного параметра проекта должно менять разговор о всей системе.</p>
+      </section>
+    </article>
+<article class="card" id="card-04">
+      <div class="card-kicker">Карточка 4</div>
+      <h2>Разговор о сорванном сроке</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Команда не успевает к согласованной дате. Причина может быть внутри команды, у клиента, у подрядчика или в цепочке согласований.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Клиент оценивает не только факт задержки, но и качество управления. Честное сообщение с планом сохраняет больше доверия, чем поздняя тишина.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Сообщают поздно.</strong> У клиента не остаётся вариантов.</li><li><strong>Оправдываются.</strong> Объяснение звучит как уход от ответственности.</li><li><strong>Нет нового плана.</strong> Получатель слышит проблему без решения.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Сообщение о сдвиге должно включать факт, причину, влияние, новый план и выбор, если он нужен.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Сообщить как можно раньше.</li><li>Назвать факт и причину коротко.</li><li>Объяснить влияние на срок.</li><li>Дать новый план и варианты.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Что написать</h3>
+        <blockquote>По текущему этапу есть сдвиг. Причина: комментарии пришли позже, часть блока нужно пересобрать. Сегодня отправим рабочую версию, финальную — завтра до 14:00. Если критичен сегодняшний финал, предложу сократить объём.</blockquote>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Сообщение о сдвиге срока: факт, причина, влияние, новый план, варианты.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Получатель понимает, что произошло, что команда делает и какой новый план реалистичен.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Срок сдвигается честнее, когда рядом есть новый план.</p>
+      </section>
+    </article>
+<article class="card" id="card-05">
+      <div class="card-kicker">Карточка 5</div>
+      <h2>Разговор после ошибки</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер или команда ошиблись: отправили не ту версию, неверно поняли задачу, сорвали договорённость, пропустили риск.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Ошибка проверяет зрелость команды. Сильная реакция не стирает факт ошибки, но показывает ответственность и возвращает управление.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Оправдываются.</strong> Получатель слышит защиту вместо ответственности.</li><li><strong>Ищут виноватых.</strong> Решение откладывается.</li><li><strong>Нет плана исправления.</strong> Ошибка остаётся открытой.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Разговор после ошибки должен состоять из признания факта, влияния, плана исправления и изменения процесса, чтобы не повторить.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать ошибку прямо.</li><li>Объяснить, на что она повлияла.</li><li>Дать план исправления.</li><li>Сказать, что меняется в процессе.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Мы ошиблись в этом месте. Исправляем так».</li><li>«Чтобы это не повторилось, добавляем дополнительную проверку перед отправкой».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Признание ошибки и план исправления.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Получатель видит ответственность, план и изменение процесса.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>После ошибки важны факт, план и изменение поведения.</p>
+      </section>
+    </article>
+<article class="card" id="card-06">
+      <div class="card-kicker">Карточка 6</div>
+      <h2>Жёсткая обратная связь участнику команды</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Человек повторяет ошибку, срывает договорённость, снижает качество или не берёт ответственность. Разговор откладывается, потому что он неприятный.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Отложенная обратная связь разрушает стандарт команды. Жёсткий разговор может быть уважительным, если опирается на факты и ожидания.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Говорят слишком мягко.</strong> Человек не понимает серьёзность.</li><li><strong>Говорят через раздражение.</strong> Смысл тонет в эмоции.</li><li><strong>Нет конкретного ожидания.</strong> После разговора поведение не меняется.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Жёсткая обратная связь должна содержать факт, влияние, ожидание, следующий шаг и точку проверки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Подготовить конкретные факты.</li><li>Объяснить влияние на проект или команду.</li><li>Назвать ожидаемое поведение.</li><li>Договориться о следующей проверке.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Что сказать</h3>
+        <blockquote>В этом проекте срок по твоему блоку сдвигался дважды без предупреждения. Это повлияло на общий статус и доверие клиента. Ожидание: риск по сроку поднимается заранее, минимум за день до точки сдачи.</blockquote>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Структура обратной связи: факт, влияние, ожидание, следующий шаг, дата проверки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Человек понимает, какое поведение должно измениться и как это будет проверяться.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Жёсткость должна быть точной и уважительной.</p>
+      </section>
+    </article>
+<article class="card" id="card-07">
+      <div class="card-kicker">Карточка 7</div>
+      <h2>Эскалация без драмы</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Вопрос нельзя решить на текущем уровне: риск по клиенту, бюджету, сроку, конфликту, качеству или полномочиям. Нужно подключить руководителя.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Эскалация нужна для решения. Руководителю нужна рамка, чтобы быстро выбрать действие.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Приходят с хаосом.</strong> Руководитель сам собирает картину.</li><li><strong>Приходят поздно.</strong> Варианты уже ограничены.</li><li><strong>Не дают рекомендации.</strong> Вопрос перекладывается целиком.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Эскалация должна отвечать на пять вопросов: что случилось, на что влияет, какие варианты есть, что я рекомендую, какое решение нужно.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать факт и влияние.</li><li>Подготовить варианты.</li><li>Дать рекомендацию.</li><li>Указать срок решения.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Шаблон эскалации</h3>
+        <pre><code>Ситуация:
+Риск:
+Варианты:
+Моя рекомендация:
+Решение, которое нужно:
+Срок:</code></pre>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Эскалационное сообщение.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Руководитель быстро понимает контекст и принимает решение.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Эскалация должна приносить рамку решения.</p>
+      </section>
+    </article>
+<article class="card" id="card-08">
+      <div class="card-kicker">Карточка 8</div>
+      <h2>Как выдерживать отказ</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Клиент отказался, руководитель не согласовал, команда не приняла идею, тендер проигран, предложение не купили.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Отказ может разрушать самооценку и вести к резким решениям. Зрелый менеджер извлекает из отказа информацию и сохраняет движение.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Отказ принимают лично.</strong> Человек перестаёт видеть рабочие причины.</li><li><strong>Не задают уточняющих вопросов.</strong> Потерян шанс узнать, что не сработало.</li><li><strong>Не фиксируют вывод.</strong> Следующее предложение повторяет те же ошибки.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Отказ — это источник данных: не совпали бюджет, сроки, доверие, формат, приоритет, решение, критерий или момент.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Стабилизировать реакцию и не отвечать из обиды.</li><li>Уточнить причину отказа, если возможно.</li><li>Разобрать, что было в зоне влияния.</li><li>Сформулировать следующий шаг.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Спасибо, что сообщили. Можем уточнить, что стало главным фактором решения?»</li><li>«Зафиксирую выводы, чтобы следующую подачу сделать точнее».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Разбор отказа: причина, зона влияния, урок, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер не застревает в отказе и превращает его в рабочий вывод.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Отказ полезен, если из него извлечён следующий шаг.</p>
+      </section>
+    </article>
+<article class="card" id="card-09">
+      <div class="card-kicker">Карточка 9</div>
+      <h2>Личные границы и профессиональная этика</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Результат можно получить через давление, манипуляцию, замалчивание проблемы, переработку команды, завышенное обещание или нечестную презентацию опыта.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Краткосрочная победа может разрушить доверие, команду и репутацию. Продюсерская зрелость включает этическую границу.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Цель оправдывает процесс.</strong> Люди страдают ради красивого финала.</li><li><strong>Проблему скрывают ради впечатления.</strong> Потом цена становится выше.</li><li><strong>Команда привыкает к норме переработки.</strong> Героизм заменяет управление.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Этика — это не абстрактная мораль, а управленческая устойчивость: честные ожидания, уважение к людям, прозрачность рисков, отказ от манипуляции.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать решения, которые кажутся сомнительными.</li><li>Проверить влияние на людей, доверие и долгосрочные отношения.</li><li>Найти честный вариант действия.</li><li>Зафиксировать личные правила для сложных ситуаций.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Я не хочу обещать это без проверки ресурса».</li><li>«Здесь важно сразу назвать риск, чтобы не вводить клиента в заблуждение».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Личные правила сложных решений.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер принимает решения, которые сохраняют результат, людей и доверие.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Профессиональная твёрдость должна быть совместима с честностью.</p>
+      </section>
+    </article>
+<article class="card" id="card-10">
+      <div class="card-kicker">Карточка 10</div>
+      <h2>Следующий уровень роста</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Курс или проект завершён. У человека есть новые инструменты, но поведение может быстро вернуться к прежним привычкам.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Рост закрепляется только через практику и обратную связь. Без плана новые знания остаются хорошими формулировками.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Слишком много целей.</strong> Человек пытается изменить всё сразу.</li><li><strong>Нет рабочей практики.</strong> Навык не привязан к реальным задачам.</li><li><strong>Нет проверки прогресса.</strong> Через месяц непонятно, что изменилось.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Следующий уровень роста нужно описывать через конкретное поведение: раньше поднимать риск, лучше ставить задачу, приходить с вариантами, фиксировать решения, вести сложный разговор.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выбрать один навык на 90 дней.</li><li>Привязать его к текущему проекту.</li><li>Договориться о точках обратной связи.</li><li>Через 30, 60 и 90 дней провести короткий разбор.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Следующие 90 дней я тренирую эскалацию с вариантами».</li><li>«Прошу давать обратную связь именно по самостоятельности решений».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта роста на 90 дней: навык, практика, проект, обратная связь, критерии.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Через 90 дней видно изменение поведения в реальных рабочих ситуациях.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Рост закрепляется повторяемым поведением.</p>
+      </section>
+    </article>
+      </section>
+    </div>
+
+    <nav class="pager" aria-label="Навигация между модулями">
+      <a href="b2b-module-05.html">← Модуль 5. Команда и ответственность</a>
+      <a href="b2b-course.html">Все модули →</a>
+    </nav>
+  </main>
+
+  <footer class="footer">B2B-курс «Продюсерское мышление». Модуль 6 из 6.</footer>
+</body>
+</html>

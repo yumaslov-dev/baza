@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Модуль 3. Клиент и задача — B2B-курс</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.62; }
+    a { color: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px clamp(18px, 5vw, 72px); border-bottom: 1px solid var(--line); background: rgba(245, 239, 226, .94); backdrop-filter: blur(14px); }
+    .brand { text-decoration: none; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .topbar nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 10px; border-radius: 7px; border: 1px solid transparent; color: var(--muted); font-size: 13px; text-decoration: none; }
+    .topbar nav a:hover { border-color: var(--line); color: var(--ink); background: var(--paper); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .42fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding: clamp(44px, 7vw, 92px) clamp(18px, 6vw, 86px); background: radial-gradient(circle at 82% 10%, rgba(200,255,0,.18), transparent 18rem), linear-gradient(125deg, rgba(47,81,56,.10), transparent 48%); }
+    .eyebrow { display: inline-flex; width: fit-content; margin-bottom: 18px; padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(47,81,56,.24); color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 980px; margin-bottom: 20px; font-size: clamp(44px, 7vw, 92px); line-height: .92; letter-spacing: -.052em; }
+    .lead { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.72; }
+    .module-summary { border-radius: 20px; background: var(--green-dark); color: var(--paper); padding: 24px; box-shadow: var(--shadow); }
+    .module-summary strong { display: block; margin-bottom: 12px; font-size: 22px; line-height: 1.14; }
+    .module-summary p { color: rgba(255,250,240,.76); margin-bottom: 16px; }
+    .progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .progress a { height: 32px; display: grid; place-items: center; border-radius: 7px; background: rgba(255,250,240,.12); color: rgba(255,250,240,.76); text-decoration: none; font-size: 12px; font-weight: 900; }
+    .progress a.active { background: var(--acid); color: var(--green-dark); }
+    .layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 28px; padding: 34px clamp(18px, 6vw, 86px) 78px; }
+    .toc { position: sticky; top: 82px; align-self: start; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 18px; max-height: calc(100vh - 110px); overflow: auto; }
+    .toc-title { margin-bottom: 12px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .toc a { display: block; padding: 8px 0; border-top: 1px solid rgba(221,211,191,.6); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.25; }
+    .toc a:hover { color: var(--ink); }
+    .content { display: grid; gap: 18px; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--paper); padding: clamp(22px, 4vw, 34px); box-shadow: 0 1px 0 rgba(255,255,255,.72) inset; scroll-margin-top: 88px; }
+    .card-kicker { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .card h2 { margin-bottom: 22px; font-size: clamp(30px, 4vw, 46px); line-height: 1; letter-spacing: -.04em; }
+    .card-section { padding: 18px 0; border-top: 1px solid var(--line); }
+    .card-section h3 { margin-bottom: 10px; color: var(--green); font-size: 15px; line-height: 1.2; letter-spacing: -.01em; }
+    .card-section p { color: var(--muted); }
+    .card-section p:last-child, .card-section ul:last-child, .card-section ol:last-child, .card-section blockquote:last-child, .card-section pre:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 22px; color: var(--muted); }
+    li + li { margin-top: 6px; }
+    strong { color: var(--ink); }
+    blockquote { margin: 12px 0; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); color: var(--ink); }
+    pre { overflow: auto; margin: 14px 0; padding: 16px; border-radius: 12px; background: var(--panel); color: var(--ink); font-family: inherit; font-size: 14px; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .pager { display: flex; justify-content: space-between; gap: 14px; padding: 0 clamp(18px, 6vw, 86px) 56px; }
+    .pager a { flex: 1; min-height: 64px; display: flex; align-items: center; justify-content: center; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; text-decoration: none; font-weight: 800; }
+    .pager a:hover { border-color: rgba(47,81,56,.36); box-shadow: var(--shadow); }
+    .footer { padding: 0 clamp(18px, 6vw, 86px) 46px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) { .hero, .layout { grid-template-columns: 1fr; } .toc { position: static; max-height: none; } }
+    @media (max-width: 700px) { .topbar { align-items: flex-start; flex-direction: column; } .topbar nav { justify-content: flex-start; } h1 { font-size: 48px; } .pager { flex-direction: column; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="b2b-course.html">mass<span>.</span>method</a>
+    <nav>
+      <a href="b2b-course.html">Все модули</a>
+      <a href="b2b-kurs-prodyuserskoe-myshlenie.md">Карта курса</a>
+      <a href="b2b-module-02.html">Предыдущий</a>
+      <a href="b2b-module-04.html">Следующий</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Модуль 3</div>
+        <h1>Клиент и задача</h1>
+        <p class="lead">Первичный запрос, бюджет, вопросы, саммари и защита решения.</p>
+      </div>
+      <aside class="module-summary">
+        <strong>Навигация по курсу</strong>
+        <p>В модуле 10 ситуационных карточек. Каждая ведёт от рабочей ситуации к действию, артефакту и критерию результата.</p>
+        <div class="progress" aria-label="Модули курса"><a class="" href="b2b-module-01.html">1</a><a class="" href="b2b-module-02.html">2</a><a class="active" href="b2b-module-03.html">3</a><a class="" href="b2b-module-04.html">4</a><a class="" href="b2b-module-05.html">5</a><a class="" href="b2b-module-06.html">6</a></div>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <aside class="toc">
+        <div class="toc-title">Карточки модуля</div>
+        <a href="#card-01">1. Клиент пишет: «нам нужен ролик / дизайн / презентация»</a>
+<a href="#card-02">2. Внутренний заказчик просит «сделать красиво»</a>
+<a href="#card-03">3. Вопросы до решения</a>
+<a href="#card-04">4. Ресурсная и бюджетная вилка</a>
+<a href="#card-05">5. Письмо с пониманием задачи</a>
+<a href="#card-06">6. Как защитить решение</a>
+<a href="#card-07">7. Презентация опыта под задачу клиента</a>
+<a href="#card-08">8. Как работать с абстрактной обратной связью</a>
+<a href="#card-09">9. Согласующие и скрытые стейкхолдеры</a>
+<a href="#card-10">10. Когда звать руководителя</a>
+      </aside>
+      <section class="content">
+        <article class="card" id="card-01">
+      <div class="card-kicker">Карточка 1</div>
+      <h2>Клиент пишет: «нам нужен ролик / дизайн / презентация»</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Запрос приходит в виде готового формата: нужен ролик, дизайн, презентация, лендинг, текст, спецпроект. От менеджера ждут быстрый ответ, цену или срок.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Короткий запрос редко содержит настоящую задачу. За форматом могут стоять найм, продажи, обучение, репутация, защита бюджета, внутренняя коммуникация или событие.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Отвечают форматом на формат.</strong> Разговор сразу уходит в производство.</li><li><strong>Называют срок или цену без вводных.</strong> Это создаёт случайное ожидание.</li><li><strong>Не открывают диагностику.</strong> Клиент не чувствует, что команда разбирается в задаче.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Первый ответ должен показать, что запрос услышан, а для решения нужно понять контекст: аудиторию, цель, площадку, ограничения, согласующих, сроки и ресурс.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Подтвердить, что запрос понятен.</li><li>Объяснить, какие вводные нужны для оценки.</li><li>Задать 5–7 стартовых вопросов или предложить короткий созвон.</li><li>После разговора письменно вернуть понимание задачи.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Что написать клиенту</h3>
+        <blockquote>Привет! Да, можем помочь. Чтобы корректно предложить формат и оценить работу, нужно понять задачу: где материал будет использоваться, кто аудитория, какое действие вы ждёте, какие сроки и есть ли бюджетный ориентир. Давайте проведём короткий созвон на 20–30 минут.</blockquote>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Первый ответ клиенту и список стартовых вопросов.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>После первого контакта понятны цель, аудитория, контекст, ограничения и следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Короткий запрос — это начало диагностики.</p>
+      </section>
+    </article>
+<article class="card" id="card-02">
+      <div class="card-kicker">Карточка 2</div>
+      <h2>Внутренний заказчик просит «сделать красиво»</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Внутренний заказчик формулирует задачу через вкус: красиво, современно, премиально, проще, посвежее, как у конкурентов. Команда не понимает, что конкретно менять.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Абстрактная формулировка запускает угадывание. Команда тратит время, заказчик раздражается, критерии результата появляются только после первой версии.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Абстрактные слова остаются без расшифровки.</strong> Каждый понимает «красиво» по-своему.</li><li><strong>Нет примеров.</strong> Команда не видит нужное направление.</li><li><strong>Неясен критерий успеха.</strong> Исполнитель не понимает, что должно измениться.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>За вкусовым словом обычно стоит цель, страх, ограничение, опыт или референс. Нужно найти, что именно заказчик пытается сказать.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Попросить примеры подходящего и неподходящего.</li><li>Уточнить, что именно в примере важно.</li><li>Связать вкус с задачей аудитории.</li><li>Зафиксировать конкретные критерии.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Вопросы заказчику</h3>
+        <ul><li>Что именно сейчас не устраивает?</li><li>Можете показать пример нужного ощущения?</li><li>Что в примере важно: тон, ритм, цвет, структура, уровень детализации?</li><li>Какой реакции ждём от аудитории?</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Конкретизированный запрос с примерами, антипримерами и критериями правки.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда получает понятное направление работы с проверяемыми признаками результата.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Абстрактную просьбу нужно переводить в проверяемые признаки.</p>
+      </section>
+    </article>
+<article class="card" id="card-03">
+      <div class="card-kicker">Карточка 3</div>
+      <h2>Вопросы до решения</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Команда уже хочет придумывать идею, дизайн или сценарий, но вводные слабые: непонятны аудитория, критерии, ограничения и причина задачи.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Решение, придуманное до диагностики, часто попадает мимо. Вопросы экономят производство и повышают шанс сделать работу, которая нужна.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Вопросы воспринимаются как задержка.</strong> Хочется быстрее перейти к креативу.</li><li><strong>Спрашивают обо всём подряд.</strong> Клиент устаёт, а главный риск остаётся.</li><li><strong>Не фиксируют ответы.</strong> После встречи вводные снова расползаются.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Хороший вопрос помогает принять решение: о формате, объёме, сроке, ресурсе, риске или критерии. Лишний вопрос не влияет на действие.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Разделить вопросы на блоки: цель, аудитория, контекст, ограничения, согласование, ресурс.</li><li>Выбрать критичные вопросы для старта.</li><li>Задать их до оценки и решения.</li><li>Зафиксировать ответы в саммари.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Вопросы клиенту</h3>
+        <ul><li>Зачем задача появилась сейчас?</li><li>Кто аудитория и что она уже знает?</li><li>Где будет использоваться результат?</li><li>Кто принимает решение?</li><li>Какие сроки и ограничения уже известны?</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Список вопросов к клиенту или внутреннему заказчику.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>После вопросов команда понимает, какое решение уместно, а какие варианты стоит отбросить.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Вопрос нужен, если ответ меняет решение.</p>
+      </section>
+    </article>
+<article class="card" id="card-04">
+      <div class="card-kicker">Карточка 4</div>
+      <h2>Ресурсная и бюджетная вилка</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Клиент или руководитель просит быстро оценить срок, бюджет или трудозатраты. Вводных мало, но ориентир нужен для планирования.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Одна цифра без условий быстро становится обязательством. Вилка помогает двигаться дальше и одновременно защищает команду от случайных обещаний.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Называют одну цифру.</strong> Она выглядит уверенно, но не отражает неизвестные.</li><li><strong>Вилка дана без состава работ.</strong> Непонятно, что входит в оценку.</li><li><strong>Не называют условия изменения.</strong> Клиент ожидает стабильность там, где вводные ещё открыты.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Оценка должна состоять из сценариев: минимальный, рабочий, расширенный. Для каждого нужно назвать состав работ, неизвестные параметры и следующий шаг для точного расчёта.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Задать минимальные вопросы перед оценкой.</li><li>Собрать 2–3 сценария.</li><li>Назвать, что входит в каждый сценарий.</li><li>Зафиксировать, от чего зависит итоговый срок или бюджет.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Могу дать первичную вилку по сценариям, а точную оценку после брифа».</li><li>«На стоимость влияет объём съёмки, графика, количество версий и этапы согласования».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Вилка по сценариям: минимальный, рабочий, расширенный; состав работ; неизвестные; следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Заказчик получает ориентир, а команда сохраняет возможность уточнить объём и условия.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Вилка должна помогать планировать и сохранять точность.</p>
+      </section>
+    </article>
+<article class="card" id="card-05">
+      <div class="card-kicker">Карточка 5</div>
+      <h2>Письмо с пониманием задачи</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Встреча прошла хорошо, стороны поговорили о задаче, сроках, идеях и ограничениях. Но после созвона каждый может запомнить своё.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Саммари превращает разговор в общую реальность. Оно снижает риск разночтений и даёт команде основу для работы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Саммари не пишут.</strong> Договорённости остаются в памяти.</li><li><strong>Пишут протокол без смысла.</strong> Есть много деталей, но нет рамки задачи.</li><li><strong>Открытые вопросы не названы.</strong> Кажется, что всё понятно, хотя часть решений не принята.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Хорошее саммари фиксирует задачу, аудиторию, результат, ограничения, решения, открытые вопросы и следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Отправить саммари в день встречи.</li><li>Начать с понимания задачи.</li><li>Отдельно выделить решения и открытые вопросы.</li><li>Попросить подтвердить или поправить рамку.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Шаблон письма</h3>
+        <pre><code>Коллеги, фиксирую понимание задачи.
+
+Цель:
+Аудитория:
+Формат:
+Ограничения:
+Что решили:
+Что нужно уточнить:
+Следующий шаг:</code></pre>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Письмо с пониманием задачи.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>После письма все стороны одинаково понимают задачу и следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Встреча становится рабочей только после фиксации.</p>
+      </section>
+    </article>
+<article class="card" id="card-06">
+      <div class="card-kicker">Карточка 6</div>
+      <h2>Как защитить решение</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Команда придумала решение: концепцию, сценарий, структуру, дизайн или формат. Клиенту или руководителю нужно объяснить, почему это подходит.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без защиты решение оценивают по вкусу. Хорошая защита связывает идею с задачей, аудиторией, ограничениями и ожидаемым эффектом.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Показывают только результат.</strong> Логика выбора остаётся невидимой.</li><li><strong>Защита звучит как вкусовое мнение.</strong> «Так красивее» не помогает принять решение.</li><li><strong>Не называют риски.</strong> Клиент не понимает условия успешной реализации.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Защита должна идти от задачи к решению: контекст, аудитория, инсайт, принцип решения, почему выбран формат, что получит клиент.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Начать с задачи и критериев.</li><li>Показать, какое наблюдение легло в основу решения.</li><li>Объяснить ключевые элементы.</li><li>Назвать риски и условия реализации.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Мы предлагаем это решение, потому что оно отвечает на главный барьер аудитории».</li><li>«Здесь важно не только визуальное ощущение, но и то, как зритель считывает смысл».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Структура защиты: задача, аудитория, инсайт, решение, аргументы, риски, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Клиент понимает не только что предлагается, но и почему это решение работает.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Защита решения должна объяснять связь между задачей и формой.</p>
+      </section>
+    </article>
+<article class="card" id="card-07">
+      <div class="card-kicker">Карточка 7</div>
+      <h2>Презентация опыта под задачу клиента</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Клиент просит презентацию, портфолио или кейсы. Общий файл есть, но он не показывает, почему команда подходит именно под эту задачу.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Клиент редко читает презентацию как автор. Он ищет признаки доверия: похожая задача, понятный процесс, сильный результат, адекватная команда.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Отправляют всё подряд.</strong> Важные кейсы теряются среди лишнего.</li><li><strong>Показывают красоту без задачи.</strong> Клиент видит картинку, но не понимает управленческий смысл.</li><li><strong>Нет следующего шага.</strong> Презентация уходит в пустоту.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Подборка должна отвечать на вопрос клиента: почему этой команде можно доверить мою задачу.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Уточнить, для какой задачи нужна презентация.</li><li>Выбрать 3–5 релевантных кейсов.</li><li>Подписать, чем каждый кейс полезен.</li><li>Предложить короткий созвон после просмотра.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Что написать клиенту</h3>
+        <blockquote>Отправляю короткую подборку. Выделил три кейса: первый похож по аудитории, второй по производственной задаче, третий по работе с несколькими согласующими.</blockquote>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Подборка релевантных кейсов с пояснением и следующим шагом.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Клиент видит связь между опытом команды и своей задачей.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Опыт нужно показывать через пользу для конкретной задачи.</p>
+      </section>
+    </article>
+<article class="card" id="card-08">
+      <div class="card-kicker">Карточка 8</div>
+      <h2>Как работать с абстрактной обратной связью</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>На работу приходит комментарий: «не то», «скучно», «дорого», «хочется сильнее», «не цепляет». Команда не понимает, что менять.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Абстрактная обратная связь без уточнения превращает правки в угадывание. Каждый новый вариант может снова не попасть в ожидания.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Сразу переделывают.</strong> Команда реагирует на эмоцию, не поняв причину.</li><li><strong>Спорят с комментарием.</strong> Заказчик чувствует сопротивление.</li><li><strong>Не переводят отзыв в критерий.</strong> Непонятно, что будет считаться исправлением.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Комментарий нужно раскрыть: что именно не работает, для кого, по какому критерию, какой пример ближе, что должно измениться.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Признать комментарий и уточнить его смысл.</li><li>Попросить пример или антипример.</li><li>Связать обратную связь с задачей.</li><li>Зафиксировать конкретную правку.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Чтобы поправить точнее, уточню: что именно сейчас не работает?»</li><li>«Какой пример ближе к нужному ощущению?»</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Уточнённая обратная связь: комментарий, причина, критерий, действие, ответственный.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Команда понимает, что менять, зачем и по каким признакам заказчик примет правку.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Обратную связь нужно переводить в действие.</p>
+      </section>
+    </article>
+<article class="card" id="card-09">
+      <div class="card-kicker">Карточка 9</div>
+      <h2>Согласующие и скрытые стейкхолдеры</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Проект движется через одного контактного человека, но ближе к финалу появляются новые согласующие: руководитель, бренд, юристы, PR, продуктовая команда.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Скрытый стейкхолдер может изменить требования, сроки и критерии. Если его не увидеть заранее, команда теряет управление.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Доверяют одному контакту.</strong> Он может не знать всех требований.</li><li><strong>Не уточняют процесс согласования.</strong> Команда ждёт быстрой обратной связи, а внутри длинная цепочка.</li><li><strong>Не включают финального согласующего.</strong> Финал превращается в новый старт.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Нужно понимать не только клиента, но и систему принятия решения: кто смотрит, кто влияет, кто утверждает, кто может заблокировать.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Спросить, кто будет участвовать в согласовании.</li><li>Узнать критерии каждого важного участника.</li><li>Запланировать точки вовлечения.</li><li>Фиксировать статус согласований письменно.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Кто ещё будет смотреть этот материал до финального утверждения?»</li><li>«Предлагаю показать черновую рамку заранее, чтобы не получить разворот на финале».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта согласующих и план их вовлечения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Ключевые участники включены до момента, когда менять работу становится дорого.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Согласующих нужно видеть до финального показа.</p>
+      </section>
+    </article>
+<article class="card" id="card-10">
+      <div class="card-kicker">Карточка 10</div>
+      <h2>Когда звать руководителя</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер не понимает, где решить вопрос самостоятельно, а где подключить руководителя. В итоге либо зовёт слишком часто, либо тянет до кризиса.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Хорошая эскалация экономит время и снижает риск. Руководителю нужна рамка: факт, варианты, рекомендация и решение, которое требуется.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Эскалируют без подготовки.</strong> Руководитель сам собирает контекст.</li><li><strong>Тянут до последнего.</strong> К моменту эскалации вариантов мало.</li><li><strong>Не называют нужное решение.</strong> Руководитель не понимает, что от него требуется.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Звать руководителя нужно, когда вопрос влияет на деньги, сроки, репутацию, стратегического клиента, конфликт или границы ответственности.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назвать факт и влияние.</li><li>Подготовить варианты.</li><li>Дать свою рекомендацию.</li><li>Сказать, какое решение нужно от руководителя.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Шаблон эскалации</h3>
+        <pre><code>Ситуация:
+Риск:
+Варианты:
+Моя рекомендация:
+Решение, которое нужно:
+Срок решения:</code></pre>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Матрица эскалации и подготовленное сообщение руководителю.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Руководитель быстро понимает ситуацию и может принять решение без восстановления всего контекста.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Эскалация должна приносить руководителю рамку решения.</p>
+      </section>
+    </article>
+      </section>
+    </div>
+
+    <nav class="pager" aria-label="Навигация между модулями">
+      <a href="b2b-module-02.html">← Модуль 2. Вход в профессию</a>
+      <a href="b2b-module-04.html">Модуль 4. Проект и деньги →</a>
+    </nav>
+  </main>
+
+  <footer class="footer">B2B-курс «Продюсерское мышление». Модуль 3 из 6.</footer>
+</body>
+</html>

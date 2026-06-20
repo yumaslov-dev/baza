@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Модуль 2. Вход в профессию — B2B-курс</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --paper: #fffaf0;
+      --ink: #171713;
+      --muted: #6f6a5f;
+      --line: #ddd3bf;
+      --green: #2f5138;
+      --green-dark: #1e3426;
+      --acid: #c8ff00;
+      --panel: #ebe2cf;
+      --shadow: 0 18px 70px rgba(35, 32, 25, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.62; }
+    a { color: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px clamp(18px, 5vw, 72px); border-bottom: 1px solid var(--line); background: rgba(245, 239, 226, .94); backdrop-filter: blur(14px); }
+    .brand { text-decoration: none; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .brand span { color: var(--green); }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .topbar nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 10px; border-radius: 7px; border: 1px solid transparent; color: var(--muted); font-size: 13px; text-decoration: none; }
+    .topbar nav a:hover { border-color: var(--line); color: var(--ink); background: var(--paper); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .42fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding: clamp(44px, 7vw, 92px) clamp(18px, 6vw, 86px); background: radial-gradient(circle at 82% 10%, rgba(200,255,0,.18), transparent 18rem), linear-gradient(125deg, rgba(47,81,56,.10), transparent 48%); }
+    .eyebrow { display: inline-flex; width: fit-content; margin-bottom: 18px; padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(47,81,56,.24); color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 980px; margin-bottom: 20px; font-size: clamp(44px, 7vw, 92px); line-height: .92; letter-spacing: -.052em; }
+    .lead { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.72; }
+    .module-summary { border-radius: 20px; background: var(--green-dark); color: var(--paper); padding: 24px; box-shadow: var(--shadow); }
+    .module-summary strong { display: block; margin-bottom: 12px; font-size: 22px; line-height: 1.14; }
+    .module-summary p { color: rgba(255,250,240,.76); margin-bottom: 16px; }
+    .progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+    .progress a { height: 32px; display: grid; place-items: center; border-radius: 7px; background: rgba(255,250,240,.12); color: rgba(255,250,240,.76); text-decoration: none; font-size: 12px; font-weight: 900; }
+    .progress a.active { background: var(--acid); color: var(--green-dark); }
+    .layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 28px; padding: 34px clamp(18px, 6vw, 86px) 78px; }
+    .toc { position: sticky; top: 82px; align-self: start; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 18px; max-height: calc(100vh - 110px); overflow: auto; }
+    .toc-title { margin-bottom: 12px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .toc a { display: block; padding: 8px 0; border-top: 1px solid rgba(221,211,191,.6); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.25; }
+    .toc a:hover { color: var(--ink); }
+    .content { display: grid; gap: 18px; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--paper); padding: clamp(22px, 4vw, 34px); box-shadow: 0 1px 0 rgba(255,255,255,.72) inset; scroll-margin-top: 88px; }
+    .card-kicker { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .card h2 { margin-bottom: 22px; font-size: clamp(30px, 4vw, 46px); line-height: 1; letter-spacing: -.04em; }
+    .card-section { padding: 18px 0; border-top: 1px solid var(--line); }
+    .card-section h3 { margin-bottom: 10px; color: var(--green); font-size: 15px; line-height: 1.2; letter-spacing: -.01em; }
+    .card-section p { color: var(--muted); }
+    .card-section p:last-child, .card-section ul:last-child, .card-section ol:last-child, .card-section blockquote:last-child, .card-section pre:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 22px; color: var(--muted); }
+    li + li { margin-top: 6px; }
+    strong { color: var(--ink); }
+    blockquote { margin: 12px 0; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); color: var(--ink); }
+    pre { overflow: auto; margin: 14px 0; padding: 16px; border-radius: 12px; background: var(--panel); color: var(--ink); font-family: inherit; font-size: 14px; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .pager { display: flex; justify-content: space-between; gap: 14px; padding: 0 clamp(18px, 6vw, 86px) 56px; }
+    .pager a { flex: 1; min-height: 64px; display: flex; align-items: center; justify-content: center; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: center; text-decoration: none; font-weight: 800; }
+    .pager a:hover { border-color: rgba(47,81,56,.36); box-shadow: var(--shadow); }
+    .footer { padding: 0 clamp(18px, 6vw, 86px) 46px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) { .hero, .layout { grid-template-columns: 1fr; } .toc { position: static; max-height: none; } }
+    @media (max-width: 700px) { .topbar { align-items: flex-start; flex-direction: column; } .topbar nav { justify-content: flex-start; } h1 { font-size: 48px; } .pager { flex-direction: column; } }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="b2b-course.html">mass<span>.</span>method</a>
+    <nav>
+      <a href="b2b-course.html">Все модули</a>
+      <a href="b2b-kurs-prodyuserskoe-myshlenie.md">Карта курса</a>
+      <a href="b2b-module-01.html">Предыдущий</a>
+      <a href="b2b-module-03.html">Следующий</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Модуль 2</div>
+        <h1>Вход в профессию</h1>
+        <p class="lead">Самопродюсирование, первый самостоятельный контур и честное предъявление опыта.</p>
+      </div>
+      <aside class="module-summary">
+        <strong>Навигация по курсу</strong>
+        <p>В модуле 10 ситуационных карточек. Каждая ведёт от рабочей ситуации к действию, артефакту и критерию результата.</p>
+        <div class="progress" aria-label="Модули курса"><a class="" href="b2b-module-01.html">1</a><a class="active" href="b2b-module-02.html">2</a><a class="" href="b2b-module-03.html">3</a><a class="" href="b2b-module-04.html">4</a><a class="" href="b2b-module-05.html">5</a><a class="" href="b2b-module-06.html">6</a></div>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <aside class="toc">
+        <div class="toc-title">Карточки модуля</div>
+        <a href="#card-01">1. Самопродюсирование внутри роли</a>
+<a href="#card-02">2. Мой текущий управленческий контур</a>
+<a href="#card-03">3. Первый самостоятельный блок проекта</a>
+<a href="#card-04">4. Честное предъявление опыта</a>
+<a href="#card-05">5. Позиция нужды в работе с руководителем или клиентом</a>
+<a href="#card-06">6. Как попросить больше ответственности</a>
+<a href="#card-07">7. Как принимать задачу у руководителя</a>
+<a href="#card-08">8. Как показывать управленческий прогресс</a>
+<a href="#card-09">9. Личный operating rhythm менеджера</a>
+<a href="#card-10">10. План роста на 30 дней</a>
+      </aside>
+      <section class="content">
+        <article class="card" id="card-01">
+      <div class="card-kicker">Карточка 1</div>
+      <h2>Самопродюсирование внутри роли</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Человек уже организует задачи, пишет клиентам, договаривается с командой, напоминает о сроках и уточняет вводные, но считает это обычной операционкой.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Пока человек не видит свою управленческую функцию, он не может развивать её осознанно. Рост начинается с признания того, что часть продюсерства уже происходит.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Опыт обесценивается.</strong> Человек видит только ошибки и не замечает, что уже держал результат.</li><li><strong>Роль выглядит пассивной.</strong> Кажется, что самостоятельность появится только после назначения.</li><li><strong>Рост не назван.</strong> Руководитель не видит, какие действия человек уже делает сам.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Самопродюсирование внутри роли — это способность организовать собственную работу вокруг результата: увидеть задачу, задать вопросы, договориться, довести, зафиксировать вывод.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выписать 5 ситуаций, где вы сами сдвинули работу.</li><li>Для каждой назвать, какой результат вы помогли получить.</li><li>Отметить, какие продюсерские действия были сделаны.</li><li>Выбрать действия, которые стоит усилить.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Я уже держал этот контур: собирал вводные, согласовывал сроки, поднимал риск».</li><li>«Хочу зафиксировать, какие продюсерские действия у меня уже получаются».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта самопродюсирования: ситуации, действия, результат, чему научился, что развивать дальше.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Участник видит свои первые управленческие действия и может назвать их без преувеличения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Рост легче развивать, когда уже видно, на что он опирается.</p>
+      </section>
+    </article>
+<article class="card" id="card-02">
+      <div class="card-kicker">Карточка 2</div>
+      <h2>Мой текущий управленческий контур</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер участвует в проектах, но не понимает, что реально держит сам: задачу, этап, коммуникацию, клиента, команду, сроки или только отдельные поручения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без понимания текущего контура невозможно честно просить больше ответственности. Руководителю нужно видеть, что именно человек уже удерживает.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Контур не описан.</strong> Человек говорит «я всё делал», но не может назвать границы.</li><li><strong>Смешаны роль и помощь.</strong> Участие в проекте выглядит как владение проектом.</li><li><strong>Нет точек контроля.</strong> Непонятно, где человек самостоятелен, а где нужна проверка.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Контур ответственности — это участок реальности, который человек может удерживать: результат, входящие данные, участники, сроки, риски и коммуникация.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выбрать текущий проект.</li><li>Выписать, что вы держите без напоминаний.</li><li>Отметить, где пока нужна помощь.</li><li>Согласовать это с руководителем.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Сейчас я самостоятельно держу этот этап, а решения по бюджету согласую».</li><li>«Мне важно сверить, где моя зона, а где нужна ваша точка контроля».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карта текущего контура ответственности: что держу сам, что согласую, что передаю, где нужен руководитель.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>У менеджера и руководителя появляется общее понимание текущего уровня самостоятельности.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Самостоятельность начинается с ясно названного контура.</p>
+      </section>
+    </article>
+<article class="card" id="card-03">
+      <div class="card-kicker">Карточка 3</div>
+      <h2>Первый самостоятельный блок проекта</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Сотруднику пора вести часть проекта самому: брифинг, один этап, подрядчика, согласование, небольшой клиентский контур или внутренний запуск.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Первый самостоятельный блок должен быть достаточно реальным, чтобы человек вырос, и достаточно ограниченным, чтобы риск оставался управляемым.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Блок слишком размыт.</strong> Человек получает «вести проект», но не понимает границы.</li><li><strong>Контроль либо плотный, либо отсутствует.</strong> Руководитель мешает самостоятельности или пропадает.</li><li><strong>Нет критерия успеха.</strong> После блока трудно понять, получилось ли.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Самостоятельный блок должен иметь результат, границы, срок, участников, риски и точки проверки. Это учебный контур в реальной работе.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выбрать блок, который можно отдать сотруднику.</li><li>Описать результат и границы.</li><li>Назначить точки контроля.</li><li>После завершения провести короткий разбор.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Я готов взять этот блок: результат такой, контрольные точки такие».</li><li>«Давайте заранее договоримся, в каких ситуациях я зову вас».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Рамка первого самостоятельного блока: задача, результат, границы, решения, риски, точки контроля, критерий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Человек ведёт блок без ежедневного ручного управления и вовремя поднимает вопросы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Самостоятельность растёт через ограниченные реальные контуры.</p>
+      </section>
+    </article>
+<article class="card" id="card-04">
+      <div class="card-kicker">Карточка 4</div>
+      <h2>Честное предъявление опыта</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>У менеджера есть вклад в проекты, но мало полностью самостоятельных кейсов. В разговоре с руководителем, клиентом или командой он либо умаляет себя, либо присваивает лишнее.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Честное предъявление опыта помогает строить доверие. Человек показывает не только название проекта, но и свою роль, мышление, решения и выводы.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Опыт описан общо.</strong> «Участвовал в проекте» ничего не объясняет.</li><li><strong>Роль преувеличена.</strong> Это быстро считывается и снижает доверие.</li><li><strong>Не названы выводы.</strong> Опыт выглядит как список событий, а не как рост.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Опыт нужно показывать через задачу, роль, вклад, результат и урок. Даже маленький вклад может быть сильным, если он точно описан.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выбрать 3 проекта или задачи.</li><li>Для каждой описать роль и конкретный вклад.</li><li>Назвать результат и ограничения.</li><li>Записать, чему научился и что теперь сделал бы точнее.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«В этом проекте я отвечал за координацию этапа и коммуникацию с подрядчиком».</li><li>«Мой вклад был в том, что я вовремя поднял риск и помог перестроить план».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Карточка опыта: задача, контекст, роль, вклад, результат, урок, следующий уровень.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Человек может показать опыт уверенно и точно, без позы и самоумаления.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Доверие рождается из точности роли и вклада.</p>
+      </section>
+    </article>
+<article class="card" id="card-05">
+      <div class="card-kicker">Карточка 5</div>
+      <h2>Позиция нужды в работе с руководителем или клиентом</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Менеджер очень хочет сохранить доверие, получить проект или показать себя хорошим. Из-за этого он соглашается на лишнее, молчит о рисках или обещает слишком быстро.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Позиция нужды делает человека менее точным. Он начинает управлять впечатлением вместо реальности проекта.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Согласие появляется раньше оценки.</strong> Человек обещает, не проверив ресурсы.</li><li><strong>Риск замалчивается.</strong> Кажется, что плохая новость испортит отношение.</li><li><strong>Граница звучит слишком поздно.</strong> К этому моменту ожидание уже создано.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Позиция нужды проявляется в теле и речи: хочется быстрее понравиться, закрыть паузу, дать уверенный ответ, избежать отказа. Нужно вернуть себя к фактам.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Перед разговором назвать, чего вы боитесь потерять.</li><li>Выписать факты: срок, ресурс, риск, ограничения.</li><li>Подготовить честные варианты.</li><li>Не обещать до проверки условий.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Мне нужно проверить ресурс, чтобы не пообещать неточно».</li><li>«Я хочу помочь, но сначала назову ограничения».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Чеклист позиции перед разговором: страх, факт, граница, варианты, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер говорит спокойно, не обещает из тревоги и удерживает интерес проекта.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Нужда снижает точность. Факты возвращают управление.</p>
+      </section>
+    </article>
+<article class="card" id="card-06">
+      <div class="card-kicker">Карточка 6</div>
+      <h2>Как попросить больше ответственности</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Человек хочет расти, но формулирует запрос слишком общо: «хочу больше задач», «хочу развиваться», «дайте что-то посложнее».</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Руководителю трудно отдать ответственность без понятной рамки. Сильный запрос показывает зрелость: человек понимает, что хочет держать и где ему нужна поддержка.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Запрос без конкретики.</strong> Непонятно, какой контур человек хочет взять.</li><li><strong>Нет аргумента готовности.</strong> Руководитель не видит, на что опереться.</li><li><strong>Не названа поддержка.</strong> Человек либо просит слишком много, либо выглядит самоуверенно.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Просить ответственность нужно через контур: какой результат, какие границы, какие риски, какая точка контроля, чему человек хочет научиться.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выбрать конкретный блок ответственности.</li><li>Объяснить, почему вы готовы его держать.</li><li>Назвать, где нужна поддержка.</li><li>Предложить пилотный период и критерий результата.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Хочу взять следующий контур: вести брифинг и первичную фиксацию задачи».</li><li>«Готов держать операционную часть, а по сложным решениям приходить с вариантами».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Запрос на новый контур: что хочу держать, почему готов, где нужна поддержка, как проверим результат.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Руководитель понимает, какой контур можно передать и как контролировать рост.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Ответственность легче получить, когда она описана как конкретный контур.</p>
+      </section>
+    </article>
+<article class="card" id="card-07">
+      <div class="card-kicker">Карточка 7</div>
+      <h2>Как принимать задачу у руководителя</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Руководитель ставит задачу быстро: в чате, на созвоне, между встречами. Вводных мало, но менеджеру кажется неудобным уточнять.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Плохой приём задачи создаёт цепочку проблем: неверный результат, переделки, задержки и взаимное раздражение. Уточнение на входе экономит больше времени, чем ускоренный старт.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Кивают без понимания.</strong> Человек боится выглядеть медленным.</li><li><strong>Не фиксируют результат.</strong> Задача остаётся набором слов.</li><li><strong>Не проверяют ограничения.</strong> Срок, ресурс и согласующие всплывают позже.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Принимать задачу — значит перевести поручение в рамку: результат, контекст, срок, ограничения, критерии, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Пересказать задачу своими словами.</li><li>Уточнить результат и критерий.</li><li>Спросить про срок, приоритет и ограничения.</li><li>Зафиксировать договорённость письменно.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Перескажу, как понял задачу, чтобы свериться».</li><li>«Какой результат будет считаться достаточным на этом этапе?»</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Протокол приёма задачи: результат, срок, критерии, вводные, открытые вопросы, следующий шаг.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Менеджер может начать работу без угадывания и с понятной рамкой ожиданий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Задача принята, когда её можно пересказать и проверить.</p>
+      </section>
+    </article>
+<article class="card" id="card-08">
+      <div class="card-kicker">Карточка 8</div>
+      <h2>Как показывать управленческий прогресс</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Человек много работает, но руководитель не видит роста самостоятельности. В обсуждении всё сводится к количеству задач и общей занятости.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Управленческий прогресс нужно показывать через качество решений: раньше увидел риск, точнее задал вопрос, сам предложил вариант, лучше зафиксировал договорённость.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Отчитываются объёмом.</strong> «Сделал много» не показывает зрелость.</li><li><strong>Не фиксируют решения.</strong> Прогресс остаётся незаметным.</li><li><strong>Не просят обратную связь.</strong> Человек не понимает, где следующий уровень.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Рост виден по изменению поведения в рабочих ситуациях. Нужно показывать не только что сделано, но и как улучшилось управление задачей.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Раз в неделю выбирать 2–3 ситуации роста.</li><li>Описывать, какое решение было принято.</li><li>Называть, что стало точнее по сравнению с прошлым разом.</li><li>Просить обратную связь по следующему уровню.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«На этой неделе я раньше поднял риск по сроку и предложил два варианта».</li><li>«Хочу обратную связь: где я ещё держу контур слабо?»</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Еженедельный отчёт о росте: ситуация, действие, результат, урок, вопрос руководителю.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Руководитель видит не только загрузку, но и рост самостоятельности.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Рост нужно показывать через изменение поведения.</p>
+      </section>
+    </article>
+<article class="card" id="card-09">
+      <div class="card-kicker">Карточка 9</div>
+      <h2>Личный operating rhythm менеджера</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>Задачи, статусы, переписки, решения и напоминания живут хаотично. Менеджер многое держит в голове и регулярно тушит срочное.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без личного ритма менеджер становится узким местом. Проекты зависят от памяти, настроения и реакции на входящие сообщения.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>Нет регулярного обзора.</strong> Задачи вспоминаются через чужие напоминания.</li><li><strong>Решения не фиксируются.</strong> Нужно каждый раз восстанавливать контекст.</li><li><strong>Статусы отправляются хаотично.</strong> Команда и руководитель не понимают ритм работы.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>Operating rhythm — это личная система недели: когда планировать, обновлять статусы, проверять риски, фиксировать решения и разбирать итоги.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Назначить ежедневную точку обзора задач.</li><li>Ввести регулярный проектный статус.</li><li>Фиксировать решения сразу после обсуждения.</li><li>Раз в неделю проводить короткий разбор своих управленческих действий.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«Обновлю статус к 17:00, чтобы у всех была одна картина».</li><li>«Зафиксирую решение и следующий шаг в общем документе».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>Личная система недели: планирование, статусы, фиксация решений, проверка рисков, разбор.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Работа становится предсказуемой для самого менеджера, руководителя и команды.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Надёжность менеджера начинается с личного ритма.</p>
+      </section>
+    </article>
+<article class="card" id="card-10">
+      <div class="card-kicker">Карточка 10</div>
+      <h2>План роста на 30 дней</h2>
+      
+      <section class="card-section">
+        <h3>Ситуация</h3>
+        <p>После обучения, разговора с руководителем или сложного проекта у человека есть понимание, что нужно расти, но нет ближайшего плана действий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Почему важно</h3>
+        <p>Без короткого плана выводы быстро растворяются в операционке. Рост закрепляется через практику в реальных задачах.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Где обычно ломается</h3>
+        <ol><li><strong>План слишком общий.</strong> «Стать самостоятельнее» не ведёт к действию.</li><li><strong>Нет рабочей практики.</strong> Навык не встроен в текущие задачи.</li><li><strong>Нет обратной связи.</strong> Человек не понимает, что изменилось.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Как смотреть точнее</h3>
+        <p>План роста на 30 дней должен содержать один навык, одну рабочую практику, один контур ответственности и понятный критерий.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Что делать</h3>
+        <ol><li>Выбрать один управленческий навык.</li><li>Найти текущую задачу для тренировки.</li><li>Договориться о формате обратной связи.</li><li>Через 30 дней сравнить поведение до и после.</li></ol>
+      </section>
+
+      <section class="card-section">
+        <h3>Рабочие фразы</h3>
+        <ul><li>«В ближайший месяц тренирую вход в задачу: буду приносить рамку до старта».</li><li>«Через месяц хочу сверить, стал ли я раньше поднимать риски».</li></ul>
+      </section>
+
+      <section class="card-section">
+        <h3>Артефакт</h3>
+        <p>План роста на 30 дней: навык, практика, задача, поддержка, критерий, дата разбора.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Критерий хорошего результата</h3>
+        <p>Участник делает один заметный шаг в самостоятельности и может показать его на конкретных ситуациях.</p>
+      </section>
+
+      <section class="card-section">
+        <h3>Главное правило</h3>
+        <p>Рост закрепляется маленькой практикой в реальной работе.</p>
+      </section>
+    </article>
+      </section>
+    </div>
+
+    <nav class="pager" aria-label="Навигация между модулями">
+      <a href="b2b-module-01.html">← Модуль 1. Продюсерская роль</a>
+      <a href="b2b-module-03.html">Модуль 3. Клиент и задача →</a>
+    </nav>
+  </main>
+
+  <footer class="footer">B2B-курс «Продюсерское мышление». Модуль 2 из 6.</footer>
+</body>
+</html>

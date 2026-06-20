@@ -66,7 +66,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ⠧ BAZA"
+              "title": "Terminal: BAZA"
             }
           }
         ]
@@ -243,6 +243,13 @@
   },
   "active": "1a8e3e3eb826ebac",
   "lastOpenFiles": [
+    "школа-продюсера/b2b-module-06.html",
+    "школа-продюсера/b2b-module-05.html",
+    "школа-продюсера/b2b-module-04.html",
+    "школа-продюсера/b2b-module-03.html",
+    "школа-продюсера/b2b-module-02.html",
+    "школа-продюсера/b2b-module-01.html",
+    "школа-продюсера/generate-b2b-module-pages.mjs",
     "школа-продюсера/b2b-course.html",
     "школа-продюсера/b2b-modul-06-slozhnye-razgovory-i-rost.md",
     "школа-продюсера/b2b-modul-05-komanda-i-otvetstvennost.md",
@@ -261,13 +268,6 @@
     "школа-продюсера/маршрут-школы-смысловой-прототип.md",
     "школа-продюсера/product-v3/assets/app.js",
     "школа-продюсера/product-v3/assets/data.js",
-    "школа-продюсера/product-v3/assets/styles.css",
-    "школа-продюсера/product-v3/market.html",
-    "школа-продюсера/product-v3/method.html",
-    "школа-продюсера/product-v3/situations.html",
-    "школа-продюсера/product-v3/card.html",
-    "школа-продюсера/product-v3/module.html",
-    "школа-продюсера/product-v3/index.html",
     "школа-продюсера/курс.md",
     "школа-продюсера/README.md",
     "входящие/README.md",
